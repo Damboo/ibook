@@ -2,6 +2,7 @@ package com.trs.ibook.service.config;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 
@@ -31,6 +32,11 @@ public class IBookServiceAutoConfiguration {
                 return "admin";
             }
         };
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 
 }
