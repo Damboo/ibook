@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<portable-config>
+    <config-file path="logback.xml">
+        <replace xpath="/configuration/logger[@name='com.trs.ibook']/@level">INFO</replace>
+    </config-file>
+</portable-config>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<portable-config>
+    <!-- spring boot  -->
+    <config-file path="WEB-INF/classes/application.yml">
+        <replace key="spring.profiles.active">prod</replace>
+    </config-file>
+</portable-config>

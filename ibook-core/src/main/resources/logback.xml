@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="logback/base.xml"/>
+    <jmxConfigurator/>
+    <logger name="com.trs.ibook" level="TRACE"/>
+    <!--<logger name="feign" level="TRACE"/>-->
+   <!-- <logger name="org.springframework" level="TRACE"/>
+    <logger name="org.springframework.cloud.sleuth" level="INFO"/>-->
+</configuration>

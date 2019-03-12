@@ -1,0 +1,91 @@
+season:
+    datasource:
+       master:
+           url: jdbc:mysql://10.159.63.23:3308/trs_interaction_service?master=1&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull
+           username: hshopuser
+           password: 6vw$kx33n
+       slaver:
+           url: jdbc:mysql://10.159.63.25:3308/trs_interaction_service?master=1&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull
+           username: hshopuser
+           password: 6vw$kx33n
+       haier_slaver:
+           url: jdbc:mysql://10.159.63.29:3306/haier?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull
+           username: trsuser
+           password: hr#tRs$79
+       casarte_slaver:
+           url: jdbc:mysql://10.159.63.31:3306/kasarre?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull
+           username: trsuser
+           password: hr#tRs$79
+       wcm_slaver:
+           url: jdbc:mysql://10.159.63.25:3308/trswcmv7cluster?&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull
+           username: hshopuser
+           password: 6vw$kx33n
+    trsserver:
+      name: cluster,haierWas
+      ip: 10.159.61.150,10.159.63.53
+      port: 8885,8888
+      user: system,system
+      password: manager,manager
+      read-only: true,true
+    multi-brand:
+        ids:
+            localLogin: false
+        leader:
+            id: 5
+            name: leader
+            domains:
+                 - http://www.tongshuai.com
+                 - http://user.tongshuai.com
+            idsUrl: http://user.tongshuai.com/ids
+            appName: tongshuai
+            appKey: abc6789054399
+        cn:
+            id: 8
+            name: cn
+            domains:
+                - http://www.haier.com
+                - http://user.haier.com
+                - https://www.haier.com
+                - https://user.haier.com
+                - http://m.haier.com
+                - https://m.haier.com
+            idsUrl: http://user.haier.com/ids
+            appName: haier2
+            appKey: abc1234554321
+        casarte:
+            id: 9
+            name: casarte
+            domains:
+                - http://www.casarte.com
+                - http://user.casarte.com
+            idsUrl: http://user.casarte.com/ids
+            appName: casarte
+            appKey: abc1212121212
+        admin:
+            name: admin
+            domains:
+                - http://w.haier.com
+            idsUrl: http://w.haier.com/ids
+            appName: wcm-hshop
+            appKey: 12345678
+        tenant:
+            shengtai:
+                id: 280
+                type: 101
+
+spring:
+    redis:
+      cluster:
+        nodes[0]: 10.159.61.150:6380
+        nodes[1]: 10.159.61.150:6381
+        nodes[2]: 10.159.61.150:6382
+        nodes[3]: 10.159.61.151:6380
+        nodes[4]: 10.159.61.151:6381
+        nodes[5]: 10.159.61.151:6382
+    rabbitmq:
+        host: 10.159.61.150
+        port: 5672
+        username: haieradmin
+        password: TstrS28O
+        virtualhost: /
+
