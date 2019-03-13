@@ -22,7 +22,7 @@
     </dependencies>
 
     <build>
-        <!-- <finalName>user</finalName>-->
+        <finalName>ibook-service</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
