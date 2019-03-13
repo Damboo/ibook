@@ -1,81 +1,10 @@
 season:
     datasource:
         master:
-            url: jdbc:mysql://10.159.63.110:3308/hshop?&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull
+            url: jdbc:mysql://10.159.63.110:3308/ibook?&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull
             username: testuser
             password: Us$4P3to
         slaver:
-            url: jdbc:mysql://10.159.63.110:3308/hshop?&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull
+            url: jdbc:mysql://10.159.63.110:3308/ibook?&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull
             username: testuser
             password: Us$4P3to
-        haier_slaver:
-            url: jdbc:mysql://10.159.63.110:3308/haier?&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull
-            username: mycatuser
-            password: Us$4P3to
-        casarte_slaver:
-            url: jdbc:mysql://10.159.63.109:3306/kasarre?&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull
-            username: root
-            password: Trs7lo$3
-        wcm_slaver:
-            url: jdbc:mysql://10.159.63.109:3308/trswcmv7cluster?&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull
-            username: root
-            password: Trs7lo$3
-    trsserver:
-        name: master,cluster,haierWas
-        ip: 10.159.63.65,10.159.63.66,10.159.63.109
-        port: 8888,8888,8885
-        user: system,system,system
-        password: manager,manager,manager
-        read-only: true,true,true
-    multi-brand:
-            ids:
-                localLogin: false
-            leader:
-                id: 1
-                name: leader
-                domains:
-                     - http://test.tongshuai.com
-                     - http://tuser.tongshuai.com
-                idsUrl: http://tuser.tongshuai.com/ids
-                appName: tongshuai
-                appKey: abc6789054321
-            cn:
-                id: 2
-                name: cn
-                domains:
-                    - http://test.haier.com
-                    - http://tuser.haier.com
-                idsUrl: http://tuser.haier.com/ids
-                appName: haierBBS
-                appKey: abc123123123
-            casarte:
-                id: 3
-                name: casarte
-                domains:
-                    - http://testuser.casarte.com
-                idsUrl: http://testuser.casarte.com/ids
-                appName: casarte
-                appKey: abc1212121212
-            admin:
-                name: admin
-                domains:
-                    - http://testw.haier.com
-                idsUrl: http://testw.haier.com/ids
-                appName: wcm-hshop
-                appKey: 12345678
-            tenant:
-                shengtai:
-                    id: 3946
-                    type: 101
-
-spring:
-    redis:
-        host: 10.159.63.66
-        port: 6388
-        password: trs28fgh
-    rabbitmq:
-        host: 10.159.63.66
-        port: 5672
-        username: haieradmin
-        password: WiTrS39G
-        virtualhost: /
