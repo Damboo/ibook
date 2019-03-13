@@ -26,7 +26,7 @@ public class BookPicturePageVO {
     @ApiModelProperty(notes = N_PICURL, example = E_PICURL)
     private String picUrl;
 
-    @ApiModelProperty(notes = "缩略图", example = "")
+    @ApiModelProperty(notes = "缩略图路径", example = "/hsfile/ibook/small/000001.jpg")
     private String smallPicUrl;
 
     @ApiModelProperty(notes = N_PAGEINDEX, example = E_PAGEINDEX)
@@ -83,4 +83,5 @@ public class BookPicturePageVO {
     public void setSerialNo(Integer serialNo) {
         this.serialNo = serialNo;
     }
+
 }

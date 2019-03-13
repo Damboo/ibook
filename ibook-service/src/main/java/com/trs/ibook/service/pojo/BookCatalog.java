@@ -23,7 +23,7 @@ import static com.trs.ibook.service.example.BookCatalogExample.*;
 public class BookCatalog extends AbstractPOJO {
 
     @Transient
-    static final String TABLE_NAME = "ibook_book_catalog";
+    public static final String TABLE_NAME = "ibook_book_catalog";
 
     @Column(length = 10, defaultValue = "", autoIncrement = true, comment = N_ID)
     private Integer id;

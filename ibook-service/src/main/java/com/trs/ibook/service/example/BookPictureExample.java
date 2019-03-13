@@ -18,7 +18,7 @@ public class BookPictureExample {
     public static final String E_BOOKID = "1";
 
     public static final String N_PICURL = "图片路径";
-    public static final String E_PICURL = "/data/TRS/picture/03040506.jpg";
+    public static final String E_PICURL = "/hsfile/ibook/normal/000001.jpg";
 
     public static final String N_PAGEINDEX = "页码";
     public static final String E_PAGEINDEX = "2";
