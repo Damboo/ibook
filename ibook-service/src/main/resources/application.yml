@@ -1,6 +1,6 @@
 server:
   context-path: /ibook-service
-  port: 7070
+  port: 8081
 
 #logging.path: /data/TRS/ibook-service/logs
 
