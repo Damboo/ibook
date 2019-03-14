@@ -1,5 +1,6 @@
 package com.trs.ibook.service.dao;
 
+import com.season.common.SafeKit;
 import com.trs.ibook.core.dao.AbstractDAO;
 import com.trs.ibook.service.pojo.BookPicture;
 import com.trs.ibook.service.vo.BookPicturePageVO;
@@ -21,6 +22,21 @@ import java.util.Map;
 public class BookPictureDAO extends AbstractDAO<BookPicture> {
 
     /**
+     * 根据电子书ID查询改书物理总页数
+     *
+     * @param bookId
+     * @return
+     */
+    public Integer getPictureCountByBookId(Integer bookId) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("bookId", bookId);
+        String sql = "SELECT COUNT(id) AS serialTotal FROM " + BookPicture.TABLE_NAME + " WHERE bookId = :bookId";
+        Map<String, Object> resultMap = seasonDao.queryFirst(params, sql);
+        return SafeKit.getInteger(resultMap.get("serialTotal"));
+    }
+
+
+    /**
      * 查询电子相册页信息
      *
      * @param bookId   电子书主键ID
@@ -31,7 +47,7 @@ public class BookPictureDAO extends AbstractDAO<BookPicture> {
         Map<String, Object> params = new HashMap<>();
         params.put("bookId", bookId);
         params.put("serialNo", serialNo);
-        String sql = "SELECT id,bookId,picUrl,pageIndex,serialNo FROM ibook_book_picture " +
+        String sql = "SELECT id,bookId,picUrl,pageIndex,serialNo FROM " + BookPicture.TABLE_NAME + " " +
                 "WHERE bookId = :bookId AND serialNo = :serialNo";
         return seasonDao.findFirst(BookPicturePageVO.class, params, sql);
     }

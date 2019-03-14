@@ -8,7 +8,9 @@ import com.trs.ibook.service.vo.BookPicturePageVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Title: 电子书前端展示相关服务
@@ -38,8 +40,13 @@ public class BookFrontShowService {
      * @param bookId 电子书主键ID
      * @return List<BookCatalogListVO>
      */
-    public List<BookCatalogListVO> bookCatalogList(Integer bookId) {
-        return bookCatalogDAO.getBookCatalogList(bookId);
+    public Map<String, Object> bookCatalogList(Integer bookId) {
+        Map<String,Object> bookCatalogMap = new HashMap<>();
+        List<BookCatalogListVO> bookCatalogList = bookCatalogDAO.getBookCatalogList(bookId);
+        Integer serialTotal = bookPictureDAO.getPictureCountByBookId(bookId);
+        bookCatalogMap.put("serialTotal",serialTotal);
+        bookCatalogMap.put("bookCatalogList",bookCatalogList);
+        return bookCatalogMap;
     }
 
 

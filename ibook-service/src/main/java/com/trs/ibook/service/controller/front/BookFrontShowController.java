@@ -5,14 +5,13 @@ import com.season.core.Result;
 import com.trs.ibook.service.api.BookFrontShowAPI;
 import com.trs.ibook.service.exception.ServiceException;
 import com.trs.ibook.service.service.BookFrontShowService;
-import com.trs.ibook.service.vo.BookCatalogListVO;
 import com.trs.ibook.service.vo.BookPicturePageVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * Title: 电子书前端展示控制器
@@ -36,13 +35,13 @@ public class BookFrontShowController implements BookFrontShowAPI {
 
     @Override
     @GetMapping(value = "bookCatalogList")
-    public Result<List<BookCatalogListVO>> bookCatalogList(Integer bookId) {
+    public Result<Map<String, Object>> bookCatalogList(Integer bookId) {
         if (StrKit.isEmpty(bookId)) {
             throw new ServiceException("电子书ID不能为空");
         }
-        List<BookCatalogListVO> bookCatalogVOList = bookFrontShowService.bookCatalogList(bookId);
-        Result<List<BookCatalogListVO>> result = Result.success();
-        result.setData(bookCatalogVOList);
+        Map<String, Object> bookCatalogMap = bookFrontShowService.bookCatalogList(bookId);
+        Result<Map<String, Object>> result = Result.success();
+        result.setData(bookCatalogMap);
         return result;
     }
 

@@ -1,14 +1,13 @@
 package com.trs.ibook.service.api;
 
 import com.season.core.Result;
-import com.trs.ibook.service.vo.BookCatalogListVO;
 import com.trs.ibook.service.vo.BookPicturePageVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * Title:【电子书前端展示相关服务】API
@@ -27,7 +26,7 @@ public interface BookFrontShowAPI {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "bookId", dataType = "Integer", value = "电子书主键ID", paramType = "query"),
     })
-    Result<List<BookCatalogListVO>> bookCatalogList(Integer bookId);
+    Result<Map<String, Object>> bookCatalogList(Integer bookId);
 
 
     /******************************获取电子相册页展示*****************************/
