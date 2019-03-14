@@ -29,6 +29,9 @@ public class BookInfoExample {
     public static final String N_PERIODICAL = "期刊数";
     public static final String E_PERIODICAL = "1";
 
+    public static final String N_PDFURL = "PDF路径";
+    public static final String E_PDFURL = "/hsfile/ibook/统帅电器2019年产品样册/统帅电器2019年产品样册.pdf";
+
     public static final String N_SITEID = "站点ID";
     public static final String E_SITEID = "5";
 

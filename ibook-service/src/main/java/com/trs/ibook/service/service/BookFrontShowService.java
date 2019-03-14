@@ -45,6 +45,7 @@ public class BookFrontShowService {
         List<BookCatalogListVO> bookCatalogList = bookCatalogDAO.getBookCatalogList(bookId);
         Integer serialTotal = bookPictureDAO.getPictureCountByBookId(bookId);
         bookCatalogMap.put("serialTotal",serialTotal);
+        bookCatalogMap.put("pdfUrl","/hsfile/ibook/统帅电器2019年产品样册/统帅电器2019年产品样册.pdf");
         bookCatalogMap.put("bookCatalogList",bookCatalogList);
         return bookCatalogMap;
     }
