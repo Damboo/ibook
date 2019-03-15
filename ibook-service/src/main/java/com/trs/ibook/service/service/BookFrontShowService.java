@@ -2,7 +2,9 @@ package com.trs.ibook.service.service;
 
 import com.season.common.StrKit;
 import com.trs.ibook.service.dao.BookCatalogDAO;
+import com.trs.ibook.service.dao.BookInfoDAO;
 import com.trs.ibook.service.dao.BookPictureDAO;
+import com.trs.ibook.service.pojo.BookInfo;
 import com.trs.ibook.service.vo.BookCatalogListVO;
 import com.trs.ibook.service.vo.BookPicturePageVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +28,13 @@ public class BookFrontShowService {
 
     private final BookCatalogDAO bookCatalogDAO;
     private final BookPictureDAO bookPictureDAO;
+    private final BookInfoDAO bookInfoDAO;
 
     @Autowired
-    public BookFrontShowService(BookCatalogDAO bookCatalogDAO, BookPictureDAO bookPictureDAO) {
+    public BookFrontShowService(BookCatalogDAO bookCatalogDAO, BookPictureDAO bookPictureDAO, BookInfoDAO bookInfoDAO) {
         this.bookCatalogDAO = bookCatalogDAO;
         this.bookPictureDAO = bookPictureDAO;
+        this.bookInfoDAO = bookInfoDAO;
     }
 
 
@@ -41,12 +45,20 @@ public class BookFrontShowService {
      * @return List<BookCatalogListVO>
      */
     public Map<String, Object> bookCatalogList(Integer bookId) {
-        Map<String,Object> bookCatalogMap = new HashMap<>();
+        Map<String, Object> bookCatalogMap = new HashMap<>();
+
         List<BookCatalogListVO> bookCatalogList = bookCatalogDAO.getBookCatalogList(bookId);
+
+        String pdfUrl = null;
+        BookInfo bookInfo = bookInfoDAO.getBookInfoById(bookId);
+        if (null != bookInfo) {
+            pdfUrl = bookInfo.getPdfUrl();
+        }
         Integer serialTotal = bookPictureDAO.getPictureCountByBookId(bookId);
-        bookCatalogMap.put("serialTotal",serialTotal);
-        bookCatalogMap.put("pdfUrl","/hsfile/ibook/统帅电器2019年产品样册/统帅电器2019年产品样册.pdf");
-        bookCatalogMap.put("bookCatalogList",bookCatalogList);
+
+        bookCatalogMap.put("serialTotal", serialTotal);
+        bookCatalogMap.put("pdfUrl", pdfUrl);
+        bookCatalogMap.put("bookCatalogList", bookCatalogList);
         return bookCatalogMap;
     }
 

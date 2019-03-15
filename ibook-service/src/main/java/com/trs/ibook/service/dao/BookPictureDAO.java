@@ -30,7 +30,7 @@ public class BookPictureDAO extends AbstractDAO<BookPicture> {
     public Integer getPictureCountByBookId(Integer bookId) {
         Map<String, Object> params = new HashMap<>();
         params.put("bookId", bookId);
-        String sql = "SELECT COUNT(id) AS serialTotal FROM " + BookPicture.TABLE_NAME + " WHERE bookId = :bookId";
+        String sql = "SELECT COUNT(id) AS serialTotal FROM " + BookPicture.TABLE_NAME + " WHERE bookId = :bookId AND isDelete = 0 ";
         Map<String, Object> resultMap = seasonDao.queryFirst(params, sql);
         return SafeKit.getInteger(resultMap.get("serialTotal"));
     }
@@ -48,7 +48,7 @@ public class BookPictureDAO extends AbstractDAO<BookPicture> {
         params.put("bookId", bookId);
         params.put("serialNo", serialNo);
         String sql = "SELECT id,bookId,picUrl,pageIndex,serialNo FROM " + BookPicture.TABLE_NAME + " " +
-                "WHERE bookId = :bookId AND serialNo = :serialNo";
+                "WHERE bookId = :bookId AND serialNo = :serialNo AND isDelete = 0 ";
         return seasonDao.findFirst(BookPicturePageVO.class, params, sql);
     }
 

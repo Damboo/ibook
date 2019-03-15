@@ -34,8 +34,8 @@ public class BookCatalogDAO extends AbstractDAO<BookCatalog> {
         String sql = "SELECT c.id,c.parentId,c.bookId,c.titleName,c.introduction,c.pageIndex,p.serialNo " +
                 "FROM " + BookCatalog.TABLE_NAME + " AS c " +
                 "LEFT JOIN " + BookPicture.TABLE_NAME + " AS p ON c.pageIndex = p.pageIndex " +
-                "WHERE c.bookId = :bookId AND p.bookId = :bookId " +
-                "ORDER BY c.pageIndex ASC";
+                "WHERE c.bookId = :bookId AND p.bookId = :bookId AND c.isDelete = 0 AND p.isDelete = 0 " +
+                "ORDER BY c.pageIndex ASC ";
         return seasonDao.find(BookCatalogListVO.class, params, sql);
     }
 
