@@ -3,5 +3,6 @@
     <!-- spring boot  -->
     <config-file path="WEB-INF/classes/application.yml">
         <replace key="spring.profiles.active">test</replace>
+        <replace key="server.port">8081</replace>
     </config-file>
 </portable-config>
