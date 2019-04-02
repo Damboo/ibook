@@ -8,3 +8,8 @@ season:
             url: jdbc:mysql://10.159.191.110:3308/ibook?&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull
             username: root
             password: Trs7lo$3
+ibook:
+    service:
+        imageUpload:
+            #图片上传路径
+            baseDir: /data/TRS/nas/ts_hudong/hsfile/ibook/

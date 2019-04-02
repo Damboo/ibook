@@ -83,4 +83,21 @@ public class BookFrontShowService {
         return bookPicturePageVO;
     }
 
+    /**
+     * 获取电子相册所有页
+     */
+    public List<BookPicturePageVO> getAllBookPicture(Integer bookId){
+        List<BookPicturePageVO> list = bookPictureDAO.getAllBookPicture(bookId);
+        if (list == null) {
+            return null;
+        }
+        for(BookPicturePageVO bookPicturePageVO : list){
+            String picUrl = bookPicturePageVO.getPicUrl();
+            if (StrKit.isNotEmpty(picUrl)) {
+                String smallPicUrl = picUrl.replace("/normal", "/small");
+                bookPicturePageVO.setSmallPicUrl(smallPicUrl);
+            }
+        }
+        return list;
+    }
 }

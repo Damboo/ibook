@@ -7,6 +7,7 @@ import com.trs.ibook.service.vo.BookPicturePageVO;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -52,4 +53,12 @@ public class BookPictureDAO extends AbstractDAO<BookPicture> {
         return seasonDao.findFirst(BookPicturePageVO.class, params, sql);
     }
 
+    /**
+     * 查询电子相册所有页
+     */
+    public List<BookPicturePageVO> getAllBookPicture(Integer bookId) {
+        String sql = " SELECT id,bookId,picUrl,pageIndex,serialNo from " + BookPicture.TABLE_NAME +
+                " where bookId = ? AND isDelete = 0 ";
+        return seasonDao.find(BookPicturePageVO.class, sql, bookId);
+    }
 }

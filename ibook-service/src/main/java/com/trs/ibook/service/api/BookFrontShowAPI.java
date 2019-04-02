@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,4 +38,11 @@ public interface BookFrontShowAPI {
     })
     Result<BookPicturePageVO> bookPicturePage(Integer bookId, Integer serialNo);
 
+
+    /******************************获取电子相册页概览*****************************/
+    @ApiOperation(value = "获取电子相册页概览")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "bookId", dataType = "Integer", value = "电子书主键ID", paramType = "query"),
+            })
+    Result<List<BookPicturePageVO>> allBookPicture(Integer bookId);
 }

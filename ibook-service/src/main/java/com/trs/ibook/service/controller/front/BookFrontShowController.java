@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -60,5 +61,15 @@ public class BookFrontShowController implements BookFrontShowAPI {
         return result;
     }
 
-
+    @Override
+    @GetMapping(value = "allBookPicture")
+    public Result<List<BookPicturePageVO>> allBookPicture(Integer bookId) {
+        if (StrKit.isEmpty(bookId)) {
+            throw new ServiceException("电子书ID不能为空");
+        }
+        List<BookPicturePageVO> list = bookFrontShowService.getAllBookPicture(bookId);
+        Result<List<BookPicturePageVO>> result = Result.success();
+        result.setData(list);
+        return result;
+    }
 }
