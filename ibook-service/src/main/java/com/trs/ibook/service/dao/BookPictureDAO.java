@@ -58,7 +58,7 @@ public class BookPictureDAO extends AbstractDAO<BookPicture> {
      */
     public List<BookPicturePageVO> getAllBookPicture(Integer bookId) {
         String sql = " SELECT id,bookId,picUrl,pageIndex,serialNo from " + BookPicture.TABLE_NAME +
-                " where bookId = ? AND isDelete = 0 ";
+                " where bookId = ? AND isDelete = 0 order by serialNo ";
         return seasonDao.find(BookPicturePageVO.class, sql, bookId);
     }
 }

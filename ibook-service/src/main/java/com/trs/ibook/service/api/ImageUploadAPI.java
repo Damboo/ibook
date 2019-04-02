@@ -25,5 +25,5 @@ public interface ImageUploadAPI {
             @ApiImplicitParam(name = "multipartFile", dataType = "MultipartFile", value = "文件内容", paramType = "body", allowMultiple = true),
             @ApiImplicitParam(name = "albumName", dataType = "String", value = "电子书名称", paramType = "body"),
     })
-    Result<String> imageUpload(MultipartFile multipartFile,String albumName);
+    Result<String> imageUpload(MultipartFile multipartFile, String albumName);
 }
