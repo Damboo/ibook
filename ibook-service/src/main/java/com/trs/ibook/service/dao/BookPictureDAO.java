@@ -61,4 +61,11 @@ public class BookPictureDAO extends AbstractDAO<BookPicture> {
                 " where bookId = ? AND isDelete = 0 order by serialNo ";
         return seasonDao.find(BookPicturePageVO.class, sql, bookId);
     }
+
+    /**
+     * 保存记录
+     */
+    public BookPicture saveBookPicture(BookPicture bookPicture){
+        return seasonDao.save(bookPicture);
+    }
 }

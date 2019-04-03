@@ -27,4 +27,11 @@ public class OriginPicDAO extends AbstractDAO<OriginPic> {
         Map<String, Object> lastSerialNo = seasonDao.queryFirst(sql, null);
         return lastSerialNo == null || lastSerialNo.isEmpty() ? 0 : SafeKit.getInteger(lastSerialNo.get("serialNo"));
     }
+
+    /**
+     * 保存记录
+     */
+    public OriginPic saveOriginPic(OriginPic originPic) {
+        return seasonDao.save(originPic);
+    }
 }
