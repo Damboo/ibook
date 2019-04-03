@@ -20,10 +20,8 @@ import java.util.Map;
 public class BookInfoDAO extends AbstractDAO<BookInfo> {
 
     public BookInfo getBookInfoById(Integer id) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("id", id);
-        String sql = "SELECT * FROM " + BookInfo.TABLE_NAME + " WHERE id = :id AND isDelete = 0 ";
-        return seasonDao.findFirst(BookInfo.class, params, sql);
+        String sql = "SELECT * FROM " + BookInfo.TABLE_NAME + " WHERE id =? AND isDelete = 0 ";
+        return seasonDao.findFirst(BookInfo.class, sql, id);
     }
 
 }

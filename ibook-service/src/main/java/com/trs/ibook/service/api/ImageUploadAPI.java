@@ -23,7 +23,7 @@ public interface ImageUploadAPI {
     @ApiOperation(value = "电子书图片上传")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "multipartFile", dataType = "MultipartFile", value = "文件内容", paramType = "body", allowMultiple = true),
-            @ApiImplicitParam(name = "albumName", dataType = "String", value = "电子书名称", paramType = "body"),
+            @ApiImplicitParam(name = "bookId", dataType = "Integer", value = "电子书id", paramType = "body"),
     })
-    Result<String> imageUpload(MultipartFile multipartFile, String albumName);
+    Result<String> imageUpload(MultipartFile multipartFile, Integer bookId);
 }

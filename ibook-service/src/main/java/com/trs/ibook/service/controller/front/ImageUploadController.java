@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 
 /**
  * Title:
@@ -29,22 +31,26 @@ import org.springframework.web.multipart.MultipartFile;
 public class ImageUploadController implements ImageUploadAPI {
 
     @Autowired
-    ImageUploadService imageUploadService;
+    private ImageUploadService imageUploadService;
     @Value("${ibook.service.imageUpload.baseDir}")
     private String baseDir;
 
     @Override
     @RequestMapping(method = RequestMethod.POST, value = "imageUpload")
-    public Result imageUpload(@RequestPart MultipartFile multipartFile, String albumName) {
+    public Result imageUpload(@RequestPart MultipartFile multipartFile, Integer bookId) {
+        Result result = Result.success();
         if (multipartFile == null) {
             throw new IBookException("图片不能为空");
         }
-        if (StrKit.isEmpty(albumName)) {
-            throw new IBookParamException("电子书名称不能为空");
+        if (StrKit.isEmpty(bookId)) {
+            throw new IBookParamException("电子书id不能为空");
         }
-        String imagePath = imageUploadService.imageUpload(multipartFile, baseDir, albumName);
-        Result result = Result.success();
-        result.setData(imagePath);
+        try {
+            imageUploadService.imageUpload(multipartFile, baseDir, bookId);
+        } catch (IOException e) {
+            result.setIsSuccess(false);
+            return result;
+        }
         return result;
     }
 }

@@ -20,6 +20,9 @@ public class OriginPicExample {
     public static final String N_PICURL = "上传的原始图片路径";
     public static final String E_PICURL = "/hsfile/ibook/统帅电器2019年产品样册/normal/统帅电器2019年产品样册_1.jpg";
 
+    public static final String N_SERIALNO = "序号(用于没有页码的图片例如封面)";
+    public static final String E_SERIALNO = "1";
+
     public static final String N_CREATETIME = "创建时间";
     public static final String E_CREATETIME = "2019-03-13 11:20:16";
 

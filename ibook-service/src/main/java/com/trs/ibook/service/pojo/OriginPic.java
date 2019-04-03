@@ -34,6 +34,9 @@ public class OriginPic extends AbstractPOJO {
     @Column(length = 255, comment = N_PICURL)
     private String picUrl;
 
+    @Column(length = 10, notNull = true, comment = N_SERIALNO)
+    private Integer serialNo;
+
     @Column(notNull = true, comment = N_CREATETIME)
     private Date createTime;
 
@@ -66,6 +69,14 @@ public class OriginPic extends AbstractPOJO {
 
     public void setPicUrl(String picUrl) {
         this.picUrl = picUrl;
+    }
+
+    public Integer getSerialNo() {
+        return serialNo;
+    }
+
+    public void setSerialNo(Integer serialNo) {
+        this.serialNo = serialNo;
     }
 
     public Date getCreateTime() {
