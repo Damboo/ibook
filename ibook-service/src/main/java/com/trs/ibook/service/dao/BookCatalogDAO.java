@@ -1,6 +1,9 @@
 package com.trs.ibook.service.dao;
 
+import com.season.common.StrKit;
+import com.season.core.Page;
 import com.trs.ibook.core.dao.AbstractDAO;
+import com.trs.ibook.service.dto.BookCatalogQueryDTO;
 import com.trs.ibook.service.pojo.BookCatalog;
 import com.trs.ibook.service.pojo.BookPicture;
 import com.trs.ibook.service.vo.BookCatalogListVO;
@@ -37,6 +40,65 @@ public class BookCatalogDAO extends AbstractDAO<BookCatalog> {
                 "WHERE c.bookId = :bookId AND p.bookId = :bookId AND c.isDelete = 0 AND p.isDelete = 0 " +
                 "ORDER BY c.pageIndex ASC ";
         return seasonDao.find(BookCatalogListVO.class, params, sql);
+    }
+
+    /**
+     * 分页查询电子书
+     */
+    public Page<BookCatalogListVO> findByQuery(BookCatalogQueryDTO bookCatalogQueryDTO) {
+        Map<String, Object> params = new HashMap<>();
+        String sql = "select * from " + BookCatalog.TABLE_NAME + " t where isDelete = 0 ";
+        if (StrKit.isNotEmpty(bookCatalogQueryDTO.getId())) {
+            sql += "and t.id = :id ";
+            params.put("id", bookCatalogQueryDTO.getId());
+        }
+        if (StrKit.isNotEmpty(bookCatalogQueryDTO.getBookId())) {
+            sql += "and t.bookId = :bookId ";
+            params.put("bookId", bookCatalogQueryDTO.getBookId());
+        }
+        if (StrKit.isNotEmpty(bookCatalogQueryDTO.getIntroduction())) {
+            sql += "and t.introduction = :introduction ";
+            params.put("introduction", bookCatalogQueryDTO.getIntroduction());
+        }
+        if (StrKit.isNotEmpty(bookCatalogQueryDTO.getPageIndex())) {
+            sql += "and t.pageIndex = :pageIndex ";
+            params.put("pageIndex", bookCatalogQueryDTO.getPageIndex());
+        }
+        if (StrKit.isNotEmpty(bookCatalogQueryDTO.getTitleName())) {
+            sql += "and t.titleName = :titleName ";
+            params.put("titleName", bookCatalogQueryDTO.getTitleName());
+        }
+        return seasonDao.findPage(BookCatalogListVO.class, bookCatalogQueryDTO.getPageNo(),
+                bookCatalogQueryDTO.getPageSize(), params, sql);
+    }
+
+    /**
+     * 分页查询电子书
+     */
+    public List<BookCatalogListVO> queryList(BookCatalogQueryDTO bookCatalogQueryDTO) {
+        Map<String, Object> params = new HashMap<>();
+        String sql = "select * from " + BookCatalog.TABLE_NAME + " t where isDelete = 0 ";
+        if (StrKit.isNotEmpty(bookCatalogQueryDTO.getId())) {
+            sql += "and t.id = :id ";
+            params.put("id", bookCatalogQueryDTO.getId());
+        }
+        if (StrKit.isNotEmpty(bookCatalogQueryDTO.getBookId())) {
+            sql += "and t.bookId = :bookId ";
+            params.put("bookId", bookCatalogQueryDTO.getBookId());
+        }
+        if (StrKit.isNotEmpty(bookCatalogQueryDTO.getIntroduction())) {
+            sql += "and t.introduction = :introduction ";
+            params.put("introduction", bookCatalogQueryDTO.getIntroduction());
+        }
+        if (StrKit.isNotEmpty(bookCatalogQueryDTO.getPageIndex())) {
+            sql += "and t.pageIndex = :pageIndex ";
+            params.put("pageIndex", bookCatalogQueryDTO.getPageIndex());
+        }
+        if (StrKit.isNotEmpty(bookCatalogQueryDTO.getTitleName())) {
+            sql += "and t.titleName = :titleName ";
+            params.put("titleName", bookCatalogQueryDTO.getTitleName());
+        }
+        return seasonDao.find(BookCatalogListVO.class, sql, params);
     }
 
 }

@@ -1,77 +1,65 @@
 package com.trs.ibook.service.dto;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.trs.ibook.core.constant.JsonFieldConst;
+import com.trs.ibook.core.dto.PageQueryDTO;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.Length;
 
 import static com.trs.ibook.service.example.BookInfoExample.*;
+import static com.trs.ibook.service.example.BookInfoExample.E_ISDELETE;
+import static com.trs.ibook.service.example.BookInfoExample.N_ISDELETE;
 
 /**
- * Title:
- * Description:
+ * Title:查询【电子书信息】的参数
+ * Description:查询【电子书信息】的参数
  * Copyright: 2019 北京拓尔思信息技术股份有限公司 版权所有.保留所有权
  * Company:北京拓尔思信息技术股份有限公司(TRS)
  * Project: ibook
  * Author: KylerTien
- * Create Time:19-3-28 17:37
+ * Create Time:19-4-4 14:27
  */
-public class BookInfoUpdateDTO {
-
+@ApiModel(description = "查询【电子书信息】的参数")
+public class BookInfoQueryDTO extends PageQueryDTO {
     @ApiModelProperty(notes = N_ID, example = E_ID)
-    @NotNull
     private Integer id;
 
     @ApiModelProperty(notes = N_TITLENAME, example = E_TITLENAME)
-    @NotNull(message = "电子书标题不能为空")
+    @Length(max = 30, message = "titleName最大长度不能超过{max}")
     private String titleName;
 
     @ApiModelProperty(notes = N_INTRODUCTION, example = E_INTRODUCTION)
-    @NotNull
+    @Length(max = 100, message = "introduction最大长度不能超过{max}")
     private String introduction;
 
-
     @ApiModelProperty(notes = N_AUTHOR, example = E_AUTHOR)
-    @NotNull
+    @Length(max = 10, message = "author最大长度不能超过{max}")
     private String author;
 
-
     @ApiModelProperty(notes = N_LABELCATEGORY, example = E_LABELCATEGORY)
-    @NotNull
     private String labelCategory;
 
-
     @ApiModelProperty(notes = N_PERIODICAL, example = E_PERIODICAL)
-    @NotNull
     private Integer periodical;
 
-
     @ApiModelProperty(notes = N_PDFURL, example = E_PDFURL)
-    @NotNull
     private String pdfUrl;
 
-
     @ApiModelProperty(notes = N_SITEID, example = E_SITEID)
-    @NotNull
     private String siteId;
 
-
     @ApiModelProperty(notes = N_STATUS, example = E_STATUS)
-    @NotNull
     private String status;
 
-
     @ApiModelProperty(notes = N_CREATETIME, example = E_CREATETIME)
-    @NotNull
+    @JSONField(format = JsonFieldConst.DEFAULT_DATE_FORMAT)
     private String createTime;
 
-
     @ApiModelProperty(notes = N_CREATEUSERID, example = E_CREATEUSERID)
-    @NotNull
     private String createUserId;
 
-
     @ApiModelProperty(notes = N_ISDELETE, example = E_ISDELETE)
-    @NotNull
     private String isDelete;
 
     public Integer getId() {
