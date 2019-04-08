@@ -98,7 +98,7 @@ public class BookCatalogDAO extends AbstractDAO<BookCatalog> {
             sql += "and t.titleName = :titleName ";
             params.put("titleName", bookCatalogQueryDTO.getTitleName());
         }
-        return seasonDao.find(BookCatalogListVO.class, sql, params);
+        return seasonDao.find(BookCatalogListVO.class, params, sql);
     }
 
 }

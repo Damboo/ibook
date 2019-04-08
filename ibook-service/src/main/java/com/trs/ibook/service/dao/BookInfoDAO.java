@@ -85,7 +85,7 @@ public class BookInfoDAO extends AbstractDAO<BookInfo> {
             sql += "and t.status = :status ";
             params.put("status", bookInfoQueryDTO.getStatus());
         }
-        return seasonDao.find(BookInfoListVO.class, sql, params);
+        return seasonDao.find(BookInfoListVO.class, params, sql);
     }
 
 
