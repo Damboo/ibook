@@ -1,7 +1,11 @@
 package com.trs.ibook.service.vo;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.trs.ibook.core.constant.JsonFieldConst;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
+import java.util.Date;
 
 import static com.trs.ibook.service.example.BookInfoExample.*;
 import static com.trs.ibook.service.example.BookInfoExample.N_CREATEUSERID;
@@ -47,7 +51,8 @@ public class BookInfoShowVO {
     private String status;
 
     @ApiModelProperty(notes = N_CREATETIME, example = E_CREATETIME)
-    private String createTime;
+    @JSONField(format = JsonFieldConst.DEFAULT_DATETIME_FORMAT)
+    private Date createTime;
 
     @ApiModelProperty(notes = N_CREATEUSERID, example = E_CREATEUSERID)
     private String createUserId;
@@ -127,11 +132,11 @@ public class BookInfoShowVO {
         this.status = status;
     }
 
-    public String getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(String createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 

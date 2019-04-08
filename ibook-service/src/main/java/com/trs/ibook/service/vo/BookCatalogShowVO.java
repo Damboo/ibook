@@ -6,6 +6,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.Length;
 
+import java.util.Date;
+
 import static com.trs.ibook.service.example.BookCatalogExample.*;
 
 /**
@@ -41,8 +43,8 @@ public class BookCatalogShowVO {
     private String pageIndex;
 
     @ApiModelProperty(notes = N_CREATETIME, example = E_CREATETIME)
-    @JSONField(format = JsonFieldConst.DEFAULT_DATE_FORMAT)
-    private String createTime;
+    @JSONField(format = JsonFieldConst.DEFAULT_DATETIME_FORMAT)
+    private Date createTime;
 
     @ApiModelProperty(notes = N_CREATEUSERID, example = E_CREATEUSERID)
     private String createUserId;
@@ -98,11 +100,11 @@ public class BookCatalogShowVO {
         this.pageIndex = pageIndex;
     }
 
-    public String getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(String createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 

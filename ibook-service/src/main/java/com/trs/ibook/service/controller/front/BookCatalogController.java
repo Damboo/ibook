@@ -9,7 +9,6 @@ import com.trs.ibook.service.dto.BookCatalogUpdateDTO;
 import com.trs.ibook.service.pojo.BookCatalog;
 import com.trs.ibook.service.service.BookCatalogCRUDService;
 import com.trs.ibook.service.vo.BookCatalogListVO;
-import com.trs.ibook.service.vo.BookCatalogListVO;
 import com.trs.ibook.service.vo.BookCatalogShowVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
