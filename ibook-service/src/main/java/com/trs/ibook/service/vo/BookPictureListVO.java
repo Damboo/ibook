@@ -57,6 +57,8 @@ public class BookPictureListVO {
         this.id = entity.getId();
         this.bookId = entity.getBookId();
         this.catalogId = entity.getCatalogId();
+        //默认设为空
+        this.catalogTitle = "";
         this.picUrl = entity.getPicUrl().replace("normal", "small");
         this.pageIndex = entity.getPageIndex();
         this.serialNo = entity.getSerialNo();

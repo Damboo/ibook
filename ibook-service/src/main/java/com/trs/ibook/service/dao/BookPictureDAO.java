@@ -75,11 +75,6 @@ public class BookPictureDAO extends AbstractDAO<BookPicture> {
         return seasonDao.save(bookPicture);
     }
 
-    public BookPicture getBookPictureById(Integer id) {
-        String sql = "SELECT * FROM " + BookPicture.TABLE_NAME + " WHERE id =? AND isDelete = 0 ";
-        return seasonDao.findFirst(BookPicture.class, sql, id);
-    }
-
     /**
      * 分页查询电子书
      */
@@ -87,19 +82,21 @@ public class BookPictureDAO extends AbstractDAO<BookPicture> {
         Map<String, Object> params = new HashMap<>();
         Map<String, Object> returnMap = new HashMap<>();
         List<BookPictureListVO> dTOList = new ArrayList<>();
-        String sql = "select * from " + BookPicture.TABLE_NAME + " t where isDelete = 0 ";
+        String sql = "select * from " + BookPicture.TABLE_NAME + " where isDelete = 0 ";
         if (StrKit.isNotEmpty(bookPictureQueryDTO.getId())) {
-            sql += "and t.id = :id ";
+            sql += "and id = :id ";
             params.put("id", bookPictureQueryDTO.getId());
         }
         if (StrKit.isNotEmpty(bookPictureQueryDTO.getBookId())) {
-            sql += "and t.bookId = :bookId ";
+            sql += "and bookId = :bookId ";
             params.put("bookId", bookPictureQueryDTO.getBookId());
         }
         if (StrKit.isNotEmpty(bookPictureQueryDTO.getCatalogId())) {
-            sql += "and t.catalogId = :catalogId ";
+            sql += "and catalogId = :catalogId ";
             params.put("catalogId", bookPictureQueryDTO.getCatalogId());
         }
+        //默认按照物理页排序
+        sql += " order by serialNo ";
         Page<BookPicture> page = seasonDao.findPage(BookPicture.class, bookPictureQueryDTO.getPageNo(),
                 bookPictureQueryDTO.getPageSize(), params, sql);
         returnMap.put("entityCount", page.getEntityCount());
@@ -111,8 +108,13 @@ public class BookPictureDAO extends AbstractDAO<BookPicture> {
         //对查询结果进行处理
         for (BookPicture entity : page.getEntities()) {
             BookPictureListVO oDto = new BookPictureListVO(entity);
-            BookCatalog bookCatalog = seasonDao.findById(BookCatalog.class, oDto.getCatalogId());
-            oDto.setCatalogTitle(bookCatalog.getTitleName());
+            Integer catalogId = oDto.getCatalogId();
+            if (catalogId > 0) {
+                BookCatalog bookCatalog = seasonDao.findById(BookCatalog.class, catalogId);
+                if (null != bookCatalog) {
+                    oDto.setCatalogTitle(bookCatalog.getTitleName());
+                }
+            }
             dTOList.add(oDto);
         }
         returnMap.put("entities", dTOList);
@@ -125,24 +127,31 @@ public class BookPictureDAO extends AbstractDAO<BookPicture> {
     public List<BookPictureListVO> queryList(BookPictureQueryDTO bookPictureQueryDTO) {
         Map<String, Object> params = new HashMap<>();
         List<BookPictureListVO> returnList = new ArrayList<>();
-        String sql = "select * from " + BookPicture.TABLE_NAME + " t where isDelete = 0 ";
+        String sql = "select * from " + BookPicture.TABLE_NAME + " where isDelete = 0 ";
         if (StrKit.isNotEmpty(bookPictureQueryDTO.getId())) {
-            sql += "and t.id = :id ";
+            sql += "and id = :id ";
             params.put("id", bookPictureQueryDTO.getId());
         }
         if (StrKit.isNotEmpty(bookPictureQueryDTO.getBookId())) {
-            sql += "and t.bookId = :bookId ";
+            sql += "and bookId = :bookId ";
             params.put("bookId", bookPictureQueryDTO.getBookId());
         }
         if (StrKit.isNotEmpty(bookPictureQueryDTO.getCatalogId())) {
-            sql += "and t.catalogId = :catalogId ";
+            sql += "and catalogId = :catalogId ";
             params.put("catalogId", bookPictureQueryDTO.getCatalogId());
         }
+        //默认按照物理页排序
+        sql += " order by serialNo ";
         List<BookPicture> list = seasonDao.find(BookPicture.class, params, sql);
         for (BookPicture bookPicture : list) {
             BookPictureListVO oDto = new BookPictureListVO(bookPicture);
-            BookCatalog bookCatalog = seasonDao.findById(BookCatalog.class, oDto.getCatalogId());
-            oDto.setCatalogTitle(bookCatalog.getTitleName());
+            Integer catalogId = oDto.getCatalogId();
+            if (catalogId > 0) {
+                BookCatalog bookCatalog = seasonDao.findById(BookCatalog.class, catalogId);
+                if (null != bookCatalog) {
+                    oDto.setCatalogTitle(bookCatalog.getTitleName());
+                }
+            }
             returnList.add(oDto);
         }
         return returnList;
