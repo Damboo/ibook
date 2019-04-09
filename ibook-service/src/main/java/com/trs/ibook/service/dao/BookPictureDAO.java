@@ -1,8 +1,12 @@
 package com.trs.ibook.service.dao;
 
 import com.season.common.SafeKit;
+import com.season.common.StrKit;
+import com.season.core.Page;
 import com.trs.ibook.core.dao.AbstractDAO;
+import com.trs.ibook.service.dto.BookPictureQueryDTO;
 import com.trs.ibook.service.pojo.BookPicture;
+import com.trs.ibook.service.vo.BookPictureListVO;
 import com.trs.ibook.service.vo.BookPicturePageVO;
 import org.springframework.stereotype.Repository;
 
@@ -67,5 +71,53 @@ public class BookPictureDAO extends AbstractDAO<BookPicture> {
      */
     public BookPicture saveBookPicture(BookPicture bookPicture){
         return seasonDao.save(bookPicture);
+    }
+
+    public BookPicture getBookPictureById(Integer id) {
+        String sql = "SELECT * FROM " + BookPicture.TABLE_NAME + " WHERE id =? AND isDelete = 0 ";
+        return seasonDao.findFirst(BookPicture.class, sql, id);
+    }
+
+    /**
+     * 分页查询电子书
+     */
+    public Page<BookPictureListVO> findByQuery(BookPictureQueryDTO bookPictureQueryDTO) {
+        Map<String, Object> params = new HashMap<>();
+        String sql = "select * from " + BookPicture.TABLE_NAME + " t where isDelete = 0 ";
+        if (StrKit.isNotEmpty(bookPictureQueryDTO.getId())) {
+            sql += "and t.id = :id ";
+            params.put("id", bookPictureQueryDTO.getId());
+        }
+        if (StrKit.isNotEmpty(bookPictureQueryDTO.getBookId())) {
+            sql += "and t.bookId = :bookId ";
+            params.put("bookId", bookPictureQueryDTO.getBookId());
+        }
+        if (StrKit.isNotEmpty(bookPictureQueryDTO.getCatalogId())) {
+            sql += "and t.catalogId = :catalogId ";
+            params.put("catalogId", bookPictureQueryDTO.getCatalogId());
+        }
+        return seasonDao.findPage(BookPictureListVO.class, bookPictureQueryDTO.getPageNo(),
+                bookPictureQueryDTO.getPageSize(), params, sql);
+    }
+
+    /**
+     * 分页查询电子书
+     */
+    public List<BookPictureListVO> queryList(BookPictureQueryDTO bookPictureQueryDTO) {
+        Map<String, Object> params = new HashMap<>();
+        String sql = "select * from " + BookPicture.TABLE_NAME + " t where isDelete = 0 ";
+        if (StrKit.isNotEmpty(bookPictureQueryDTO.getId())) {
+            sql += "and t.id = :id ";
+            params.put("id", bookPictureQueryDTO.getId());
+        }
+        if (StrKit.isNotEmpty(bookPictureQueryDTO.getBookId())) {
+            sql += "and t.bookId = :bookId ";
+            params.put("bookId", bookPictureQueryDTO.getBookId());
+        }
+        if (StrKit.isNotEmpty(bookPictureQueryDTO.getCatalogId())) {
+            sql += "and t.catalogId = :catalogId ";
+            params.put("catalogId", bookPictureQueryDTO.getCatalogId());
+        }
+        return seasonDao.find(BookPictureListVO.class, params, sql);
     }
 }

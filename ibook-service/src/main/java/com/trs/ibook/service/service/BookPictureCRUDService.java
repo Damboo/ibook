@@ -3,18 +3,24 @@ package com.trs.ibook.service.service;
 import com.season.common.ArrayKit;
 import com.season.common.JudgeFileTypeKit;
 import com.season.common.SafeKit;
+import com.season.core.Page;
 import com.season.core.error.ParamException;
 import com.trs.ibook.core.exception.IBookException;
 import com.trs.ibook.core.exception.IBookParamException;
-import com.trs.ibook.service.dao.BookInfoDAO;
+import com.trs.ibook.service.dao.*;
 import com.trs.ibook.service.dao.BookPictureDAO;
-import com.trs.ibook.service.dao.OriginPicDAO;
+import com.trs.ibook.service.dto.BookPictureQueryDTO;
+import com.trs.ibook.service.dto.BookPictureUpdateDTO;
+import com.trs.ibook.service.mapper.BookPictureMapper;
 import com.trs.ibook.service.pojo.BookInfo;
 import com.trs.ibook.service.pojo.BookPicture;
 import com.trs.ibook.service.pojo.OriginPic;
 import com.trs.ibook.service.util.ImageUtil;
+import com.trs.ibook.service.vo.BookPictureListVO;
+import com.trs.ibook.service.vo.BookPictureShowVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
@@ -24,6 +30,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Title: 图片上传服务
@@ -35,18 +42,69 @@ import java.util.Date;
  * Create Time: 2018-01-29 10:30
  */
 @Service
-public class ImageUploadService {
-
-    private final OriginPicDAO originPicDAO;
-    private final BookInfoDAO bookInfoDAO;
-    private final BookPictureDAO bookPictureDAO;
-    private static final String[] EXT_NAMES = new String[]{"jpg", "png", "jpeg"};
+public class BookPictureCRUDService {
 
     @Autowired
-    public ImageUploadService(OriginPicDAO originPicDAO, BookInfoDAO bookInfoDAO, BookPictureDAO bookPictureDAO) {
-        this.originPicDAO = originPicDAO;
-        this.bookInfoDAO = bookInfoDAO;
-        this.bookPictureDAO = bookPictureDAO;
+    private BookInfoDAO bookInfoDAO;
+    @Autowired
+    private OriginPicDAO originPicDAO;
+    @Autowired
+    private BookPictureDAO bookPictureDAO;
+    
+    private static final String[] EXT_NAMES = new String[]{"jpg", "png", "jpeg"};
+
+
+    /**
+     * 修改【电子书页码信息】
+     */
+    @Transactional(rollbackFor = IBookParamException.class)
+    public void update(BookPictureUpdateDTO bookPictureUpdateDTO) {
+        Integer id = bookPictureUpdateDTO.getId();
+        BookPicture bookPicture = bookPictureDAO.findById(id);
+        if (bookPicture == null) {
+            throw new IBookParamException("id有误");
+        }
+        BookPictureMapper.INSTANCE.setUpdateDTO(bookPicture, bookPictureUpdateDTO);
+        bookPictureDAO.update(bookPicture);
+    }
+
+    /**
+     * 查询分页列表
+     */
+    public Page<BookPictureListVO> page(BookPictureQueryDTO bookPictureQueryDTO) {
+        return bookPictureDAO.findByQuery(bookPictureQueryDTO);
+    }
+
+    /**
+     * 查询列表
+     */
+    public List<BookPictureListVO> list(BookPictureQueryDTO bookPictureQueryDTO) {
+        return bookPictureDAO.queryList(bookPictureQueryDTO);
+    }
+
+    /**
+     * 查询【电子书页码信息】详情
+     *
+     * @param id
+     * @return
+     */
+    public BookPictureShowVO show(Integer id) {
+        BookPicture bookPicture = bookPictureDAO.findById(id);
+        if (bookPicture == null) {
+            throw new IBookParamException("未查询到记录");
+        }
+        return BookPictureMapper.INSTANCE.toShowVO(bookPicture);
+    }
+
+    /**
+     * 删除【电子书页码信息】
+     *
+     * @param id
+     * @return
+     */
+    @Transactional(rollbackFor = IBookException.class)
+    public int delete(Integer id) {
+        return bookPictureDAO.delete(id);
     }
 
     public void imageUpload(MultipartFile multipartFile, String baseDir, Integer bookId) throws IOException {
@@ -84,13 +142,13 @@ public class ImageUploadService {
         bookPicture.setCreateUserId(null);
         bookPicture.setIsDelete(0);
 
-         bookPicture.setSerialNo(part1Page);
+        bookPicture.setSerialNo(part1Page);
         //固定无页码有5页
         bookPicture.setPageIndex(part1Page > 5 ? part1Page - 5 : null);
         bookPicture.setPicUrl(part1);
         bookPictureDAO.saveBookPicture(bookPicture);
 
-       bookPicture.setSerialNo(part2Page);
+        bookPicture.setSerialNo(part2Page);
         //固定无页码有5页
         bookPicture.setPageIndex(part2Page > 5 ? part2Page - 5 : null);
         bookPicture.setPicUrl(part2);

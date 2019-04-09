@@ -13,7 +13,7 @@ import static com.trs.ibook.service.example.BookInfoExample.N_ISDELETE;
 
 /**
  * Title:
- * Description:
+ * Description:电子书详情列表
  * Copyright: 2019 北京拓尔思信息技术股份有限公司 版权所有.保留所有权
  * Company:北京拓尔思信息技术股份有限公司(TRS)
  * Project: ibook

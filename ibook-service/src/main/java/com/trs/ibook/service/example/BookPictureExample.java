@@ -17,6 +17,9 @@ public class BookPictureExample {
     public static final String N_BOOKID = "电子书信息表主键ID";
     public static final String E_BOOKID = "1";
 
+    public static final String N_CATALOGID = "电子书目录表主键ID";
+    public static final String E_CATALOGID = "1";
+
     public static final String N_PICURL = "图片路径";
     public static final String E_PICURL = "/hsfile/ibook/统帅电器2019年产品样册/normal/统帅电器2019年产品样册_1.jpg";
 

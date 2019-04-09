@@ -1,57 +1,55 @@
-package com.trs.ibook.service.pojo;
+package com.trs.ibook.service.vo;
 
-import com.season.orm.dao.annotation.Column;
-import com.season.orm.dao.annotation.TableInfo;
-import com.season.orm.dao.annotation.Transient;
-import com.season.orm.dao.dialect.constant.MySqlTypeConst;
-import com.trs.ibook.core.pojo.AbstractPOJO;
+import com.alibaba.fastjson.annotation.JSONField;
+import com.trs.ibook.core.constant.JsonFieldConst;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
 
 import static com.trs.ibook.service.example.BookPictureExample.*;
+import static com.trs.ibook.service.example.BookPictureExample.E_ISDELETE;
+import static com.trs.ibook.service.example.BookPictureExample.N_ISDELETE;
 
 /**
- * Title: 电子书图片表实体类
- * Description: 电子书图片表实体类
- * Copyright: 2019 拓尔思信息技术股份有限公司 版权所有.保留所有权
- * Company: 拓尔思信息技术股份有限公司(TRS)
+ * Title:
+ * Description:
+ * Copyright: 2019 北京拓尔思信息技术股份有限公司 版权所有.保留所有权
+ * Company:北京拓尔思信息技术股份有限公司(TRS)
  * Project: ibook
- * Author: RayeGong
- * Create Time: 2019-03-13 12:00
+ * Author: KylerTien
+ * Create Time:19-4-9 14:25
  */
-@TableInfo(tableName = BookPicture.TABLE_NAME, pkName = "id")
-public class BookPicture extends AbstractPOJO {
+@ApiModel(description = "电子书页码列表展示对象")
+public class BookPictureListVO {
 
-    @Transient
-    public static final String TABLE_NAME = "ibook_book_picture";
-
-    @Column(length = 10, defaultValue = "", autoIncrement = true, comment = N_ID)
+    @ApiModelProperty(notes = N_ID, example = E_ID)
     private Integer id;
 
-    @Column(length = 10, notNull = true, comment = N_BOOKID)
+    @ApiModelProperty(notes = N_BOOKID, example = E_BOOKID)
     private Integer bookId;
 
-    @Column(length = 10, notNull = true, comment = N_CATALOGID)
+    @ApiModelProperty(notes = N_CATALOGID, example = E_CATALOGID)
     private Integer catalogId;
 
-    @Column(length = 255, comment = N_PICURL)
+    @ApiModelProperty(notes = N_PICURL, example = E_PICURL)
     private String picUrl;
 
-    @Column(length = 10, comment = N_PAGEINDEX)
+    @ApiModelProperty(notes = N_PAGEINDEX, example = E_PAGEINDEX)
     private Integer pageIndex;
 
-    @Column(length = 10, comment = N_SERIALNO)
+    @ApiModelProperty(notes = N_SERIALNO, example = E_SERIALNO)
     private Integer serialNo;
 
-    @Column(notNull = true, comment = N_CREATETIME)
+    @ApiModelProperty(notes = N_CREATETIME, example = E_CREATETIME)
+    @JSONField(format = JsonFieldConst.DEFAULT_DATETIME_FORMAT)
     private Date createTime;
 
-    @Column(length = 20, comment = N_CREATEUSERID)
+    @ApiModelProperty(notes = N_CREATEUSERID, example = E_CREATEUSERID)
     private Long createUserId;
 
-    @Column(type = MySqlTypeConst.SMALLINT, length = 1, notNull = true, comment = N_ISDELETE)
+    @ApiModelProperty(notes = N_ISDELETE, example = E_ISDELETE)
     private Integer isDelete;
-
 
     public Integer getId() {
         return id;
@@ -124,5 +122,4 @@ public class BookPicture extends AbstractPOJO {
     public void setIsDelete(Integer isDelete) {
         this.isDelete = isDelete;
     }
-
 }
