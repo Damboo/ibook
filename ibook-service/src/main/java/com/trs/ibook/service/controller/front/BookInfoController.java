@@ -26,7 +26,7 @@ import java.util.List;
  * Create Time:19-3-28 15:35
  */
 @RestController
-@RequestMapping("/bookFrontShow")
+@RequestMapping("/bookInfo")
 public class BookInfoController implements BookInfoAPI {
 
     @Autowired
@@ -68,8 +68,8 @@ public class BookInfoController implements BookInfoAPI {
 
     @Override
     @RequestMapping(method = RequestMethod.GET, value = "show")
-    public Result<BookInfoShowVO> show(Integer bookId) {
-        BookInfoShowVO bookInfoShowVO = bookInfoCRUDService.show(bookId);
+    public Result<BookInfoShowVO> show(Integer id) {
+        BookInfoShowVO bookInfoShowVO = bookInfoCRUDService.show(id);
         Result<BookInfoShowVO> result = Result.success();
         result.setData(bookInfoShowVO);
         return result;

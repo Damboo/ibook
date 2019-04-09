@@ -43,7 +43,7 @@ public class BookCatalogAddDTO extends AbstractDTO {
 
     @ApiModelProperty(notes = N_PAGEINDEX, example = E_PAGEINDEX)
     @NotNull
-    private String pageIndex;
+    private Integer pageIndex;
 
     @ApiModelProperty(notes = N_CREATETIME, example = E_CREATETIME)
     @NotNull
@@ -51,11 +51,11 @@ public class BookCatalogAddDTO extends AbstractDTO {
 
     @ApiModelProperty(notes = N_CREATEUSERID, example = E_CREATEUSERID)
     @NotNull
-    private String createUserId;
+    private Long createUserId;
 
     @ApiModelProperty(notes = N_ISDELETE, example = E_ISDELETE)
     @NotNull
-    private String isDelete;
+    private Integer isDelete;
 
     public Integer getParentId() {
         return parentId;
@@ -89,11 +89,11 @@ public class BookCatalogAddDTO extends AbstractDTO {
         this.introduction = introduction;
     }
 
-    public String getPageIndex() {
+    public Integer getPageIndex() {
         return pageIndex;
     }
 
-    public void setPageIndex(String pageIndex) {
+    public void setPageIndex(Integer pageIndex) {
         this.pageIndex = pageIndex;
     }
 
@@ -105,19 +105,19 @@ public class BookCatalogAddDTO extends AbstractDTO {
         this.createTime = createTime;
     }
 
-    public String getCreateUserId() {
+    public Long getCreateUserId() {
         return createUserId;
     }
 
-    public void setCreateUserId(String createUserId) {
+    public void setCreateUserId(Long createUserId) {
         this.createUserId = createUserId;
     }
 
-    public String getIsDelete() {
+    public Integer getIsDelete() {
         return isDelete;
     }
 
-    public void setIsDelete(String isDelete) {
+    public void setIsDelete(Integer isDelete) {
         this.isDelete = isDelete;
     }
 }

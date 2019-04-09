@@ -63,9 +63,9 @@ public interface BookInfoAPI {
     /******************************查看【电子书信息】详情*****************************/
     @ApiOperation(value = "查看【电子书信息】详情")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "bookId", dataType = "Integer", value = "【电子书信息】id", paramType = "query"),
+            @ApiImplicitParam(name = "id", dataType = "Integer", value = "【电子书信息】id", paramType = "query"),
     })
-    Result<BookInfoShowVO> show(Integer bookId);
+    Result<BookInfoShowVO> show(Integer id);
 
 
     /******************************删除【电子书信息】*****************************/

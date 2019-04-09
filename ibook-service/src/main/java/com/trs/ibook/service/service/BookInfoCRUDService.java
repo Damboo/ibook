@@ -43,7 +43,7 @@ public class BookInfoCRUDService {
     }
 
     /**
-     * 修改【地区信息】
+     * 修改【电子书信息】
      */
     @Transactional(rollbackFor = IBookParamException.class)
     public void update(BookInfoUpdateDTO bookInfoUpdateDTO) {
@@ -71,7 +71,7 @@ public class BookInfoCRUDService {
     }
 
     /**
-     * 查询【地区信息】详情
+     * 查询【电子书信息】详情
      *
      * @param id
      * @return
@@ -85,7 +85,7 @@ public class BookInfoCRUDService {
     }
 
     /**
-     * 删除【地区信息】
+     * 删除【电子书信息】
      *
      * @param id
      * @return

@@ -40,17 +40,17 @@ public class BookCatalogShowVO {
     private String introduction;
 
     @ApiModelProperty(notes = N_PAGEINDEX, example = E_PAGEINDEX)
-    private String pageIndex;
+    private Integer pageIndex;
 
     @ApiModelProperty(notes = N_CREATETIME, example = E_CREATETIME)
     @JSONField(format = JsonFieldConst.DEFAULT_DATETIME_FORMAT)
     private Date createTime;
 
     @ApiModelProperty(notes = N_CREATEUSERID, example = E_CREATEUSERID)
-    private String createUserId;
+    private Long createUserId;
 
     @ApiModelProperty(notes = N_ISDELETE, example = E_ISDELETE)
-    private String isDelete;
+    private Integer isDelete;
 
     public Integer getId() {
         return id;
@@ -92,11 +92,11 @@ public class BookCatalogShowVO {
         this.introduction = introduction;
     }
 
-    public String getPageIndex() {
+    public Integer getPageIndex() {
         return pageIndex;
     }
 
-    public void setPageIndex(String pageIndex) {
+    public void setPageIndex(Integer pageIndex) {
         this.pageIndex = pageIndex;
     }
 
@@ -108,19 +108,19 @@ public class BookCatalogShowVO {
         this.createTime = createTime;
     }
 
-    public String getCreateUserId() {
+    public Long getCreateUserId() {
         return createUserId;
     }
 
-    public void setCreateUserId(String createUserId) {
+    public void setCreateUserId(Long createUserId) {
         this.createUserId = createUserId;
     }
 
-    public String getIsDelete() {
+    public Integer getIsDelete() {
         return isDelete;
     }
 
-    public void setIsDelete(String isDelete) {
+    public void setIsDelete(Integer isDelete) {
         this.isDelete = isDelete;
     }
 }

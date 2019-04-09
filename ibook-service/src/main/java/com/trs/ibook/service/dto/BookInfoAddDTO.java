@@ -51,11 +51,11 @@ public class BookInfoAddDTO extends AbstractDTO {
 
     @ApiModelProperty(notes = N_SITEID, example = E_SITEID)
     @NotNull
-    private String siteId;
+    private Integer siteId;
 
     @ApiModelProperty(notes = N_STATUS, example = E_STATUS)
     @NotNull
-    private String status;
+    private Integer status;
 
     @ApiModelProperty(notes = N_CREATETIME, example = E_CREATETIME)
     @NotNull
@@ -63,11 +63,11 @@ public class BookInfoAddDTO extends AbstractDTO {
 
     @ApiModelProperty(notes = N_CREATEUSERID, example = E_CREATEUSERID)
     @NotNull
-    private String createUserId;
+    private Long createUserId;
 
     @ApiModelProperty(notes = N_ISDELETE, example = E_ISDELETE)
     @NotNull
-    private String isDelete;
+    private Integer isDelete;
 
     public String getTitleName() {
         return titleName;
@@ -117,19 +117,19 @@ public class BookInfoAddDTO extends AbstractDTO {
         this.pdfUrl = pdfUrl;
     }
 
-    public String getSiteId() {
+    public Integer getSiteId() {
         return siteId;
     }
 
-    public void setSiteId(String siteId) {
+    public void setSiteId(Integer siteId) {
         this.siteId = siteId;
     }
 
-    public String getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
@@ -141,19 +141,19 @@ public class BookInfoAddDTO extends AbstractDTO {
         this.createTime = createTime;
     }
 
-    public String getCreateUserId() {
+    public Long getCreateUserId() {
         return createUserId;
     }
 
-    public void setCreateUserId(String createUserId) {
+    public void setCreateUserId(Long createUserId) {
         this.createUserId = createUserId;
     }
 
-    public String getIsDelete() {
+    public Integer getIsDelete() {
         return isDelete;
     }
 
-    public void setIsDelete(String isDelete) {
+    public void setIsDelete(Integer isDelete) {
         this.isDelete = isDelete;
     }
 }

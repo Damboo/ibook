@@ -30,7 +30,7 @@ public interface BookInfoMapper {
     /**
      * 将updateDTO的值映射到pojo
      */
-    void setUpdateDTO(BookInfo bookInfo, @MappingTarget BookInfoUpdateDTO bookInfoUpdateDTO);
+    void setUpdateDTO(@MappingTarget BookInfo bookInfo, BookInfoUpdateDTO bookInfoUpdateDTO);
 
     /**
      * pojo映射vo
