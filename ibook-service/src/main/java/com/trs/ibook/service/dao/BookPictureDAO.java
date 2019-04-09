@@ -5,11 +5,13 @@ import com.season.common.StrKit;
 import com.season.core.Page;
 import com.trs.ibook.core.dao.AbstractDAO;
 import com.trs.ibook.service.dto.BookPictureQueryDTO;
+import com.trs.ibook.service.pojo.BookCatalog;
 import com.trs.ibook.service.pojo.BookPicture;
 import com.trs.ibook.service.vo.BookPictureListVO;
 import com.trs.ibook.service.vo.BookPicturePageVO;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,7 +71,7 @@ public class BookPictureDAO extends AbstractDAO<BookPicture> {
     /**
      * 保存记录
      */
-    public BookPicture saveBookPicture(BookPicture bookPicture){
+    public BookPicture saveBookPicture(BookPicture bookPicture) {
         return seasonDao.save(bookPicture);
     }
 
@@ -81,8 +83,10 @@ public class BookPictureDAO extends AbstractDAO<BookPicture> {
     /**
      * 分页查询电子书
      */
-    public Page<BookPictureListVO> findByQuery(BookPictureQueryDTO bookPictureQueryDTO) {
+    public Map<String, Object> findByQuery(BookPictureQueryDTO bookPictureQueryDTO) {
         Map<String, Object> params = new HashMap<>();
+        Map<String, Object> returnMap = new HashMap<>();
+        List<BookPictureListVO> dTOList = new ArrayList<>();
         String sql = "select * from " + BookPicture.TABLE_NAME + " t where isDelete = 0 ";
         if (StrKit.isNotEmpty(bookPictureQueryDTO.getId())) {
             sql += "and t.id = :id ";
@@ -96,12 +100,28 @@ public class BookPictureDAO extends AbstractDAO<BookPicture> {
             sql += "and t.catalogId = :catalogId ";
             params.put("catalogId", bookPictureQueryDTO.getCatalogId());
         }
-        return seasonDao.findPage(BookPictureListVO.class, bookPictureQueryDTO.getPageNo(),
+        Page<BookPicture> page = seasonDao.findPage(BookPicture.class, bookPictureQueryDTO.getPageNo(),
                 bookPictureQueryDTO.getPageSize(), params, sql);
+        returnMap.put("entityCount", page.getEntityCount());
+        returnMap.put("firstEntityIndex", page.getFirstEntityIndex());
+        returnMap.put("lastEntityIndex", page.getLastEntityIndex());
+        returnMap.put("pageCount", page.getPageCount());
+        returnMap.put("pageNo",page.getPageNo());
+        returnMap.put("pageSize",page.getPageSize());
+        //对查询结果进行处理
+        for (BookPicture entity : page.getEntities()) {
+            BookPictureListVO oDto = new BookPictureListVO(entity);
+            Integer catalogId = oDto.getCatalogId();
+            BookCatalog bookCatalog = seasonDao.findById(BookCatalog.class, catalogId);
+            oDto.setCatalogTitle(bookCatalog.getTitleName());
+            dTOList.add(oDto);
+        }
+        returnMap.put("entities", dTOList);
+        return returnMap;
     }
 
     /**
-     * 分页查询电子书
+     * 全部查询电子书
      */
     public List<BookPictureListVO> queryList(BookPictureQueryDTO bookPictureQueryDTO) {
         Map<String, Object> params = new HashMap<>();

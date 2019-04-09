@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -48,10 +49,10 @@ public class BookPictureController implements BookPictureAPI {
 
     @Override
     @PostMapping(value = "/page")
-    public Result<Page<BookPictureListVO>> page(@Valid @RequestBody BookPictureQueryDTO bookPictureQueryDTO) {
-        Page<BookPictureListVO> page = bookPictureCRUDService.page(bookPictureQueryDTO);
-        Result<Page<BookPictureListVO>> result = Result.success();
-        result.setData(page);
+    public Result<Map<String, Object>> page(@Valid @RequestBody BookPictureQueryDTO bookPictureQueryDTO) {
+        Map<String, Object> map = bookPictureCRUDService.page(bookPictureQueryDTO);
+        Result<Map<String, Object>> result = Result.success();
+        result.setData(map);
         return result;
     }
 

@@ -13,6 +13,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Title:
@@ -31,7 +32,7 @@ public interface BookPictureAPI {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "bookPictureQueryDTO", dataType = "BookPictureQueryDTO", value = "分页查询【电子书页码信息】参数", paramType = "body"),
     })
-    Result<Page<BookPictureListVO>> page(BookPictureQueryDTO bookPictureQueryDTO);
+    Result<Map<String, Object>> page(BookPictureQueryDTO bookPictureQueryDTO);
 
 
     /******************************WCM修改电子书页码*****************************/

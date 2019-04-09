@@ -3,7 +3,6 @@ package com.trs.ibook.service.service;
 import com.season.common.ArrayKit;
 import com.season.common.JudgeFileTypeKit;
 import com.season.common.SafeKit;
-import com.season.core.Page;
 import com.season.core.error.ParamException;
 import com.trs.ibook.core.exception.IBookException;
 import com.trs.ibook.core.exception.IBookParamException;
@@ -31,6 +30,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Title: 图片上传服务
@@ -71,7 +71,7 @@ public class BookPictureCRUDService {
     /**
      * 查询分页列表
      */
-    public Page<BookPictureListVO> page(BookPictureQueryDTO bookPictureQueryDTO) {
+    public Map<String, Object> page(BookPictureQueryDTO bookPictureQueryDTO) {
         return bookPictureDAO.findByQuery(bookPictureQueryDTO);
     }
 

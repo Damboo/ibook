@@ -11,7 +11,7 @@ import static com.trs.ibook.service.example.BookPictureExample.*;
 
 /**
  * Title:
- * Description:
+ * Description:后端页码管理查询DTO
  * Copyright: 2019 北京拓尔思信息技术股份有限公司 版权所有.保留所有权
  * Company:北京拓尔思信息技术股份有限公司(TRS)
  * Project: ibook

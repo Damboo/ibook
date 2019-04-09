@@ -1,10 +1,10 @@
 package com.trs.ibook.service.vo;
 
-import com.alibaba.fastjson.annotation.JSONField;
-import com.trs.ibook.core.constant.JsonFieldConst;
+import com.trs.ibook.service.pojo.BookPicture;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static com.trs.ibook.service.example.BookPictureExample.*;
@@ -13,7 +13,7 @@ import static com.trs.ibook.service.example.BookPictureExample.N_ISDELETE;
 
 /**
  * Title:
- * Description:
+ * Description:电子书页码列表展示对象
  * Copyright: 2019 北京拓尔思信息技术股份有限公司 版权所有.保留所有权
  * Company:北京拓尔思信息技术股份有限公司(TRS)
  * Project: ibook
@@ -32,6 +32,9 @@ public class BookPictureListVO {
     @ApiModelProperty(notes = N_CATALOGID, example = E_CATALOGID)
     private Integer catalogId;
 
+    @ApiModelProperty(notes = N_CATALOGTITLE, example = E_CATALOGTITLE)
+    private String catalogTitle;
+
     @ApiModelProperty(notes = N_PICURL, example = E_PICURL)
     private String picUrl;
 
@@ -42,14 +45,30 @@ public class BookPictureListVO {
     private Integer serialNo;
 
     @ApiModelProperty(notes = N_CREATETIME, example = E_CREATETIME)
-    @JSONField(format = JsonFieldConst.DEFAULT_DATETIME_FORMAT)
-    private Date createTime;
+    private String createTime;
 
     @ApiModelProperty(notes = N_CREATEUSERID, example = E_CREATEUSERID)
     private Long createUserId;
 
     @ApiModelProperty(notes = N_ISDELETE, example = E_ISDELETE)
     private Integer isDelete;
+
+    public BookPictureListVO(BookPicture entity) {
+        this.id = entity.getId();
+        this.bookId = entity.getBookId();
+        this.catalogId = entity.getCatalogId();
+        this.picUrl = entity.getPicUrl().replace("normal", "small");
+        this.pageIndex = entity.getPageIndex();
+        this.serialNo = entity.getSerialNo();
+        dealCreateTime(entity);
+        this.createUserId = entity.getCreateUserId();
+        this.isDelete = entity.getIsDelete();
+    }
+
+    private void dealCreateTime(BookPicture entity) {
+        Date time = entity.getCreateTime();
+        this.createTime = time == null ? "" : new SimpleDateFormat("yyyy-MM-dd").format(time);
+    }
 
     public Integer getId() {
         return id;
@@ -73,6 +92,14 @@ public class BookPictureListVO {
 
     public void setCatalogId(Integer catalogId) {
         this.catalogId = catalogId;
+    }
+
+    public String getCatalogTitle() {
+        return catalogTitle;
+    }
+
+    public void setCatalogTitle(String catalogTitle) {
+        this.catalogTitle = catalogTitle;
     }
 
     public String getPicUrl() {
@@ -99,11 +126,11 @@ public class BookPictureListVO {
         this.serialNo = serialNo;
     }
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
