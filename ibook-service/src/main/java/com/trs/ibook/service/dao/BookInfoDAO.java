@@ -41,7 +41,7 @@ public class BookInfoDAO extends AbstractDAO<BookInfo> {
         }
         if (StrKit.isNotEmpty(bookInfoQueryDTO.getAuthor())) {
             sql += "and t.author = :author ";
-            params.put("regionCode", bookInfoQueryDTO.getAuthor());
+            params.put("author", bookInfoQueryDTO.getAuthor());
         }
         if (StrKit.isNotEmpty(bookInfoQueryDTO.getSiteId())) {
             sql += "and t.siteId = :siteId ";
@@ -71,7 +71,7 @@ public class BookInfoDAO extends AbstractDAO<BookInfo> {
         }
         if (StrKit.isNotEmpty(bookInfoQueryDTO.getAuthor())) {
             sql += "and t.author = :author ";
-            params.put("regionCode", bookInfoQueryDTO.getAuthor());
+            params.put("author", bookInfoQueryDTO.getAuthor());
         }
         if (StrKit.isNotEmpty(bookInfoQueryDTO.getSiteId())) {
             sql += "and t.siteId = :siteId ";
