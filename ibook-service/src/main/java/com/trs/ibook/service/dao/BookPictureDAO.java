@@ -106,13 +106,12 @@ public class BookPictureDAO extends AbstractDAO<BookPicture> {
         returnMap.put("firstEntityIndex", page.getFirstEntityIndex());
         returnMap.put("lastEntityIndex", page.getLastEntityIndex());
         returnMap.put("pageCount", page.getPageCount());
-        returnMap.put("pageNo",page.getPageNo());
-        returnMap.put("pageSize",page.getPageSize());
+        returnMap.put("pageNo", page.getPageNo());
+        returnMap.put("pageSize", page.getPageSize());
         //对查询结果进行处理
         for (BookPicture entity : page.getEntities()) {
             BookPictureListVO oDto = new BookPictureListVO(entity);
-            Integer catalogId = oDto.getCatalogId();
-            BookCatalog bookCatalog = seasonDao.findById(BookCatalog.class, catalogId);
+            BookCatalog bookCatalog = seasonDao.findById(BookCatalog.class, oDto.getCatalogId());
             oDto.setCatalogTitle(bookCatalog.getTitleName());
             dTOList.add(oDto);
         }
@@ -125,6 +124,7 @@ public class BookPictureDAO extends AbstractDAO<BookPicture> {
      */
     public List<BookPictureListVO> queryList(BookPictureQueryDTO bookPictureQueryDTO) {
         Map<String, Object> params = new HashMap<>();
+        List<BookPictureListVO> returnList = new ArrayList<>();
         String sql = "select * from " + BookPicture.TABLE_NAME + " t where isDelete = 0 ";
         if (StrKit.isNotEmpty(bookPictureQueryDTO.getId())) {
             sql += "and t.id = :id ";
@@ -138,6 +138,13 @@ public class BookPictureDAO extends AbstractDAO<BookPicture> {
             sql += "and t.catalogId = :catalogId ";
             params.put("catalogId", bookPictureQueryDTO.getCatalogId());
         }
-        return seasonDao.find(BookPictureListVO.class, params, sql);
+        List<BookPicture> list = seasonDao.find(BookPicture.class, params, sql);
+        for (BookPicture bookPicture : list) {
+            BookPictureListVO oDto = new BookPictureListVO(bookPicture);
+            BookCatalog bookCatalog = seasonDao.findById(BookCatalog.class, oDto.getCatalogId());
+            oDto.setCatalogTitle(bookCatalog.getTitleName());
+            returnList.add(oDto);
+        }
+        return returnList;
     }
 }
