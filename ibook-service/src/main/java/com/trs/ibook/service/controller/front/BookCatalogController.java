@@ -68,8 +68,8 @@ public class BookCatalogController implements BookCatalogAPI {
 
     @Override
     @RequestMapping(method = RequestMethod.GET, value = "show")
-    public Result<BookCatalogShowVO> show(Integer bookId) {
-        BookCatalogShowVO bookCatalogShowVO = bookCatalogCRUDService.show(bookId);
+    public Result<BookCatalogShowVO> show(Integer id) {
+        BookCatalogShowVO bookCatalogShowVO = bookCatalogCRUDService.show(id);
         Result<BookCatalogShowVO> result = Result.success();
         result.setData(bookCatalogShowVO);
         return result;

@@ -46,7 +46,7 @@ public class BookCatalogAddDTO extends AbstractDTO {
     private String pageIndex;
 
     @ApiModelProperty(notes = N_CREATETIME, example = E_CREATETIME)
-
+    @NotNull
     private Date createTime;
 
     @ApiModelProperty(notes = N_CREATEUSERID, example = E_CREATEUSERID)

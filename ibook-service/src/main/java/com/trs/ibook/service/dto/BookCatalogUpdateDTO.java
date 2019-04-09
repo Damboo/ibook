@@ -46,6 +46,14 @@ public class BookCatalogUpdateDTO {
     @NotNull
     private String pageIndex;
 
+    @ApiModelProperty(notes = N_CREATETIME, example = E_CREATETIME)
+    @NotNull
+    private Date createTime;
+
+    @ApiModelProperty(notes = N_CREATEUSERID, example = E_CREATEUSERID)
+    @NotNull
+    private String createUserId;
+
     @ApiModelProperty(notes = N_ISDELETE, example = E_ISDELETE)
     @NotNull
     private String isDelete;
@@ -104,5 +112,21 @@ public class BookCatalogUpdateDTO {
 
     public void setIsDelete(String isDelete) {
         this.isDelete = isDelete;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getCreateUserId() {
+        return createUserId;
+    }
+
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId;
     }
 }

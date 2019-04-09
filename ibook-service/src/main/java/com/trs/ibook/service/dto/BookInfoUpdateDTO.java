@@ -6,6 +6,8 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
 
+import java.util.Date;
+
 import static com.trs.ibook.service.example.BookInfoExample.*;
 
 /**
@@ -57,6 +59,14 @@ public class BookInfoUpdateDTO {
     @ApiModelProperty(notes = N_STATUS, example = E_STATUS)
     @NotNull
     private String status;
+
+    @ApiModelProperty(notes = N_CREATETIME, example = E_CREATETIME)
+    @NotNull
+    private Date createTime;
+
+    @ApiModelProperty(notes = N_CREATEUSERID, example = E_CREATEUSERID)
+    @NotNull
+    private String createUserId;
 
     @ApiModelProperty(notes = N_ISDELETE, example = E_ISDELETE)
     @NotNull
@@ -140,5 +150,21 @@ public class BookInfoUpdateDTO {
 
     public void setIsDelete(String isDelete) {
         this.isDelete = isDelete;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getCreateUserId() {
+        return createUserId;
+    }
+
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId;
     }
 }

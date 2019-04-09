@@ -52,7 +52,7 @@ public class BookCatalogCRUDService {
         if (bookCatalog == null) {
             throw new IBookParamException("id有误");
         }
-        BookCatalogMapper.INSTANCE.setUpdateDTO(bookCatalog, bookCatalogUpdateDTO);
+        BookCatalogMapper.INSTANCE.setUpdateDTO(bookCatalogUpdateDTO, bookCatalog);
         bookCatalogDAO.update(bookCatalog);
     }
 
@@ -71,7 +71,7 @@ public class BookCatalogCRUDService {
     }
 
     /**
-     * 查询【地区信息】详情
+     * 查询【目录信息】详情
      *
      * @param id
      * @return
