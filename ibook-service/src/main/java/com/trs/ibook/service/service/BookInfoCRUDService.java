@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -39,6 +40,9 @@ public class BookInfoCRUDService {
     @Transactional
     public BookInfo save(BookInfoAddDTO bookInfoAddDTO) {
         BookInfo bookInfo = BookInfoMapper.INSTANCE.fromAddDTO(bookInfoAddDTO);
+        bookInfo.setIsDelete(0);
+        bookInfo.setStatus(1);
+        bookInfo.setCreateTime(new Date());
         bookInfoDAO.save(bookInfo);
         return bookInfo;
     }
@@ -73,9 +77,6 @@ public class BookInfoCRUDService {
 
     /**
      * 查询【电子书信息】详情
-     *
-     * @param id
-     * @return
      */
     public BookInfoShowVO show(Integer id) {
         BookInfo bookInfo = bookInfoDAO.findById(id);
@@ -87,9 +88,6 @@ public class BookInfoCRUDService {
 
     /**
      * 删除【电子书信息】
-     *
-     * @param id
-     * @return
      */
     @Transactional(rollbackFor = IBookException.class)
     public int delete(Integer id) {

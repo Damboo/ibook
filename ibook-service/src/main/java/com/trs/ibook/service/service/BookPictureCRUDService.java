@@ -22,16 +22,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import static com.trs.ibook.service.util.ImageUtil.upload;
 
 /**
  * Title: 图片上传服务
@@ -51,9 +48,6 @@ public class BookPictureCRUDService {
     private OriginPicDAO originPicDAO;
     @Autowired
     private BookPictureDAO bookPictureDAO;
-
-    private static final String[] EXT_NAMES = new String[]{"jpg", "png", "jpeg"};
-
 
     /**
      * 修改【电子书页码信息】
@@ -124,17 +118,13 @@ public class BookPictureCRUDService {
         originPic.setCreateUserId(null);
         originPic.setIsDelete(0);
         originPic.setPicUrl(fileFullName);
-        //获取当前序列号
-        int serialNo = SafeKit.getInteger(fileFullName.substring(fileFullName.indexOf('(') + 1, fileFullName.indexOf(')')));
-        originPic.setSerialNo(serialNo);
-        originPicDAO.saveOriginPic(originPic);
+        originPic.setSerialNo(originPicDAO.getNewSerialNo(bookId));
+        originPicDAO.save(originPic);
         //切割原图后, 取到两页路径
-        String[] pagePart = ImageUtil.splitImage(fileFullName, pagePath);
+        String[] pagePart = ImageUtil.splitImage(fileFullName, pagePath, albumName);
         String part1 = pagePart[0];
-        int part1Page = SafeKit.getInteger(part1.substring(part1.indexOf('(') + 1, part1.indexOf(')')));
         ImageUtil.buildSmallPic(part1);
         String part2 = pagePart[1];
-        int part2Page = SafeKit.getInteger(part2.substring(part2.indexOf('(') + 1, part2.indexOf(')')));
         ImageUtil.buildSmallPic(part2);
         //页码存库
         BookPicture bookPicture = new BookPicture();
@@ -142,98 +132,21 @@ public class BookPictureCRUDService {
         bookPicture.setCreateTime(new Date());
         bookPicture.setCreateUserId(null);
         bookPicture.setIsDelete(0);
-
-        bookPicture.setSerialNo(part1Page);
-        //固定无页码有5页
-        bookPicture.setPageIndex(part1Page > 5 ? part1Page - 5 : null);
+        int serialNo = bookPictureDAO.getNewSerialNoByBookId(bookId);
+        int pageIndex = bookPictureDAO.getNewSerialNoByBookId(bookId);
+        bookPicture.setSerialNo(serialNo);
+        bookPicture.setPageIndex(pageIndex);
         bookPicture.setPicUrl(part1);
-        bookPictureDAO.saveBookPicture(bookPicture);
-
-        bookPicture.setSerialNo(part2Page);
-        //固定无页码有5页
-        bookPicture.setPageIndex(part2Page > 5 ? part2Page - 5 : null);
+        bookPictureDAO.save(bookPicture);
+        bookPicture.setSerialNo(serialNo + 1);
+        bookPicture.setPageIndex(pageIndex + 1);
         bookPicture.setPicUrl(part2);
-        bookPictureDAO.saveBookPicture(bookPicture);
-
+        bookPictureDAO.save(bookPicture);
         //如果是第一页上传,并且没有封面,默认设置第一页为封面
-        if (part1Page == 1 && StrKit.isEmpty(bookInfo.getCoverUrl())) {
+        if (serialNo == 1 && StrKit.isEmpty(bookInfo.getCoverUrl())) {
             bookInfo.setCoverUrl(part1);
             bookInfoDAO.updateCoverUrl(bookInfo);
         }
-    }
-
-    /**
-     * 原始图片上传
-     */
-    private String upload(MultipartFile file, String filePath, String albumName) {
-        boolean checkResult = checkFile(file, 5 * 1069548, -1, -1, -1, -1);
-        if (!checkResult) {
-            throw new IBookException("请上传图片类型为【'jpg', 'jpeg', 'png'】并且小于5MB的图片");
-        }
-        //检查目录
-        File uploadDir = new File(filePath);
-        boolean flg = true;
-        if (!uploadDir.exists()) {
-            flg = uploadDir.mkdirs();
-        }
-        if (flg && !uploadDir.isDirectory()) {
-            throw new ParamException("上传目录不存在" + filePath);
-        }
-        // 文件扩展名
-        String originalFileName = file.getOriginalFilename();
-        String extName = originalFileName.substring(originalFileName.indexOf('.') + 1).toLowerCase();
-
-        //查库,根据数据库的最新一条页码重命名
-        int lastSerialNo = originPicDAO.getLastSerialNo();
-        //重命名文件
-        String newFileName = albumName + "(" + lastSerialNo + 1 + ")." + extName;
-        String fileFullName = filePath + newFileName;
-        File newFile = new File(fileFullName);
-
-        try (BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(newFile))) {
-            stream.write(file.getBytes());
-        } catch (IOException e) {
-            throw new IBookException("upload material error");
-        }
-        //检查文件类型
-        if (ArrayKit.asList(EXT_NAMES).indexOf(extName) == -1 || !JudgeFileTypeKit.checkFileType(newFile, EXT_NAMES)) {
-            if (!newFile.delete()) {
-                throw new IBookException("delete fail");
-            }
-            throw new ParamException("file-type-forbid ." + extName);
-        }
-        return filePath + newFileName;
-    }
-
-    private static boolean checkFile(MultipartFile file, int sizeMaxLimit, int heightMaxLimit, int widthMaxLimit, int heightMinLimit, int widthMinLimit) {
-        if (file.getSize() > sizeMaxLimit) {
-            return false;
-        }
-        BufferedImage bufferedImg;
-        try {
-            bufferedImg = ImageIO.read(file.getInputStream());
-        } catch (IOException e) {
-            throw new IBookException("upload material error");
-        }
-        if (bufferedImg == null) {
-            throw new IBookParamException("所选文件包含不支持的格式或文件大小超出限制，请重新选择");
-        }
-        int imgWidth = bufferedImg.getWidth();
-        int imgHeight = bufferedImg.getHeight();
-
-        if (-1 != heightMinLimit && imgHeight < heightMinLimit) {
-            return false;
-        }
-        if (-1 != widthMinLimit && imgWidth < widthMinLimit) {
-            return false;
-        }
-        if (-1 != heightMaxLimit && imgHeight > heightMaxLimit) {
-            return false;
-        }
-        if (-1 != widthMaxLimit && imgWidth > widthMaxLimit) {
-            return false;
-        }
-        return true;
     }
 
     /**
@@ -244,28 +157,13 @@ public class BookPictureCRUDService {
         Integer bookId = bookPicture.getBookId();
         Integer oldSerialNo = bookPicture.getSerialNo();
         Integer oldPageIndex = bookPicture.getPageIndex();
-        String oldUrl = bookPicture.getPicUrl();
-        String newUrl = oldUrl.replace("(" + oldSerialNo + ")", "(" + (oldSerialNo + type) + ")");
-        bookPicture.setPicUrl(newUrl);
         bookPicture.setPageIndex(oldPageIndex + type);
         bookPicture.setSerialNo(oldSerialNo + type);
         //需要交换相邻的数据
-        BookPicture preBookPicture = bookPictureDAO.getBookPictureByPage(bookId, oldPageIndex);
-        String preUrl = preBookPicture.getPicUrl();
+        BookPicture preBookPicture = bookPictureDAO.getBookPictureByPage(bookId, oldPageIndex + type);
         preBookPicture.setPageIndex(oldPageIndex);
         preBookPicture.setSerialNo(oldSerialNo);
-        preBookPicture.setPicUrl(oldUrl);
-        //重命名图片信息,未防止重复需要重命名为临时文件
-        File oldFile = new File(oldUrl);
-        String tmpUrl = newUrl.replace(".", "_tmp.");
-        File tmpFile = new File(tmpUrl);
-        File preFile = new File(preUrl);
-        boolean flag = oldFile.renameTo(tmpFile);
-        boolean flag2 = preFile.renameTo(oldFile);
-        boolean flag3 = tmpFile.renameTo(new File(tmpUrl.replace("_tmp", "")));
-        if (flag && flag2 && flag3) {
-            bookPictureDAO.update(bookPicture);
-            bookPictureDAO.update(preBookPicture);
-        }
+        bookPictureDAO.update(bookPicture);
+        bookPictureDAO.update(preBookPicture);
     }
 }

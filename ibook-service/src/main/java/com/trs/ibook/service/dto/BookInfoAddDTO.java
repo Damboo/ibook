@@ -6,13 +6,12 @@ import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 import static com.trs.ibook.service.example.BookInfoExample.*;
 
 /**
- * Title:新增【电子书信息】的参数
- * Description:新增【电子书信息】的参数
+ * Title:新增电子书信息参数DTO
+ * Description:新增电子书信息参数DTO
  * Copyright: 2019 北京拓尔思信息技术股份有限公司 版权所有.保留所有权
  * Company:北京拓尔思信息技术股份有限公司(TRS)
  * Project: ibook
@@ -38,39 +37,36 @@ public class BookInfoAddDTO extends AbstractDTO {
     private String author;
 
     @ApiModelProperty(notes = N_LABELCATEGORY, example = E_LABELCATEGORY)
-    @NotNull
+    @NotBlank(message = "标签分类不能为空")
+    @Length(max = 20, message = "labelCategory最大长度不能超过{max}")
     private String labelCategory;
 
     @ApiModelProperty(notes = N_PERIODICAL, example = E_PERIODICAL)
-    @NotNull
     private Integer periodical;
 
     @ApiModelProperty(notes = N_PDFURL, example = E_PDFURL)
-    @NotNull
+    @NotBlank(message = "PDF文档不能为空")
+    @Length(max = 100, message = "pdfUrl最大长度不能超过{max}")
     private String pdfUrl;
 
     @ApiModelProperty(notes = N_COVERURL, example = E_COVERURL)
-    @NotNull
     private String coverUrl;
 
     @ApiModelProperty(notes = N_SITEID, example = E_SITEID)
-    @NotNull
+    @NotBlank(message = "站点id不能为空")
+    @Length(max = 10, message = "siteId最大长度不能超过{max}")
     private Integer siteId;
 
     @ApiModelProperty(notes = N_STATUS, example = E_STATUS)
-    @NotNull
     private Integer status;
 
     @ApiModelProperty(notes = N_CREATETIME, example = E_CREATETIME)
-    @NotNull
     private Date createTime;
 
     @ApiModelProperty(notes = N_CREATEUSERID, example = E_CREATEUSERID)
-    @NotNull
     private Long createUserId;
 
     @ApiModelProperty(notes = N_ISDELETE, example = E_ISDELETE)
-    @NotNull
     private Integer isDelete;
 
     public String getTitleName() {

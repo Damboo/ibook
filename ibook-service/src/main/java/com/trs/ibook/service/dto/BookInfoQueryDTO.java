@@ -40,6 +40,7 @@ public class BookInfoQueryDTO extends PageQueryDTO {
     private String author;
 
     @ApiModelProperty(notes = N_LABELCATEGORY, example = E_LABELCATEGORY)
+    @Length(max = 20, message = "labelCategory最大长度不能超过{max}")
     private String labelCategory;
 
     @ApiModelProperty(notes = N_PERIODICAL, example = E_PERIODICAL)

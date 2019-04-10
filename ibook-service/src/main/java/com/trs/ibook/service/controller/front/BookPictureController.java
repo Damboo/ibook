@@ -85,8 +85,8 @@ public class BookPictureController implements BookPictureAPI {
     @Override
     @PostMapping(value = "/sort")
     public Result<Void> sort(Integer id, Integer type) {
-        if (StrKit.isEmpty(id)) {
-            throw new IBookParamException("页码id不能为空");
+        if (null == id || 0 == id) {
+            throw new IBookParamException("无效的页码id");
         }
         if (type != -1 && type != 1) {
             throw new IBookParamException("排序参数错误");

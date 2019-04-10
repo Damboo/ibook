@@ -1,15 +1,15 @@
 season:
-    datasource:
-        master:
-            url: jdbc:mysql://10.159.63.110:3308/ibook?&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull
-            username: testuser
-            password: Us$4P3to
-        slaver:
-            url: jdbc:mysql://10.159.63.110:3308/ibook?&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull
-            username: testuser
-            password: Us$4P3to
+  datasource:
+    master:
+      url: jdbc:mysql://10.159.63.110:3308/ibook?&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull
+      username: testuser
+      password: Us$4P3to
+    slaver:
+      url: jdbc:mysql://10.159.63.110:3308/ibook?&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull
+      username: testuser
+      password: Us$4P3to
 ibook:
-    service:
-        imageUpload:
-            #图片上传路径
-            baseDir: /data/TRS/nas/ts_hudong/hsfile/ibook/
+  service:
+    imageUpload:
+      #图片上传路径
+      baseDir: /data/TRS/nas/ts_hudong/hsfile/ibook/

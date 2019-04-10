@@ -20,18 +20,11 @@ import java.util.Map;
 public class OriginPicDAO extends AbstractDAO<OriginPic> {
 
     /**
-     * 查询最新的一条页码记录
+     * 根据bookId获取下一页SerialNo
      */
-    public int getLastSerialNo() {
-        String sql = " select serialNo from " + OriginPic.TABLE_NAME + " order by serialNo desc limit 1 ";
-        Map<String, Object> lastSerialNo = seasonDao.queryFirst(sql, null);
-        return lastSerialNo == null || lastSerialNo.isEmpty() ? 0 : SafeKit.getInteger(lastSerialNo.get("serialNo"));
-    }
-
-    /**
-     * 保存记录
-     */
-    public OriginPic saveOriginPic(OriginPic originPic) {
-        return seasonDao.save(originPic);
+    public int getNewSerialNo(Integer bookId) {
+        String sql = " select serialNo from " + OriginPic.TABLE_NAME + " where bookId=? order by serialNo desc limit 1 ";
+        Map<String, Object> lastSerialNo = seasonDao.queryFirst(sql, bookId);
+        return lastSerialNo == null || lastSerialNo.isEmpty() ? 1 : SafeKit.getInteger(lastSerialNo.get("serialNo")) + 1;
     }
 }

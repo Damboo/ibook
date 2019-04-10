@@ -69,13 +69,6 @@ public class BookPictureDAO extends AbstractDAO<BookPicture> {
     }
 
     /**
-     * 保存记录
-     */
-    public BookPicture saveBookPicture(BookPicture bookPicture) {
-        return seasonDao.save(bookPicture);
-    }
-
-    /**
      * 分页查询电子书
      */
     public Map<String, Object> findByQuery(BookPictureQueryDTO bookPictureQueryDTO) {
@@ -163,5 +156,23 @@ public class BookPictureDAO extends AbstractDAO<BookPicture> {
     public BookPicture getBookPictureByPage(Integer bookId, Integer pageIndex) {
         String sql = " select * from " + BookPicture.TABLE_NAME + " where bookId =? and pageIndex =? ";
         return seasonDao.findFirst(BookPicture.class, sql, bookId, pageIndex);
+    }
+
+    /**
+     * 根据bookId获取下一页的pageIndex
+     */
+    public int getNewPageIndexByBookId(Integer bookId) {
+        String sql = " select pageIndex from " + BookPicture.TABLE_NAME + "where bookId=? order by pageIndex desc limit 1";
+        Map<String, Object> map = seasonDao.queryFirst(sql, bookId);
+        return map == null || map.isEmpty() ? 1 : SafeKit.getInteger(map.get("pageIndex")) + 1;
+    }
+
+    /**
+     * 根据bookId获取下一页的serialNo
+     */
+    public int getNewSerialNoByBookId(Integer bookId) {
+        String sql = " select serialNo from " + BookPicture.TABLE_NAME + "where bookId=? order by serialNo desc limit 1";
+        Map<String, Object> map = seasonDao.queryFirst(sql, bookId);
+        return map == null || map.isEmpty() ? 1 : SafeKit.getInteger(map.get("serialNo")) + 1;
     }
 }
