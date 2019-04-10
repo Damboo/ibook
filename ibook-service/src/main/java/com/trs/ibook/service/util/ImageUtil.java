@@ -67,7 +67,7 @@ public class ImageUtil {
     /**
      * 检查图片
      */
-    public static boolean checkFile(MultipartFile file, int sizeMaxLimit) {
+    private static boolean checkFile(MultipartFile file, int sizeMaxLimit) {
         if (file.getSize() > sizeMaxLimit) {
             return false;
         }
@@ -146,7 +146,7 @@ public class ImageUtil {
 
     /**
      * imageFolderPath:图片所在文件夹
-     * pdfPath:指定pdf位置
+     * pdfPath:指定pdf位置(全路径)
      * 多张图片转pdf
      */
     public static void buildPDF(String imageFolderPath, String pdfPath) {

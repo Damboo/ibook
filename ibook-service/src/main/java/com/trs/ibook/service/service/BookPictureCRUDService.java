@@ -133,7 +133,7 @@ public class BookPictureCRUDService {
         bookPicture.setCreateUserId(null);
         bookPicture.setIsDelete(0);
         int serialNo = bookPictureDAO.getNewSerialNoByBookId(bookId);
-        int pageIndex = bookPictureDAO.getNewSerialNoByBookId(bookId);
+        int pageIndex = bookPictureDAO.getNewPageIndexByBookId(bookId);
         bookPicture.setSerialNo(serialNo);
         bookPicture.setPageIndex(pageIndex);
         bookPicture.setPicUrl(part1);

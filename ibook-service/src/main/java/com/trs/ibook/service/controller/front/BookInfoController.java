@@ -11,6 +11,7 @@ import com.trs.ibook.service.service.BookInfoCRUDService;
 import com.trs.ibook.service.vo.BookInfoListVO;
 import com.trs.ibook.service.vo.BookInfoShowVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -31,6 +32,10 @@ public class BookInfoController implements BookInfoAPI {
 
     @Autowired
     private BookInfoCRUDService bookInfoCRUDService;
+    @Value("${ibook.service.imageUpload.baseDir}")
+    private String baseDir;
+    @Value("${ibook.service.imageUpload.oppositeDir}")
+    private String oppositeDir;
 
     @Override
     @PostMapping(value = "/save")
@@ -82,6 +87,17 @@ public class BookInfoController implements BookInfoAPI {
         int count = bookInfoCRUDService.delete(id);
         Result<Integer> result = Result.success();
         result.setData(count);
+        return result;
+    }
+
+    @Override
+    public Result<Integer> loadPDF(Integer id) {
+        boolean flag = bookInfoCRUDService.loadPDF(id, baseDir, oppositeDir);
+        Result<Integer> result = Result.success();
+        if (!flag) {
+            result.setIsSuccess(false);
+            result.setResultMsg("当前电子书无内容,请检查");
+        }
         return result;
     }
 }

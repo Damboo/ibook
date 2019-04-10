@@ -13,3 +13,5 @@ ibook:
     imageUpload:
       #图片上传路径
       baseDir: /data/TRS/nas/ts_hudong/hsfile/ibook/
+      #相对路径
+      oppositeDir: /hsfile/ibook/

@@ -154,7 +154,7 @@ public class BookPictureDAO extends AbstractDAO<BookPicture> {
      * 根据bookId,pageIndex查询记录
      */
     public BookPicture getBookPictureByPage(Integer bookId, Integer pageIndex) {
-        String sql = " select * from " + BookPicture.TABLE_NAME + " where bookId =? and pageIndex =? ";
+        String sql = " select * from " + BookPicture.TABLE_NAME + " where bookId=? and pageIndex=? and isDelete = 0 ";
         return seasonDao.findFirst(BookPicture.class, sql, bookId, pageIndex);
     }
 
@@ -162,7 +162,7 @@ public class BookPictureDAO extends AbstractDAO<BookPicture> {
      * 根据bookId获取下一页的pageIndex
      */
     public int getNewPageIndexByBookId(Integer bookId) {
-        String sql = " select pageIndex from " + BookPicture.TABLE_NAME + "where bookId=? order by pageIndex desc limit 1";
+        String sql = " select pageIndex from " + BookPicture.TABLE_NAME + "where bookId=? and isDelete = 0 order by pageIndex desc limit 1";
         Map<String, Object> map = seasonDao.queryFirst(sql, bookId);
         return map == null || map.isEmpty() ? 1 : SafeKit.getInteger(map.get("pageIndex")) + 1;
     }
@@ -171,8 +171,22 @@ public class BookPictureDAO extends AbstractDAO<BookPicture> {
      * 根据bookId获取下一页的serialNo
      */
     public int getNewSerialNoByBookId(Integer bookId) {
-        String sql = " select serialNo from " + BookPicture.TABLE_NAME + "where bookId=? order by serialNo desc limit 1";
+        String sql = " select serialNo from " + BookPicture.TABLE_NAME + "where bookId=? and isDelete = 0 order by serialNo desc limit 1";
         Map<String, Object> map = seasonDao.queryFirst(sql, bookId);
         return map == null || map.isEmpty() ? 1 : SafeKit.getInteger(map.get("serialNo")) + 1;
+    }
+
+    /**
+     * 根据bookId查询当前电子书在服务器的存储路径
+     */
+    public String getBookUrlByBookId(Integer bookId) {
+        String returnUrl = "";
+        String sql = " select picUrl from " + BookPicture.TABLE_NAME + "where bookId=? and isDelete = 0 order by id limit 1 ";
+        Map<String, Object> map = seasonDao.queryFirst(sql, bookId);
+        if (map != null && !map.isEmpty()) {
+            returnUrl = SafeKit.getString(map.get("picUrl"));
+            returnUrl = returnUrl.substring(returnUrl.indexOf("ibook/") + 6, returnUrl.indexOf("/normal"));
+        }
+        return returnUrl;
     }
 }

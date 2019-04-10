@@ -75,4 +75,11 @@ public interface BookInfoAPI {
     })
     Result<Integer> delete(Integer id);
 
+    /******************************导出电子书PDF*****************************/
+    @ApiOperation(value = "导出电子书PDF")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", dataType = "Integer", value = "【电子书信息】id", paramType = "path"),
+    })
+    Result<Integer> loadPDF(Integer id);
+
 }

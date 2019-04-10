@@ -45,8 +45,6 @@ public class BookInfoAddDTO extends AbstractDTO {
     private Integer periodical;
 
     @ApiModelProperty(notes = N_PDFURL, example = E_PDFURL)
-    @NotBlank(message = "PDF文档不能为空")
-    @Length(max = 100, message = "pdfUrl最大长度不能超过{max}")
     private String pdfUrl;
 
     @ApiModelProperty(notes = N_COVERURL, example = E_COVERURL)
