@@ -88,5 +88,11 @@ public class BookInfoDAO extends AbstractDAO<BookInfo> {
         return seasonDao.find(BookInfoListVO.class, params, sql);
     }
 
+    /**
+     * 更新字段
+     */
+    public void updateCoverUrl(BookInfo bookInfo) {
+        seasonDao.update(bookInfo, "coverUrl");
+    }
 
 }

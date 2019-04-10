@@ -3,6 +3,7 @@ package com.trs.ibook.service.service;
 import com.season.common.ArrayKit;
 import com.season.common.JudgeFileTypeKit;
 import com.season.common.SafeKit;
+import com.season.common.StrKit;
 import com.season.core.error.ParamException;
 import com.trs.ibook.core.exception.IBookException;
 import com.trs.ibook.core.exception.IBookParamException;
@@ -50,7 +51,7 @@ public class BookPictureCRUDService {
     private OriginPicDAO originPicDAO;
     @Autowired
     private BookPictureDAO bookPictureDAO;
-    
+
     private static final String[] EXT_NAMES = new String[]{"jpg", "png", "jpeg"};
 
 
@@ -153,6 +154,12 @@ public class BookPictureCRUDService {
         bookPicture.setPageIndex(part2Page > 5 ? part2Page - 5 : null);
         bookPicture.setPicUrl(part2);
         bookPictureDAO.saveBookPicture(bookPicture);
+
+        //如果是第一页上传,并且没有封面,默认设置第一页为封面
+        if (part1Page == 1 && StrKit.isEmpty(bookInfo.getCoverUrl())) {
+            bookInfo.setCoverUrl(part1);
+            bookInfoDAO.updateCoverUrl(bookInfo);
+        }
     }
 
     /**
@@ -227,5 +234,38 @@ public class BookPictureCRUDService {
             return false;
         }
         return true;
+    }
+
+    /**
+     * 电子书排序,-1表示向上排序,1表示向下排序
+     */
+    public void sort(Integer id, Integer type) {
+        BookPicture bookPicture = bookPictureDAO.findById(id);
+        Integer bookId = bookPicture.getBookId();
+        Integer oldSerialNo = bookPicture.getSerialNo();
+        Integer oldPageIndex = bookPicture.getPageIndex();
+        String oldUrl = bookPicture.getPicUrl();
+        String newUrl = oldUrl.replace("(" + oldSerialNo + ")", "(" + (oldSerialNo + type) + ")");
+        bookPicture.setPicUrl(newUrl);
+        bookPicture.setPageIndex(oldPageIndex + type);
+        bookPicture.setSerialNo(oldSerialNo + type);
+        //需要交换相邻的数据
+        BookPicture preBookPicture = bookPictureDAO.getBookPictureByPage(bookId, oldPageIndex);
+        String preUrl = preBookPicture.getPicUrl();
+        preBookPicture.setPageIndex(oldPageIndex);
+        preBookPicture.setSerialNo(oldSerialNo);
+        preBookPicture.setPicUrl(oldUrl);
+        //重命名图片信息,未防止重复需要重命名为临时文件
+        File oldFile = new File(oldUrl);
+        String tmpUrl = newUrl.replace(".", "_tmp.");
+        File tmpFile = new File(tmpUrl);
+        File preFile = new File(preUrl);
+        boolean flag = oldFile.renameTo(tmpFile);
+        boolean flag2 = preFile.renameTo(oldFile);
+        boolean flag3 = tmpFile.renameTo(new File(tmpUrl.replace("_tmp", "")));
+        if (flag && flag2 && flag3) {
+            bookPictureDAO.update(bookPicture);
+            bookPictureDAO.update(preBookPicture);
+        }
     }
 }

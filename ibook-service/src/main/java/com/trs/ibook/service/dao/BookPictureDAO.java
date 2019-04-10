@@ -156,4 +156,12 @@ public class BookPictureDAO extends AbstractDAO<BookPicture> {
         }
         return returnList;
     }
+
+    /**
+     * 根据bookId,pageIndex查询记录
+     */
+    public BookPicture getBookPictureByPage(Integer bookId, Integer pageIndex) {
+        String sql = " select * from " + BookPicture.TABLE_NAME + " where bookId =? and pageIndex =? ";
+        return seasonDao.findFirst(BookPicture.class, sql, bookId, pageIndex);
+    }
 }

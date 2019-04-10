@@ -46,6 +46,9 @@ public class BookInfo extends AbstractPOJO {
     @Column(length = 255, comment = N_PDFURL)
     private String pdfUrl;
 
+    @Column(length = 255, comment = N_COVERURL)
+    private String coverUrl;
+
     @Column(length = 10, comment = N_SITEID)
     private Integer siteId;
 
@@ -116,6 +119,14 @@ public class BookInfo extends AbstractPOJO {
 
     public void setPdfUrl(String pdfUrl) {
         this.pdfUrl = pdfUrl;
+    }
+
+    public String getCoverUrl() {
+        return coverUrl;
+    }
+
+    public void setCoverUrl(String coverUrl) {
+        this.coverUrl = coverUrl;
     }
 
     public Integer getSiteId() {

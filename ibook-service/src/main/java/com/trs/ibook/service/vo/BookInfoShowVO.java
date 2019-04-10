@@ -44,6 +44,9 @@ public class BookInfoShowVO {
     @ApiModelProperty(notes = N_PDFURL, example = E_PDFURL)
     private String pdfUrl;
 
+    @ApiModelProperty(notes = N_COVERURL, example = E_COVERURL)
+    private String coverUrl;
+
     @ApiModelProperty(notes = N_SITEID, example = E_SITEID)
     private Integer siteId;
 
@@ -114,6 +117,14 @@ public class BookInfoShowVO {
 
     public void setPdfUrl(String pdfUrl) {
         this.pdfUrl = pdfUrl;
+    }
+
+    public String getCoverUrl() {
+        return coverUrl;
+    }
+
+    public void setCoverUrl(String coverUrl) {
+        this.coverUrl = coverUrl;
     }
 
     public Integer getSiteId() {

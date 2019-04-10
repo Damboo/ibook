@@ -66,6 +66,14 @@ public interface BookPictureAPI {
     })
     Result<Integer> delete(Integer id);
 
+    /******************************排序【电子书页码信息】*****************************/
+    @ApiOperation(value = "排序【电子书页码信息】")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", dataType = "Integer", value = "【电子书页码信息】id", paramType = "path"),
+            @ApiImplicitParam(name = "type", dataType = "Integer", value = "排序顺序属性", paramType = "path"),
+    })
+    Result<Void> sort(Integer id,Integer type);
+
 
     /******************************电子书图片上传*****************************/
     @ApiOperation(value = "电子书图片上传")

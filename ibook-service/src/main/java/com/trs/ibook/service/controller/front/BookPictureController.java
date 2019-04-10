@@ -1,13 +1,11 @@
 package com.trs.ibook.service.controller.front;
 
 import com.season.common.StrKit;
-import com.season.core.Page;
 import com.season.core.Result;
 import com.trs.ibook.core.exception.IBookException;
 import com.trs.ibook.core.exception.IBookParamException;
 import com.trs.ibook.service.api.BookPictureAPI;
 import com.trs.ibook.service.dto.*;
-import com.trs.ibook.service.pojo.BookPicture;
 import com.trs.ibook.service.service.BookPictureCRUDService;
 import com.trs.ibook.service.vo.BookPictureListVO;
 import com.trs.ibook.service.vo.BookPictureShowVO;
@@ -32,7 +30,7 @@ import java.util.Map;
  * Create Time:19-3-29 10:55
  */
 @RestController
-@RequestMapping("/")
+@RequestMapping("/bookPicture")
 public class BookPictureController implements BookPictureAPI {
 
     @Autowired
@@ -82,6 +80,19 @@ public class BookPictureController implements BookPictureAPI {
         Result<Integer> result = Result.success();
         result.setData(count);
         return result;
+    }
+
+    @Override
+    @PostMapping(value = "/sort")
+    public Result<Void> sort(Integer id, Integer type) {
+        if (StrKit.isEmpty(id)) {
+            throw new IBookParamException("页码id不能为空");
+        }
+        if (type != -1 && type != 1) {
+            throw new IBookParamException("排序参数错误");
+        }
+        bookPictureCRUDService.sort(id, type);
+        return Result.success();
     }
 
     @Override
