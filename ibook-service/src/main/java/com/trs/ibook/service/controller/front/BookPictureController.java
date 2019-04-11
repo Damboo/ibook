@@ -96,17 +96,15 @@ public class BookPictureController implements BookPictureAPI {
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.POST, value = "imageUpload")
-    public Result imageUpload(@RequestPart MultipartFile multipartFile, Integer bookId) {
+    @ResponseBody
+    @PostMapping(value = "imageUpload")
+    public Result<Void> imageUpload(@RequestParam("file") MultipartFile file, Integer bookId) {
         Result result = Result.success();
-        if (multipartFile == null) {
-            throw new IBookException("图片不能为空");
-        }
         if (StrKit.isEmpty(bookId)) {
             throw new IBookParamException("电子书id不能为空");
         }
         try {
-            bookPictureCRUDService.imageUpload(multipartFile, baseDir, bookId);
+            bookPictureCRUDService.imageUpload(file, baseDir, bookId);
         } catch (IOException e) {
             result.setIsSuccess(false);
             return result;

@@ -1,10 +1,6 @@
 package com.trs.ibook.service.service;
 
-import com.season.common.ArrayKit;
-import com.season.common.JudgeFileTypeKit;
-import com.season.common.SafeKit;
 import com.season.common.StrKit;
-import com.season.core.error.ParamException;
 import com.trs.ibook.core.exception.IBookException;
 import com.trs.ibook.core.exception.IBookParamException;
 import com.trs.ibook.service.dao.*;
@@ -22,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import java.io.File;
+
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
@@ -105,11 +101,11 @@ public class BookPictureCRUDService {
     public void imageUpload(MultipartFile multipartFile, String baseDir, Integer bookId) throws IOException {
         //根据bookId获取对应的产品信息
         BookInfo bookInfo = bookInfoDAO.getBookInfoById(bookId);
-        String albumName = bookInfo.getTitleName();
+        String albumName = bookInfo.getLocationName();
         //原始图片的存储路径
-        String filePath = baseDir + albumName + File.separator + "origin" + File.separator;
+        String filePath = baseDir + albumName + "/origin/";
         //切割后的页码存储路径
-        String pagePath = baseDir + albumName + File.separator + "normal" + File.separator;
+        String pagePath = baseDir + albumName + "/normal/";
         String fileFullName = upload(multipartFile, filePath, albumName);
         //上传图片后,原图存库
         OriginPic originPic = new OriginPic();

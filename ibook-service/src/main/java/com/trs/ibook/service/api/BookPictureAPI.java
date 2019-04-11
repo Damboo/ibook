@@ -81,5 +81,5 @@ public interface BookPictureAPI {
             @ApiImplicitParam(name = "multipartFile", dataType = "MultipartFile", value = "文件内容", paramType = "body", allowMultiple = true),
             @ApiImplicitParam(name = "bookId", dataType = "Integer", value = "电子书id", paramType = "body"),
     })
-    Result<String> imageUpload(MultipartFile multipartFile, Integer bookId);
+    Result<Void> imageUpload(MultipartFile multipartFile, Integer bookId);
 }

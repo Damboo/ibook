@@ -95,4 +95,12 @@ public class BookInfoDAO extends AbstractDAO<BookInfo> {
         seasonDao.update(bookInfo, "coverUrl");
     }
 
+    /**
+     * 根据id获取存储路径
+     */
+    public String getLocationNameById(Integer id) {
+        BookInfo bookInfo = seasonDao.findById(BookInfo.class, id);
+        return bookInfo != null ? bookInfo.getLocationName() : "";
+    }
+
 }

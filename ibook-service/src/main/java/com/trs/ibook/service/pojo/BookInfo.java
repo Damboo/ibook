@@ -43,6 +43,9 @@ public class BookInfo extends AbstractPOJO {
     @Column(length = 10, comment = N_PERIODICAL)
     private Integer periodical;
 
+    @Column(length = 200, comment = N_LOCATIONNAME)
+    private String locationName;
+
     @Column(length = 255, comment = N_PDFURL)
     private String pdfUrl;
 
@@ -111,6 +114,14 @@ public class BookInfo extends AbstractPOJO {
 
     public void setPeriodical(Integer periodical) {
         this.periodical = periodical;
+    }
+
+    public String getLocationName() {
+        return locationName;
+    }
+
+    public void setLocationName(String locationName) {
+        this.locationName = locationName;
     }
 
     public String getPdfUrl() {

@@ -1,21 +1,25 @@
 package com.trs.ibook.service.controller.front;
 
+import com.season.common.SafeKit;
 import com.season.core.Page;
 import com.season.core.Result;
 import com.trs.ibook.service.api.BookInfoAPI;
+import com.trs.ibook.service.dao.BookInfoDAO;
 import com.trs.ibook.service.dto.BookInfoAddDTO;
 import com.trs.ibook.service.dto.BookInfoQueryDTO;
 import com.trs.ibook.service.dto.BookInfoUpdateDTO;
-import com.trs.ibook.service.pojo.BookInfo;
 import com.trs.ibook.service.service.BookInfoCRUDService;
 import com.trs.ibook.service.vo.BookInfoListVO;
 import com.trs.ibook.service.vo.BookInfoShowVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Title:
@@ -40,9 +44,13 @@ public class BookInfoController implements BookInfoAPI {
     @Override
     @PostMapping(value = "/save")
     public Result<Integer> save(@Valid @RequestBody BookInfoAddDTO bookInfoAddDTO) {
-        BookInfo bookInfo = bookInfoCRUDService.save(bookInfoAddDTO);
+        int bookId = bookInfoCRUDService.save(bookInfoAddDTO, baseDir);
         Result<Integer> result = Result.success();
-        result.setData(bookInfo.getId());
+        if (bookId == 0) {
+            result.setIsSuccess(false);
+            result.setResultMsg("创建目录失败,请检查服务器");
+        }
+        result.setData(bookId);
         return result;
     }
 
@@ -91,13 +99,31 @@ public class BookInfoController implements BookInfoAPI {
     }
 
     @Override
-    public Result<Integer> loadPDF(Integer id) {
-        boolean flag = bookInfoCRUDService.loadPDF(id, baseDir, oppositeDir);
+    public Result<Integer> downloadPDF(Integer id) {
+        boolean flag = bookInfoCRUDService.downloadPDF(id, baseDir, oppositeDir);
         Result<Integer> result = Result.success();
         if (!flag) {
             result.setIsSuccess(false);
             result.setResultMsg("当前电子书无内容,请检查");
         }
+        return result;
+    }
+
+    @Override
+    @ResponseBody
+    @PostMapping(value = "uploadPDF")
+    public Result<Map<String, Object>> uploadPDF(@RequestParam("file") MultipartFile file, Integer id) {
+        Result<Map<String, Object>> result = Result.success();
+        Map<String, Object> map = bookInfoCRUDService.uploadPDF(file, id, baseDir);
+        if (!SafeKit.getBoolean(map.get("isSuccess"))) {
+            result.setIsSuccess(false);
+            result.setResultMsg(SafeKit.getString(map.get("resultMsg")));
+            return result;
+        }
+        Map<String, Object> returnMap = new HashMap<>();
+        returnMap.put("siteId", map.get("siteId"));
+        returnMap.put("bookId", map.get("bookId"));
+        result.setData(returnMap);
         return result;
     }
 }

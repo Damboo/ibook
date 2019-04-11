@@ -2,6 +2,8 @@ package com.trs.ibook.service.util;
 
 import com.season.common.ArrayKit;
 import com.season.common.SafeKit;
+import com.season.common.StrKit;
+import com.season.common.UUIDUtil;
 import com.season.core.error.ParamException;
 import com.trs.ibook.core.exception.IBookException;
 import com.trs.ibook.core.exception.IBookParamException;
@@ -19,7 +21,6 @@ import com.lowagie.text.pdf.PdfWriter;
 import org.springframework.web.multipart.MultipartFile;
 
 import static com.trs.ibook.service.constant.BookConstant.EXT_NAMES;
-import static com.trs.ibook.service.util.DateUtil.getRandomNum;
 
 
 /**
@@ -30,6 +31,7 @@ import static com.trs.ibook.service.util.DateUtil.getRandomNum;
  * Project: ibook
  * Author: KylerTien
  * Create Time:19-4-3 11:33
+ * @author dambo
  */
 public class ImageUtil {
     /**
@@ -53,15 +55,15 @@ public class ImageUtil {
         String originalFileName = file.getOriginalFilename();
         String extName = originalFileName.substring(originalFileName.indexOf('.') + 1).toLowerCase();
         //重命名文件
-        String newFileName = dirName + "_" + System.currentTimeMillis() / 1000 + "_" + getRandomNum() + "." + extName;
+        String newFileName = dirName + "_" + System.currentTimeMillis() / 1000 + "_" + UUIDUtil.getUUID() + "." + extName;
         String fileFullName = filePath + newFileName;
         File newFile = new File(fileFullName);
-        try (BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(newFile))) {
-            stream.write(file.getBytes());
+        try {
+            file.transferTo(newFile);
         } catch (IOException e) {
-            throw new IBookException("upload material error");
+            throw new IBookException("上传文件失败");
         }
-        return filePath + newFileName;
+        return fileFullName;
     }
 
     /**
@@ -71,23 +73,17 @@ public class ImageUtil {
         if (file.getSize() > sizeMaxLimit) {
             return false;
         }
-        BufferedImage bufferedImg;
-        try {
-            bufferedImg = ImageIO.read(file.getInputStream());
-        } catch (IOException e) {
-            throw new IBookException("upload material error");
-        }
-        if (bufferedImg == null) {
-            throw new IBookParamException("所选文件大小超出限制，请重新选择");
-        }
         // 文件扩展名
         String originalFileName = file.getOriginalFilename();
         String extName = originalFileName.substring(originalFileName.indexOf('.') + 1).toLowerCase();
-        //检查文件类型
-        if (ArrayKit.asList(EXT_NAMES).indexOf(extName) == -1) {
-            throw new ParamException("请上传图片类型为【'jpg', 'jpeg', 'png'】的图片");
+        //获得文件类型（可以判断如果不是图片，禁止上传）
+        String contentType = file.getContentType();
+        String imageName = contentType.substring(contentType.indexOf('/') + 1);
+        if (StrKit.isEmpty(imageName)) {
+            return false;
         }
-        return true;
+        //判断是不是图片类型
+        return ArrayKit.asList(EXT_NAMES).indexOf(extName) != -1;
     }
 
     /**
@@ -126,8 +122,8 @@ public class ImageUtil {
             }
         }
         // 输出小图
-        String part1 = targetPath + albumName + "_" + System.currentTimeMillis() / 1000 + "_" + getRandomNum() + "." + extName;
-        String part2 = targetPath + albumName + "_" + System.currentTimeMillis() / 1000 + "." + getRandomNum() + "." + extName;
+        String part1 = targetPath + albumName + "_" + System.currentTimeMillis() / 1000 + "_" + UUIDUtil.getUUID() + "." + extName;
+        String part2 = targetPath + albumName + "_" + System.currentTimeMillis() / 1000 + "." + UUIDUtil.getUUID() + "." + extName;
         ImageIO.write(imgs[0], extName, new File(part1));
         ImageIO.write(imgs[1], extName, new File(part2));
         str[0] = part1;

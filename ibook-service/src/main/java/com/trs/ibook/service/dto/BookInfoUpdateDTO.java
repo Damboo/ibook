@@ -48,9 +48,10 @@ public class BookInfoUpdateDTO {
     @ApiModelProperty(notes = N_PERIODICAL, example = E_PERIODICAL)
     private Integer periodical;
 
+    @ApiModelProperty(notes = N_LOCATIONNAME, example = E_LOCATIONNAME)
+    private String locationName;
+
     @ApiModelProperty(notes = N_PDFURL, example = E_PDFURL)
-    @NotBlank(message = "PDF文档不能为空")
-    @Length(max = 100, message = "pdfUrl最大长度不能超过{max}")
     private String pdfUrl;
 
     @ApiModelProperty(notes = N_COVERURL, example = E_COVERURL)
@@ -119,6 +120,14 @@ public class BookInfoUpdateDTO {
 
     public void setPeriodical(Integer periodical) {
         this.periodical = periodical;
+    }
+
+    public String getLocationName() {
+        return locationName;
+    }
+
+    public void setLocationName(String locationName) {
+        this.locationName = locationName;
     }
 
     public String getPdfUrl() {

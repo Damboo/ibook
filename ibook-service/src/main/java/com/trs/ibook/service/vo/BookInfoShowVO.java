@@ -41,6 +41,9 @@ public class BookInfoShowVO {
     @ApiModelProperty(notes = N_PERIODICAL, example = E_PERIODICAL)
     private Integer periodical;
 
+    @ApiModelProperty(notes = N_LOCATIONNAME, example = E_LOCATIONNAME)
+    private String locationName;
+
     @ApiModelProperty(notes = N_PDFURL, example = E_PDFURL)
     private String pdfUrl;
 
@@ -109,6 +112,14 @@ public class BookInfoShowVO {
 
     public void setPeriodical(Integer periodical) {
         this.periodical = periodical;
+    }
+
+    public String getLocationName() {
+        return locationName;
+    }
+
+    public void setLocationName(String locationName) {
+        this.locationName = locationName;
     }
 
     public String getPdfUrl() {

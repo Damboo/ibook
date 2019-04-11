@@ -11,8 +11,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Title:【电子书后端管理相关服务】API
@@ -75,11 +77,20 @@ public interface BookInfoAPI {
     })
     Result<Integer> delete(Integer id);
 
+
     /******************************导出电子书PDF*****************************/
     @ApiOperation(value = "导出电子书PDF")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", dataType = "Integer", value = "【电子书信息】id", paramType = "path"),
     })
-    Result<Integer> loadPDF(Integer id);
+    Result<Integer> downloadPDF(Integer id);
 
+
+    /******************************导入电子书PDF*****************************/
+    @ApiOperation(value = "导入电子书PDF")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "multipartFile", dataType = "MultipartFile", value = "文件内容", paramType = "body", allowMultiple = true),
+            @ApiImplicitParam(name = "id", dataType = "Integer", value = "电子书id", paramType = "body"),
+    })
+    Result<Map<String,Object>> uploadPDF(MultipartFile multipartFile, Integer id);
 }

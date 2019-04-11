@@ -175,18 +175,4 @@ public class BookPictureDAO extends AbstractDAO<BookPicture> {
         Map<String, Object> map = seasonDao.queryFirst(sql, bookId);
         return map == null || map.isEmpty() ? 1 : SafeKit.getInteger(map.get("serialNo")) + 1;
     }
-
-    /**
-     * 根据bookId查询当前电子书在服务器的存储路径
-     */
-    public String getBookUrlByBookId(Integer bookId) {
-        String returnUrl = "";
-        String sql = " select picUrl from " + BookPicture.TABLE_NAME + "where bookId=? and isDelete = 0 order by id limit 1 ";
-        Map<String, Object> map = seasonDao.queryFirst(sql, bookId);
-        if (map != null && !map.isEmpty()) {
-            returnUrl = SafeKit.getString(map.get("picUrl"));
-            returnUrl = returnUrl.substring(returnUrl.indexOf("ibook/") + 6, returnUrl.indexOf("/normal"));
-        }
-        return returnUrl;
-    }
 }

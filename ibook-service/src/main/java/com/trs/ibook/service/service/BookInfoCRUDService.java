@@ -4,8 +4,8 @@ import com.season.common.StrKit;
 import com.season.core.Page;
 import com.trs.ibook.core.exception.IBookException;
 import com.trs.ibook.core.exception.IBookParamException;
+import com.trs.ibook.service.constant.BookConstant;
 import com.trs.ibook.service.dao.BookInfoDAO;
-import com.trs.ibook.service.dao.BookPictureDAO;
 import com.trs.ibook.service.dto.BookInfoAddDTO;
 import com.trs.ibook.service.dto.BookInfoQueryDTO;
 import com.trs.ibook.service.dto.BookInfoUpdateDTO;
@@ -14,14 +14,23 @@ import com.trs.ibook.service.pojo.BookInfo;
 import com.trs.ibook.service.util.ImageUtil;
 import com.trs.ibook.service.vo.BookInfoListVO;
 import com.trs.ibook.service.vo.BookInfoShowVO;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.swing.filechooser.FileSystemView;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static com.trs.ibook.service.util.DateUtil.getTodayStr;
+
 
 /**
  * Title:
@@ -38,20 +47,51 @@ public class BookInfoCRUDService {
 
     @Autowired
     private BookInfoDAO bookInfoDAO;
-    @Autowired
-    private BookPictureDAO bookPictureDAO;
+    private static final Logger logger = Logger.getLogger(BookInfoCRUDService.class);
 
     /**
      * 新增【电子书信息】
      */
-    @Transactional
-    public BookInfo save(BookInfoAddDTO bookInfoAddDTO) {
+    @Transactional(rollbackFor = IBookParamException.class)
+    public int save(BookInfoAddDTO bookInfoAddDTO, String baseDir) {
         BookInfo bookInfo = BookInfoMapper.INSTANCE.fromAddDTO(bookInfoAddDTO);
         bookInfo.setIsDelete(0);
         bookInfo.setStatus(1);
         bookInfo.setCreateTime(new Date());
-        bookInfoDAO.save(bookInfo);
-        return bookInfo;
+        bookInfo = bookInfoDAO.save(bookInfo);
+        int id = bookInfo.getId();
+        StringBuilder bookPath = new StringBuilder(baseDir);
+        StringBuilder locationName = new StringBuilder();
+        //需要在服务器新开文件夹
+        if (bookInfo.getSiteId() == BookConstant.LEADERSITEID) {
+            locationName.append("leader_");
+        } else if (bookInfo.getSiteId() == BookConstant.HAIERSITEID) {
+            locationName.append("haier_");
+        } else if (bookInfo.getSiteId() == BookConstant.CASARTESITEID) {
+            locationName.append("casarte_");
+        }
+        locationName.append(getTodayStr()).append("_").append(id);
+        String bookPathStr = bookPath.append(locationName).toString();
+        //检查目录
+        File uploadDir = new File(bookPathStr);
+        boolean bookFlag = uploadDir.mkdirs();
+        boolean normalFlag = false;
+        boolean smallFlag = false;
+        if (bookFlag) {
+            //创建目录成功,继续创建目录下的两个文件夹
+            normalFlag = new File(bookPathStr + "normal/").mkdirs();
+            smallFlag = new File(bookPathStr + "small/").mkdirs();
+            //更新字段
+            bookInfo.setLocationName(locationName.toString());
+            bookInfoDAO.update(bookInfo);
+        }
+        boolean flag = bookFlag && normalFlag && smallFlag;
+        if (!flag) {
+            //创建目录失败,回滚操作
+            bookInfoDAO.physicalDelete(id);
+            return 0;
+        }
+        return bookInfo.getId();
     }
 
     /**
@@ -102,9 +142,81 @@ public class BookInfoCRUDService {
     }
 
     /**
+     * 上传PDF
+     */
+    public Map<String, Object> uploadPDF(MultipartFile file, Integer id, String baseDir) {
+        Map<String, Object> result = new HashMap<>();
+        result.put("isSuccess", true);
+        //根据id取到文件夹名称
+        String albumName = bookInfoDAO.getLocationNameById(id);
+        //PDF存储路径
+        String pdfSavePath = baseDir + albumName + File.separator;
+        //检查目录
+        File uploadDir = new File(pdfSavePath);
+        if (!uploadDir.exists()) {
+            uploadDir.mkdirs();
+        }
+        if (!uploadDir.isDirectory()) {
+            result.put("isSuccess", false);
+            result.put("resultMsg", "上传目录不存在");
+            return result;
+        }
+        //检查目录写权限
+        if (!uploadDir.canWrite()) {
+            result.put("isSuccess", false);
+            result.put("resultMsg", "上传目录没有写");
+            return result;
+        }
+        String path = "";
+        if (!file.isEmpty()) {
+            //获得文件后缀名称
+            String extName = file.getOriginalFilename().substring(file.getOriginalFilename().indexOf('.') + 1).toLowerCase();
+            if (!"pdf".equals(extName)) {
+                result.put("isSuccess", false);
+                result.put("resultMsg", "文件格式不正确");
+                return result;
+            }
+            path = albumName + "." + extName;
+            //校验文件头
+            try (InputStream inputStream = file.getInputStream()) {
+                byte[] b = new byte[4];
+                /*
+                 * int read() 从此输入流中读取一个数据字节。 int read(byte[] b) 从此输入流中将最多 b.length
+                 * 个字节的数据读入一个 byte 数组中。 int read(byte[] b, int off, int len)
+                 * 从此输入流中将最多 len 个字节的数据读入一个 byte 数组中。
+                 */
+                inputStream.read(b, 0, b.length);
+                StringBuilder builder = new StringBuilder();
+                String hv;
+                for (byte aB : b) {
+                    // 以十六进制（基数 16）无符号整数形式返回一个整数参数的字符串表示形式，并转换为大写
+                    hv = Integer.toHexString(aB & 0xFF).toUpperCase();
+                    if (hv.length() < 2) {
+                        builder.append(0);
+                    }
+                    builder.append(hv);
+                }
+                //判断是不是PDF类型
+                if (!"25504446".equals(builder.toString())) {
+                    result.put("isSuccess", false);
+                    result.put("resultMsg", "文件格式不正确");
+                    return result;
+                }
+                file.transferTo(new File(pdfSavePath + File.separator + path));
+            } catch (IOException e) {
+                logger.error("二进制转换错误!", e);
+            }
+            BookInfo bookInfo = bookInfoDAO.findById(id);
+            result.put("siteId", bookInfo.getSiteId());
+            result.put("bookId", bookInfo.getId());
+        }
+        return result;
+    }
+
+    /**
      * 导出PDF
      */
-    public boolean loadPDF(Integer id, String baseDir, String oppositeDir) {
+    public boolean downloadPDF(Integer id, String baseDir, String oppositeDir) {
         //首先检查服务器是否存在PDF
         BookInfo bookInfo = bookInfoDAO.findById(id);
         //不为空, 直接下载
@@ -113,7 +225,7 @@ public class BookInfoCRUDService {
             return true;
         } else {
             //获取当前bookId的服务器存储路径文件夹
-            String albumName = bookPictureDAO.getBookUrlByBookId(id);
+            String albumName = bookInfoDAO.getLocationNameById(id);
             if (StrKit.isEmpty(albumName)) {
                 return false;
             }
@@ -129,6 +241,5 @@ public class BookInfoCRUDService {
             bookInfo.setPdfUrl(oppositeDir + albumName + File.separator + albumName + ".pdf");
             return true;
         }
-
     }
 }
