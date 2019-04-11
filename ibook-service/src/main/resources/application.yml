@@ -5,16 +5,22 @@ server:
 #logging.path: /data/TRS/ibook-service/logs
 
 spring:
-    profiles:
-        active: local
-    application:
-        name: ibook-service
+  profiles:
+    active: local
+  application:
+    name: ibook-service
+  http:
+    multipart:
+      max-file-size: 500MB
+      max-request-size: 500MB
+      enabled: true
+
 
 season:
-    swagger:
-        basePackage: com.trs.ibook.service
-        title: 通用电子书服务组件API
-        description: <b>通用电子书服务组件API</b><br/>
-        version: 1.0-SNAPSHOT
-        contactName: RayeGong
-        contactEmail: gong.lei@trs.com.cn
+  swagger:
+    basePackage: com.trs.ibook.service
+    title: 通用电子书服务组件API
+    description: <b>通用电子书服务组件API</b><br/>
+    version: 1.0-SNAPSHOT
+    contactName: RayeGong
+    contactEmail: gong.lei@trs.com.cn

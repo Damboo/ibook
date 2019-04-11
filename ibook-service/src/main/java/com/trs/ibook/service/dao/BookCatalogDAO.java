@@ -43,7 +43,7 @@ public class BookCatalogDAO extends AbstractDAO<BookCatalog> {
     }
 
     /**
-     * 分页查询电子书
+     * 分页查询电子书目录
      */
     public Page<BookCatalogListVO> findByQuery(BookCatalogQueryDTO bookCatalogQueryDTO) {
         Map<String, Object> params = new HashMap<>();
@@ -72,12 +72,14 @@ public class BookCatalogDAO extends AbstractDAO<BookCatalog> {
             sql += "and t.titleName = :titleName ";
             params.put("titleName", bookCatalogQueryDTO.getTitleName());
         }
+        //默认按照开始页排序
+        sql += " order by pageStartIndex ";
         return seasonDao.findPage(BookCatalogListVO.class, bookCatalogQueryDTO.getPageNo(),
                 bookCatalogQueryDTO.getPageSize(), params, sql);
     }
 
     /**
-     * 分页查询电子书
+     * 全部查询电子书目录
      */
     public List<BookCatalogListVO> queryList(BookCatalogQueryDTO bookCatalogQueryDTO) {
         Map<String, Object> params = new HashMap<>();
@@ -106,7 +108,22 @@ public class BookCatalogDAO extends AbstractDAO<BookCatalog> {
             sql += "and t.titleName = :titleName ";
             params.put("titleName", bookCatalogQueryDTO.getTitleName());
         }
+        //默认按照开始页排序
+        sql += " order by pageStartIndex ";
         return seasonDao.find(BookCatalogListVO.class, params, sql);
+    }
+
+    /**
+     * 根据电子书目录起始页,获取下一个目录的实体类
+     */
+    public BookCatalog getNextBookCatalogById(Integer pageStartIndex, Integer type) {
+        StringBuilder sql = new StringBuilder(" select * from " + BookCatalog.TABLE_NAME);
+        if (type == -1) {
+            sql.append("pageStartIndex < ? order by pageStartIndex desc limit 1 ");
+        } else if (type == 1) {
+            sql.append("pageStartIndex > ? order by pageStartIndex limit 1 ");
+        }
+        return seasonDao.findFirst(BookCatalog.class, sql.toString(), pageStartIndex);
     }
 
 }

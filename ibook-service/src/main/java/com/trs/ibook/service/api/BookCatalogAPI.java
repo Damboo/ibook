@@ -73,4 +73,11 @@ public interface BookCatalogAPI {
     })
     Result<Integer> delete(Integer id);
 
+    /******************************排序【电子书目录信息】*****************************/
+    @ApiOperation(value = "排序【电子书目录信息】")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", dataType = "Integer", value = "【电子书目录信息】id", paramType = "path"),
+            @ApiImplicitParam(name = "type", dataType = "Integer", value = "排序顺序属性", paramType = "path"),
+    })
+    Result<Void> sort(Integer id,Integer type);
 }

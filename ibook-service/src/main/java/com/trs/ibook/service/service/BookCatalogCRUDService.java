@@ -96,4 +96,22 @@ public class BookCatalogCRUDService {
         return bookCatalogDAO.delete(id);
     }
 
+    /**
+     * 电子书排序,-1表示向上排序,1表示向下排序
+     */
+    public void sort(Integer id, Integer type) {
+        BookCatalog bookCatalog = bookCatalogDAO.findById(id);
+        Integer startIndex = bookCatalog.getPageStartIndex();
+        Integer endIndex = bookCatalog.getPageEndIndex();
+        //需要交换相邻的数据
+        BookCatalog nextBookCatalog = bookCatalogDAO.getNextBookCatalogById(startIndex, type);
+        Integer nextStartIndex = nextBookCatalog.getPageStartIndex();
+        Integer nextEndIndex = nextBookCatalog.getPageEndIndex();
+        bookCatalog.setPageStartIndex(nextStartIndex);
+        bookCatalog.setPageEndIndex(nextEndIndex);
+        nextBookCatalog.setPageStartIndex(startIndex);
+        nextBookCatalog.setPageEndIndex(endIndex);
+        bookCatalogDAO.update(bookCatalog);
+        bookCatalogDAO.update(nextBookCatalog);
+    }
 }
