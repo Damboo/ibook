@@ -26,8 +26,11 @@ public class BookCatalogExample {
     public static final String N_INTRODUCTION = "简介";
     public static final String E_INTRODUCTION = "诠释年轻人的新生活主张";
 
-    public static final String N_PAGEINDEX = "页码";
-    public static final String E_PAGEINDEX = "1";
+    public static final String N_PAGESTARTINDEX = "页码";
+    public static final String E_PAGESTARTINDEX = "1";
+
+    public static final String N_PAGEENDINDEX = "页码";
+    public static final String E_PAGEENDINDEX = "10";
 
     public static final String N_CREATETIME = "创建时间";
     public static final String E_CREATETIME = "2019-03-13 11:20:16";

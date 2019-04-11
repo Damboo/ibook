@@ -40,8 +40,11 @@ public class BookCatalog extends AbstractPOJO {
     @Column(type = MySqlTypeConst.TEXT, length = 1000, comment = N_INTRODUCTION)
     private String introduction;
 
-    @Column(length = 10, comment = N_PAGEINDEX)
-    private Integer pageIndex;
+    @Column(length = 10, comment = N_PAGESTARTINDEX)
+    private Integer pageStartIndex;
+
+    @Column(length = 10, comment = N_PAGEENDINDEX)
+    private Integer pageEndIndex;
 
     @Column(notNull = true, comment = N_CREATETIME)
     private Date createTime;
@@ -93,12 +96,20 @@ public class BookCatalog extends AbstractPOJO {
         this.introduction = introduction;
     }
 
-    public Integer getPageIndex() {
-        return pageIndex;
+    public Integer getPageStartIndex() {
+        return pageStartIndex;
     }
 
-    public void setPageIndex(Integer pageIndex) {
-        this.pageIndex = pageIndex;
+    public void setPageStartIndex(Integer pageStartIndex) {
+        this.pageStartIndex = pageStartIndex;
+    }
+
+    public Integer getPageEndIndex() {
+        return pageEndIndex;
+    }
+
+    public void setPageEndIndex(Integer pageEndIndex) {
+        this.pageEndIndex = pageEndIndex;
     }
 
     public Date getCreateTime() {

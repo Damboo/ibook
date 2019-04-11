@@ -42,9 +42,13 @@ public class BookCatalogUpdateDTO {
     @Length(max = 100, message = "introduction最大长度不能超过{max}")
     private String introduction;
 
-    @ApiModelProperty(notes = N_PAGEINDEX, example = E_PAGEINDEX)
+    @ApiModelProperty(notes = N_PAGESTARTINDEX, example = E_PAGESTARTINDEX)
     @NotNull
-    private Integer pageIndex;
+    private Integer pageStartIndex;
+
+    @ApiModelProperty(notes = N_PAGEENDINDEX, example = E_PAGEENDINDEX)
+    @NotNull
+    private Integer pageEndIndex;
 
     @ApiModelProperty(notes = N_CREATETIME, example = E_CREATETIME)
     @NotNull
@@ -98,12 +102,20 @@ public class BookCatalogUpdateDTO {
         this.introduction = introduction;
     }
 
-    public Integer getPageIndex() {
-        return pageIndex;
+    public Integer getPageStartIndex() {
+        return pageStartIndex;
     }
 
-    public void setPageIndex(Integer pageIndex) {
-        this.pageIndex = pageIndex;
+    public void setPageStartIndex(Integer pageStartIndex) {
+        this.pageStartIndex = pageStartIndex;
+    }
+
+    public Integer getPageEndIndex() {
+        return pageEndIndex;
+    }
+
+    public void setPageEndIndex(Integer pageEndIndex) {
+        this.pageEndIndex = pageEndIndex;
     }
 
     public Date getCreateTime() {

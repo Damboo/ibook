@@ -34,9 +34,9 @@ public class BookCatalogDAO extends AbstractDAO<BookCatalog> {
     public List<BookCatalogListVO> getBookCatalogList(Integer bookId) {
         Map<String, Object> params = new HashMap<>();
         params.put("bookId", bookId);
-        String sql = "SELECT c.id,c.parentId,c.bookId,c.titleName,c.introduction,c.pageIndex,p.serialNo " +
+        String sql = "SELECT c.id,c.parentId,c.bookId,c.titleName,c.introduction,c.pageStartIndex,p.serialNo " +
                 "FROM " + BookCatalog.TABLE_NAME + " AS c " +
-                "LEFT JOIN " + BookPicture.TABLE_NAME + " AS p ON c.pageIndex = p.pageIndex " +
+                "LEFT JOIN " + BookPicture.TABLE_NAME + " AS p ON c.pageStartIndex = p.pageIndex " +
                 "WHERE c.bookId = :bookId AND p.bookId = :bookId AND c.isDelete = 0 AND p.isDelete = 0 " +
                 "ORDER BY c.pageIndex ASC ";
         return seasonDao.find(BookCatalogListVO.class, params, sql);
@@ -60,9 +60,13 @@ public class BookCatalogDAO extends AbstractDAO<BookCatalog> {
             sql += "and t.introduction = :introduction ";
             params.put("introduction", bookCatalogQueryDTO.getIntroduction());
         }
-        if (StrKit.isNotEmpty(bookCatalogQueryDTO.getPageIndex())) {
-            sql += "and t.pageIndex = :pageIndex ";
-            params.put("pageIndex", bookCatalogQueryDTO.getPageIndex());
+        if (StrKit.isNotEmpty(bookCatalogQueryDTO.getPageStartIndex())) {
+            sql += "and t.pageStartIndex = :pageStartIndex ";
+            params.put("pageStartIndex", bookCatalogQueryDTO.getPageStartIndex());
+        }
+        if (StrKit.isNotEmpty(bookCatalogQueryDTO.getPageEndIndex())) {
+            sql += "and t.pageEndIndex = :pageEndIndex ";
+            params.put("pageEndIndex", bookCatalogQueryDTO.getPageEndIndex());
         }
         if (StrKit.isNotEmpty(bookCatalogQueryDTO.getTitleName())) {
             sql += "and t.titleName = :titleName ";
@@ -90,9 +94,13 @@ public class BookCatalogDAO extends AbstractDAO<BookCatalog> {
             sql += "and t.introduction = :introduction ";
             params.put("introduction", bookCatalogQueryDTO.getIntroduction());
         }
-        if (StrKit.isNotEmpty(bookCatalogQueryDTO.getPageIndex())) {
-            sql += "and t.pageIndex = :pageIndex ";
-            params.put("pageIndex", bookCatalogQueryDTO.getPageIndex());
+        if (StrKit.isNotEmpty(bookCatalogQueryDTO.getPageStartIndex())) {
+            sql += "and t.pageStartIndex = :pageStartIndex ";
+            params.put("pageStartIndex", bookCatalogQueryDTO.getPageStartIndex());
+        }
+        if (StrKit.isNotEmpty(bookCatalogQueryDTO.getPageEndIndex())) {
+            sql += "and t.pageEndIndex = :pageEndIndex ";
+            params.put("pageEndIndex", bookCatalogQueryDTO.getPageEndIndex());
         }
         if (StrKit.isNotEmpty(bookCatalogQueryDTO.getTitleName())) {
             sql += "and t.titleName = :titleName ";
