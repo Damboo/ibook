@@ -84,8 +84,8 @@ public class BookInfoCRUDService {
         boolean smallFlag = false;
         if (bookFlag) {
             //创建目录成功,继续创建目录下的两个文件夹
-            normalFlag = new File(bookPathStr + "normal/").mkdirs();
-            smallFlag = new File(bookPathStr + "small/").mkdirs();
+            normalFlag = new File(bookPathStr + "/normal/").mkdirs();
+            smallFlag = new File(bookPathStr + "/small/").mkdirs();
             //更新字段
             bookInfo.setLocationName(locationName.toString());
             bookInfoDAO.update(bookInfo);
