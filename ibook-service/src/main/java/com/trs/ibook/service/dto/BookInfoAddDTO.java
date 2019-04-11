@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import static com.trs.ibook.service.example.BookInfoExample.*;
 
@@ -54,8 +55,7 @@ public class BookInfoAddDTO extends AbstractDTO {
     private String coverUrl;
 
     @ApiModelProperty(notes = N_SITEID, example = E_SITEID)
-    @NotBlank(message = "站点id不能为空")
-    @Length(max = 10, message = "siteId最大长度不能超过{max}")
+    @NotNull
     private Integer siteId;
 
     @ApiModelProperty(notes = N_STATUS, example = E_STATUS)

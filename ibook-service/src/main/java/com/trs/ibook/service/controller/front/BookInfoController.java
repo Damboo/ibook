@@ -4,7 +4,6 @@ import com.season.common.SafeKit;
 import com.season.core.Page;
 import com.season.core.Result;
 import com.trs.ibook.service.api.BookInfoAPI;
-import com.trs.ibook.service.dao.BookInfoDAO;
 import com.trs.ibook.service.dto.BookInfoAddDTO;
 import com.trs.ibook.service.dto.BookInfoQueryDTO;
 import com.trs.ibook.service.dto.BookInfoUpdateDTO;
@@ -12,7 +11,6 @@ import com.trs.ibook.service.service.BookInfoCRUDService;
 import com.trs.ibook.service.vo.BookInfoListVO;
 import com.trs.ibook.service.vo.BookInfoShowVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,15 +34,11 @@ public class BookInfoController implements BookInfoAPI {
 
     @Autowired
     private BookInfoCRUDService bookInfoCRUDService;
-    @Value("${ibook.service.imageUpload.baseDir}")
-    private String baseDir;
-    @Value("${ibook.service.imageUpload.oppositeDir}")
-    private String oppositeDir;
 
     @Override
     @PostMapping(value = "/save")
     public Result<Integer> save(@Valid @RequestBody BookInfoAddDTO bookInfoAddDTO) {
-        int bookId = bookInfoCRUDService.save(bookInfoAddDTO, baseDir);
+        int bookId = bookInfoCRUDService.save(bookInfoAddDTO);
         Result<Integer> result = Result.success();
         if (bookId == 0) {
             result.setIsSuccess(false);
@@ -99,8 +93,10 @@ public class BookInfoController implements BookInfoAPI {
     }
 
     @Override
+    @ResponseBody
+    @PostMapping(value = "downloadPDF")
     public Result<Integer> downloadPDF(Integer id) {
-        boolean flag = bookInfoCRUDService.downloadPDF(id, baseDir, oppositeDir);
+        boolean flag = bookInfoCRUDService.downloadPDF(id);
         Result<Integer> result = Result.success();
         if (!flag) {
             result.setIsSuccess(false);
@@ -114,7 +110,7 @@ public class BookInfoController implements BookInfoAPI {
     @PostMapping(value = "uploadPDF")
     public Result<Map<String, Object>> uploadPDF(@RequestParam("file") MultipartFile file, Integer id) {
         Result<Map<String, Object>> result = Result.success();
-        Map<String, Object> map = bookInfoCRUDService.uploadPDF(file, id, baseDir);
+        Map<String, Object> map = bookInfoCRUDService.uploadPDF(file, id);
         if (!SafeKit.getBoolean(map.get("isSuccess"))) {
             result.setIsSuccess(false);
             result.setResultMsg(SafeKit.getString(map.get("resultMsg")));
@@ -123,7 +119,15 @@ public class BookInfoController implements BookInfoAPI {
         Map<String, Object> returnMap = new HashMap<>();
         returnMap.put("siteId", map.get("siteId"));
         returnMap.put("bookId", map.get("bookId"));
+        returnMap.put("pdfUrl", map.get("pdfUrl"));
         result.setData(returnMap);
+        return result;
+    }
+
+    @Override
+    public Result<Void> cutPDF(String pdfUrl, Integer bookId) {
+        Result<Void> result = Result.success();
+        boolean flag = bookInfoCRUDService.cutPDF(pdfUrl, bookId);
         return result;
     }
 }

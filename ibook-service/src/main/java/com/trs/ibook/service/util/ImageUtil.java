@@ -1,12 +1,10 @@
 package com.trs.ibook.service.util;
 
 import com.season.common.ArrayKit;
-import com.season.common.SafeKit;
 import com.season.common.StrKit;
 import com.season.common.UUIDUtil;
 import com.season.core.error.ParamException;
 import com.trs.ibook.core.exception.IBookException;
-import com.trs.ibook.core.exception.IBookParamException;
 import net.coobird.thumbnailator.Thumbnails;
 
 import javax.imageio.ImageIO;
@@ -18,6 +16,8 @@ import com.lowagie.text.Document;
 import com.lowagie.text.Image;
 import com.lowagie.text.Rectangle;
 import com.lowagie.text.pdf.PdfWriter;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.rendering.PDFRenderer;
 import org.springframework.web.multipart.MultipartFile;
 
 import static com.trs.ibook.service.constant.BookConstant.EXT_NAMES;
@@ -31,6 +31,7 @@ import static com.trs.ibook.service.constant.BookConstant.EXT_NAMES;
  * Project: ibook
  * Author: KylerTien
  * Create Time:19-4-3 11:33
+ *
  * @author dambo
  */
 public class ImageUtil {
@@ -180,6 +181,28 @@ public class ImageUtil {
             // 关闭文档
             doc.close();
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 首先对指定URL的PDF进行切割出图片;
+     * 保存到origin文件夹,存表存图;
+     * 对图片进行切割, 存表存图;
+     * 循环至结束
+     */
+    public static void pdfToPicture(String pdfPath, String originPath, String dirName) {
+        // 将pdf装图片 并且自定义图片得格式大小
+        File file = new File(pdfPath);
+        try {
+            PDDocument doc = PDDocument.load(file);
+            PDFRenderer renderer = new PDFRenderer(doc);
+            int pageCount = doc.getNumberOfPages();
+            for (int i = 0; i < pageCount; i++) {
+                BufferedImage image = renderer.renderImageWithDPI(i, 144);
+                ImageIO.write(image, "png", new File(originPath + "/" + dirName + "_" + (i + 1) + ".png"));
+            }
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

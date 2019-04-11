@@ -90,7 +90,16 @@ public interface BookInfoAPI {
     @ApiOperation(value = "导入电子书PDF")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "multipartFile", dataType = "MultipartFile", value = "文件内容", paramType = "body", allowMultiple = true),
-            @ApiImplicitParam(name = "id", dataType = "Integer", value = "电子书id", paramType = "body"),
+            @ApiImplicitParam(name = "id", dataType = "Integer", value = "电子书id", paramType = "path"),
     })
-    Result<Map<String,Object>> uploadPDF(MultipartFile multipartFile, Integer id);
+    Result<Map<String, Object>> uploadPDF(MultipartFile multipartFile, Integer id);
+
+
+    /******************************PDF处理*****************************/
+    @ApiOperation(value = "PDF处理")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pdfUrl", dataType = "String", value = "PDFurl", paramType = "path"),
+            @ApiImplicitParam(name = "bookId", dataType = "Integer", value = "电子书id", paramType = "path"),
+    })
+    Result<Void> cutPDF(String pdfUrl, Integer bookId);
 }

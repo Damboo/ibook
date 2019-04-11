@@ -58,8 +58,6 @@ public class BookInfoUpdateDTO {
     private String coverUrl;
 
     @ApiModelProperty(notes = N_SITEID, example = E_SITEID)
-    @NotBlank(message = "站点id不能为空")
-    @Length(max = 10, message = "siteId最大长度不能超过{max}")
     private Integer siteId;
 
     @ApiModelProperty(notes = N_STATUS, example = E_STATUS)

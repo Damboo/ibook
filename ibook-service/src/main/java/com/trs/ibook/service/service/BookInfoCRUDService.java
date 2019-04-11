@@ -16,6 +16,7 @@ import com.trs.ibook.service.vo.BookInfoListVO;
 import com.trs.ibook.service.vo.BookInfoShowVO;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,13 +48,17 @@ public class BookInfoCRUDService {
 
     @Autowired
     private BookInfoDAO bookInfoDAO;
+    @Value("${ibook.service.imageUpload.baseDir}")
+    private String baseDir;
+    @Value("${ibook.service.imageUpload.oppositeDir}")
+    private String oppositeDir;
     private static final Logger logger = Logger.getLogger(BookInfoCRUDService.class);
 
     /**
      * 新增【电子书信息】
      */
     @Transactional(rollbackFor = IBookParamException.class)
-    public int save(BookInfoAddDTO bookInfoAddDTO, String baseDir) {
+    public int save(BookInfoAddDTO bookInfoAddDTO) {
         BookInfo bookInfo = BookInfoMapper.INSTANCE.fromAddDTO(bookInfoAddDTO);
         bookInfo.setIsDelete(0);
         bookInfo.setStatus(1);
@@ -144,7 +149,7 @@ public class BookInfoCRUDService {
     /**
      * 上传PDF
      */
-    public Map<String, Object> uploadPDF(MultipartFile file, Integer id, String baseDir) {
+    public Map<String, Object> uploadPDF(MultipartFile file, Integer id) {
         Map<String, Object> result = new HashMap<>();
         result.put("isSuccess", true);
         //根据id取到文件夹名称
@@ -167,7 +172,7 @@ public class BookInfoCRUDService {
             result.put("resultMsg", "上传目录没有写");
             return result;
         }
-        String path = "";
+        String pdfName;
         if (!file.isEmpty()) {
             //获得文件后缀名称
             String extName = file.getOriginalFilename().substring(file.getOriginalFilename().indexOf('.') + 1).toLowerCase();
@@ -176,7 +181,7 @@ public class BookInfoCRUDService {
                 result.put("resultMsg", "文件格式不正确");
                 return result;
             }
-            path = albumName + "." + extName;
+            pdfName = albumName + "." + extName;
             //校验文件头
             try (InputStream inputStream = file.getInputStream()) {
                 byte[] b = new byte[4];
@@ -202,13 +207,18 @@ public class BookInfoCRUDService {
                     result.put("resultMsg", "文件格式不正确");
                     return result;
                 }
-                file.transferTo(new File(pdfSavePath + File.separator + path));
+                file.transferTo(new File(pdfSavePath + File.separator + pdfName));
             } catch (IOException e) {
                 logger.error("二进制转换错误!", e);
             }
             BookInfo bookInfo = bookInfoDAO.findById(id);
             result.put("siteId", bookInfo.getSiteId());
             result.put("bookId", bookInfo.getId());
+            //PDF上传成功,那么写入字段
+            String pdfUrl = oppositeDir + albumName + File.separator + pdfName;
+            bookInfo.setPdfUrl(pdfUrl);
+            bookInfoDAO.update(bookInfo);
+            result.put("pdfUrl", pdfUrl);
         }
         return result;
     }
@@ -216,7 +226,7 @@ public class BookInfoCRUDService {
     /**
      * 导出PDF
      */
-    public boolean downloadPDF(Integer id, String baseDir, String oppositeDir) {
+    public boolean downloadPDF(Integer id) {
         //首先检查服务器是否存在PDF
         BookInfo bookInfo = bookInfoDAO.findById(id);
         //不为空, 直接下载
@@ -241,5 +251,12 @@ public class BookInfoCRUDService {
             bookInfo.setPdfUrl(oppositeDir + albumName + File.separator + albumName + ".pdf");
             return true;
         }
+    }
+
+    /**
+     * 切割PDF为图片
+     */
+    public boolean cutPDF(String pdfUrl, Integer bookId) {
+        return false;
     }
 }
