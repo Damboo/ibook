@@ -24,8 +24,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import static com.trs.ibook.service.util.ImageUtil.upload;
-
 /**
  * Title: 图片上传服务
  * Description:
@@ -106,7 +104,7 @@ public class BookPictureCRUDService {
         String filePath = baseDir + albumName + "/origin/";
         //切割后的页码存储路径
         String pagePath = baseDir + albumName + "/normal/";
-        String fileFullName = upload(multipartFile, filePath, albumName);
+        String fileFullName = ImageUtil.upload(multipartFile, filePath, albumName);
         //上传图片后,原图存库
         OriginPic originPic = new OriginPic();
         originPic.setBookId(bookId);

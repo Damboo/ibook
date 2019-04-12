@@ -35,7 +35,7 @@ public interface BookInfoAPI {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "bookInfoAddDTO", dataType = "BookInfoAddDTO", value = "新增【电子书信息】参数", paramType = "body"),
     })
-    Result<Integer> save(BookInfoAddDTO bookInfoAddDTO);
+    Result<Integer> save(BookInfoAddDTO bookInfoAddDTO,MultipartFile multipartFile, Integer id);
 
 
     /******************************分页查询【电子书信息】*****************************/

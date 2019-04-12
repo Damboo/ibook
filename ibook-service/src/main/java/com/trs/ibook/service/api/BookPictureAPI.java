@@ -74,7 +74,6 @@ public interface BookPictureAPI {
     })
     Result<Void> sort(Integer id,Integer type);
 
-
     /******************************电子书图片上传*****************************/
     @ApiOperation(value = "电子书图片上传")
     @ApiImplicitParams({

@@ -1,13 +1,13 @@
 season:
   datasource:
     master:
-      url: jdbc:mysql://10.159.191.110:3308/ibook?&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull
-      username: root
-      password: Trs7lo$3
+      url: jdbc:mysql://10.159.63.75:3306/ibook?&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull
+      username: testuser
+      password: Us$4P3to
     slaver:
-      url: jdbc:mysql://10.159.191.110:3308/ibook?&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull
-      username: root
-      password: Trs7lo$3
+      url: jdbc:mysql://10.159.63.76:3306/ibook?&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull
+      username: testuser
+      password: Us$4P3to
 ibook:
   service:
     imageUpload:
