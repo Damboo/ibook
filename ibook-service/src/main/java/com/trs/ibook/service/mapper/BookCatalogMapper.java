@@ -16,6 +16,7 @@ import org.mapstruct.factory.Mappers;
  * Project: ibook
  * Author: KylerTien
  * Create Time:19-4-4 14:04
+ * @author dambo
  */
 @Mapper
 public interface BookCatalogMapper {

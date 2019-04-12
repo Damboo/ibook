@@ -34,8 +34,9 @@ public interface BookInfoAPI {
     @ApiOperation(value = "新增【电子书信息】")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "bookInfoAddDTO", dataType = "BookInfoAddDTO", value = "新增【电子书信息】参数", paramType = "body"),
-    })
-    Result<Integer> save(BookInfoAddDTO bookInfoAddDTO,MultipartFile multipartFile, Integer id);
+            @ApiImplicitParam(name = "multipartFile", dataType = "MultipartFile", value = "文件内容", paramType = "body", allowMultiple = true),
+           })
+    Result<Map<String,Object>> save(BookInfoAddDTO bookInfoAddDTO, MultipartFile multipartFile);
 
 
     /******************************分页查询【电子书信息】*****************************/
@@ -84,15 +85,6 @@ public interface BookInfoAPI {
             @ApiImplicitParam(name = "id", dataType = "Integer", value = "【电子书信息】id", paramType = "path"),
     })
     Result<Integer> downloadPDF(Integer id);
-
-
-    /******************************导入电子书PDF*****************************/
-    @ApiOperation(value = "导入电子书PDF")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "multipartFile", dataType = "MultipartFile", value = "文件内容", paramType = "body", allowMultiple = true),
-            @ApiImplicitParam(name = "id", dataType = "Integer", value = "电子书id", paramType = "path"),
-    })
-    Result<Map<String, Object>> uploadPDF(MultipartFile multipartFile, Integer id);
 
 
     /******************************PDF处理*****************************/

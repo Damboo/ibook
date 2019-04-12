@@ -207,7 +207,7 @@ public class BookInfoCRUDService {
                     result.put("resultMsg", "文件格式不正确");
                     return result;
                 }
-                file.transferTo(new File(pdfSavePath + File.separator + pdfName));
+                file.transferTo(new File(pdfSavePath + pdfName));
             } catch (IOException e) {
                 logger.error("二进制转换错误!", e);
             }

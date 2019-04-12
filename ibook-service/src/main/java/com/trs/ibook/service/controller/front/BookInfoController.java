@@ -37,14 +37,27 @@ public class BookInfoController implements BookInfoAPI {
 
     @Override
     @PostMapping(value = "/save")
-    public Result<Integer> save(@Valid @RequestBody BookInfoAddDTO bookInfoAddDTO, @RequestParam("file") MultipartFile file, Integer id) {
+    public Result<Map<String, Object>> save(@Valid @RequestBody BookInfoAddDTO bookInfoAddDTO, @RequestParam("file") MultipartFile file) {
         int bookId = bookInfoCRUDService.save(bookInfoAddDTO);
-        Result<Integer> result = Result.success();
+        Result<Map<String, Object>> result = Result.success();
+        //返回map
+        Map<String, Object> map;
         if (bookId == 0) {
             result.setIsSuccess(false);
             result.setResultMsg("创建目录失败,请检查服务器");
+        } else {
+            //保存成功,调用上传文件服务
+            map = bookInfoCRUDService.uploadPDF(file, bookId);
+            if (SafeKit.getBoolean(map.get("isSuccess"))) {
+                //如果成功, 确定返回值信息
+                result.setData(map);
+                //上传文件失败
+            } else {
+                result.setResultMsg(SafeKit.getString(map.get("resultMsg")));
+            }
+            //移除成功标志
+            map.remove("isSuccess");
         }
-        result.setData(bookId);
         return result;
     }
 
@@ -107,24 +120,7 @@ public class BookInfoController implements BookInfoAPI {
 
     @Override
     @ResponseBody
-    @PostMapping(value = "uploadPDF")
-    public Result<Map<String, Object>> uploadPDF(@RequestParam("file") MultipartFile file, Integer id) {
-        Result<Map<String, Object>> result = Result.success();
-        Map<String, Object> map = bookInfoCRUDService.uploadPDF(file, id);
-        if (!SafeKit.getBoolean(map.get("isSuccess"))) {
-            result.setIsSuccess(false);
-            result.setResultMsg(SafeKit.getString(map.get("resultMsg")));
-            return result;
-        }
-        Map<String, Object> returnMap = new HashMap<>();
-        returnMap.put("siteId", map.get("siteId"));
-        returnMap.put("bookId", map.get("bookId"));
-        returnMap.put("pdfUrl", map.get("pdfUrl"));
-        result.setData(returnMap);
-        return result;
-    }
-
-    @Override
+    @PostMapping(value = "cutPDF")
     public Result<Void> cutPDF(String pdfUrl, Integer bookId) {
         Result<Void> result = Result.success();
         boolean flag = bookInfoCRUDService.cutPDF(pdfUrl, bookId);
