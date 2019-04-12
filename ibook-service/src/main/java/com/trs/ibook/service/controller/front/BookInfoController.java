@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,9 +35,8 @@ public class BookInfoController implements BookInfoAPI {
     private BookInfoCRUDService bookInfoCRUDService;
 
     @Override
-    @ResponseBody
-    @PostMapping(value = "/save")
-    public Result<Map<String, Object>> save(@Valid @RequestBody BookInfoAddDTO bookInfoAddDTO, @RequestParam("file") MultipartFile file) {
+    @RequestMapping(value = "/save", method = RequestMethod.GET)
+    public Result<Map<String, Object>> save(@RequestParam("bookData") BookInfoAddDTO bookInfoAddDTO, @RequestParam("file") MultipartFile file) {
         int bookId = bookInfoCRUDService.save(bookInfoAddDTO);
         Result<Map<String, Object>> result = Result.success();
         //返回map
@@ -107,7 +105,6 @@ public class BookInfoController implements BookInfoAPI {
     }
 
     @Override
-    @ResponseBody
     @PostMapping(value = "downloadPDF")
     public Result<Integer> downloadPDF(Integer id) {
         boolean flag = bookInfoCRUDService.downloadPDF(id);
@@ -120,7 +117,6 @@ public class BookInfoController implements BookInfoAPI {
     }
 
     @Override
-    @ResponseBody
     @PostMapping(value = "cutPDF")
     public Result<Void> cutPDF(String pdfUrl, Integer bookId) {
         Result<Void> result = Result.success();
