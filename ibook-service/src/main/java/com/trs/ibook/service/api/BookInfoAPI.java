@@ -33,10 +33,10 @@ public interface BookInfoAPI {
     /******************************新增【电子书信息】*****************************/
     @ApiOperation(value = "新增【电子书信息】")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "bookInfoAddDTO", dataType = "BookInfoAddDTO", value = "新增【电子书信息】参数", paramType = "body"),
+            @ApiImplicitParam(name = "bookInfoJson", dataType = "String", value = "新增【电子书信息】参数", paramType = "path"),
             @ApiImplicitParam(name = "multipartFile", dataType = "MultipartFile", value = "文件内容", paramType = "body", allowMultiple = true),
            })
-    Result<Map<String,Object>> save(BookInfoAddDTO bookInfoAddDTO, MultipartFile multipartFile);
+    Result<Map<String,Object>> save(String bookInfoJson, MultipartFile multipartFile);
 
 
     /******************************分页查询【电子书信息】*****************************/

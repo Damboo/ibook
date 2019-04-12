@@ -1,5 +1,6 @@
 package com.trs.ibook.service.controller.front;
 
+import com.alibaba.fastjson.JSONObject;
 import com.season.common.SafeKit;
 import com.season.core.Page;
 import com.season.core.Result;
@@ -36,7 +37,8 @@ public class BookInfoController implements BookInfoAPI {
 
     @Override
     @PostMapping(value = "/save")
-    public Result<Map<String, Object>> save(@RequestParam("bookData") BookInfoAddDTO bookInfoAddDTO, @RequestParam("file") MultipartFile file) {
+    public Result<Map<String, Object>> save(@RequestParam("bookData") String bookInfoJson, @RequestParam("file") MultipartFile file) {
+        BookInfoAddDTO bookInfoAddDTO = JSONObject.parseObject(bookInfoJson, BookInfoAddDTO.class);
         int bookId = bookInfoCRUDService.save(bookInfoAddDTO);
         Result<Map<String, Object>> result = Result.success();
         //返回map
