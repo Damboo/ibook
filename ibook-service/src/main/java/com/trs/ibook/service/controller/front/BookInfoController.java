@@ -35,7 +35,7 @@ public class BookInfoController implements BookInfoAPI {
     private BookInfoCRUDService bookInfoCRUDService;
 
     @Override
-    @RequestMapping(value = "/save", method = RequestMethod.GET)
+    @PostMapping(value = "/save")
     public Result<Map<String, Object>> save(@RequestParam("bookData") BookInfoAddDTO bookInfoAddDTO, @RequestParam("file") MultipartFile file) {
         int bookId = bookInfoCRUDService.save(bookInfoAddDTO);
         Result<Map<String, Object>> result = Result.success();
