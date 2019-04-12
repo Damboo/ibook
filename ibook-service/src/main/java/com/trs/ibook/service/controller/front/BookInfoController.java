@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,28 +38,14 @@ public class BookInfoController implements BookInfoAPI {
 
     @Override
     @PostMapping(value = "/save")
-    public Result<Map<String, Object>> save(@RequestParam("bookData") String bookInfoJson, @RequestParam("file") MultipartFile file) {
-        BookInfoAddDTO bookInfoAddDTO = JSONObject.parseObject(bookInfoJson, BookInfoAddDTO.class);
+    public Result<Integer> save(@Valid @RequestBody BookInfoAddDTO bookInfoAddDTO) {
         int bookId = bookInfoCRUDService.save(bookInfoAddDTO);
-        Result<Map<String, Object>> result = Result.success();
-        //返回map
-        Map<String, Object> map;
+        Result<Integer> result = Result.success();
         if (bookId == 0) {
             result.setIsSuccess(false);
             result.setResultMsg("创建目录失败,请检查服务器");
-        } else {
-            //保存成功,调用上传文件服务
-            map = bookInfoCRUDService.uploadPDF(file, bookId);
-            if (SafeKit.getBoolean(map.get("isSuccess"))) {
-                //如果成功, 确定返回值信息
-                result.setData(map);
-                //上传文件失败
-            } else {
-                result.setResultMsg(SafeKit.getString(map.get("resultMsg")));
-            }
-            //移除成功标志
-            map.remove("isSuccess");
         }
+        result.setData(bookId);
         return result;
     }
 
@@ -103,6 +90,25 @@ public class BookInfoController implements BookInfoAPI {
         int count = bookInfoCRUDService.delete(id);
         Result<Integer> result = Result.success();
         result.setData(count);
+        return result;
+    }
+
+    @Override
+    @ResponseBody
+    @PostMapping(value = "uploadPDF")
+    public Result<Map<String, Object>> uploadPDF(@RequestParam("file") MultipartFile file, Integer id) {
+        Result<Map<String, Object>> result = Result.success();
+        Map<String, Object> map = bookInfoCRUDService.uploadPDF(file, id);
+        if (!SafeKit.getBoolean(map.get("isSuccess"))) {
+            result.setIsSuccess(false);
+            result.setResultMsg(SafeKit.getString(map.get("resultMsg")));
+            return result;
+        }
+        Map<String, Object> returnMap = new HashMap<>();
+        returnMap.put("siteId", map.get("siteId"));
+        returnMap.put("bookId", map.get("bookId"));
+        returnMap.put("pdfUrl", map.get("pdfUrl"));
+        result.setData(returnMap);
         return result;
     }
 
