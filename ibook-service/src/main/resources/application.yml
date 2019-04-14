@@ -14,7 +14,13 @@ spring:
       max-file-size: 500MB
       max-request-size: 500MB
       enabled: true
-
+  rabbitmq:
+    port: 5672
+    username: admin
+    password: admin
+    publisher-confirms: true
+    virtual-host: /
+    addresses: 192.168.1.104
 
 season:
   swagger:

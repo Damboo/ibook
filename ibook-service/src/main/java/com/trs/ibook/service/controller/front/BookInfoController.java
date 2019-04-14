@@ -1,6 +1,5 @@
 package com.trs.ibook.service.controller.front;
 
-import com.alibaba.fastjson.JSONObject;
 import com.season.common.SafeKit;
 import com.season.core.Page;
 import com.season.core.Result;
@@ -9,6 +8,7 @@ import com.trs.ibook.service.dto.BookInfoAddDTO;
 import com.trs.ibook.service.dto.BookInfoQueryDTO;
 import com.trs.ibook.service.dto.BookInfoUpdateDTO;
 import com.trs.ibook.service.service.BookInfoCRUDService;
+import com.trs.ibook.service.service.PDFToOriginService;
 import com.trs.ibook.service.vo.BookInfoListVO;
 import com.trs.ibook.service.vo.BookInfoShowVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +35,8 @@ public class BookInfoController implements BookInfoAPI {
 
     @Autowired
     private BookInfoCRUDService bookInfoCRUDService;
+    @Autowired
+    private PDFToOriginService pdfToOriginService;
 
     @Override
     @PostMapping(value = "/save")
@@ -128,7 +130,7 @@ public class BookInfoController implements BookInfoAPI {
     @PostMapping(value = "cutPDF")
     public Result<Void> cutPDF(String pdfUrl, Integer bookId) {
         Result<Void> result = Result.success();
-        boolean flag = bookInfoCRUDService.cutPDF(pdfUrl, bookId);
+        pdfToOriginService.cutPDF(pdfUrl, bookId);
         return result;
     }
 }

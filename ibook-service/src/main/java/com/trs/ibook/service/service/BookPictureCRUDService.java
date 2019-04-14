@@ -115,11 +115,9 @@ public class BookPictureCRUDService {
         originPic.setSerialNo(originPicDAO.getNewSerialNo(bookId));
         originPicDAO.save(originPic);
         //切割原图后, 取到两页路径
-        String[] pagePart = ImageUtil.splitImage(fileFullName, pagePath, albumName);
+        String[] pagePart = ImageUtil.splitImage(fileFullName, pagePath);
         String part1 = pagePart[0];
-        ImageUtil.buildSmallPic(part1);
         String part2 = pagePart[1];
-        ImageUtil.buildSmallPic(part2);
         //页码存库
         BookPicture bookPicture = new BookPicture();
         bookPicture.setBookId(bookId);

@@ -1,8 +1,11 @@
 package com;
 
 import com.season.core.SeasonBanner;
+import org.springframework.amqp.core.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+
 
 /**
  * Title: Service模块启动类
@@ -15,6 +18,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication
 public class ServiceApp {
+
+    public final static String QUEUE = "dealPDF-queue";
+
+    @Bean
+    public Queue queue() {
+        return new Queue(QUEUE);
+    }
 
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(ServiceApp.class);

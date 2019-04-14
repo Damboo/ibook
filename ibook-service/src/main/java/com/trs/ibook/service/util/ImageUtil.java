@@ -11,6 +11,8 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.Image;
@@ -89,10 +91,13 @@ public class ImageUtil {
 
     /**
      * 将一张图切割成两个,并保存服务器
+     * 参数示例:
+     * originImgPath: /data/TRS/nas/ts_hudong/hsfile/ibook/test/origin/test_1.png
+     * targetPath: /data/TRS/nas/ts_hudong/hsfile/ibook/test/normal/test
      *
      * @throws IOException
      */
-    public static String[] splitImage(String originImgPath, String targetPath, String albumName) throws IOException {
+    public static String[] splitImage(String originImgPath, String targetPath) throws IOException {
         String[] str = new String[2];
         // 读入大图
         File file = new File(originImgPath);
@@ -123,10 +128,13 @@ public class ImageUtil {
             }
         }
         // 输出小图
-        String part1 = targetPath + albumName + "_" + System.currentTimeMillis() / 1000 + "_" + UUIDUtil.getUUID() + "." + extName;
-        String part2 = targetPath + albumName + "_" + System.currentTimeMillis() / 1000 + "." + UUIDUtil.getUUID() + "." + extName;
+        String part1 = targetPath + "_" + System.currentTimeMillis() / 1000 + "_" + UUIDUtil.getUUID() + "." + extName;
+        String part2 = targetPath + "_" + System.currentTimeMillis() / 1000 + "." + UUIDUtil.getUUID() + "." + extName;
         ImageIO.write(imgs[0], extName, new File(part1));
         ImageIO.write(imgs[1], extName, new File(part2));
+        //生成缩略图
+        ImageUtil.buildSmallPic(part1);
+        ImageUtil.buildSmallPic(part2);
         str[0] = part1;
         str[1] = part2;
         return str;
@@ -135,7 +143,7 @@ public class ImageUtil {
     /**
      * 生成略缩图,保存服务器
      */
-    public static void buildSmallPic(String originImgPath) throws IOException {
+    private static void buildSmallPic(String originImgPath) throws IOException {
         //scale(比例)
         String targetPath = originImgPath.replace("/normal", "/small");
         Thumbnails.of(originImgPath).scale(0.25f).toFile(targetPath);
@@ -181,28 +189,6 @@ public class ImageUtil {
             // 关闭文档
             doc.close();
         } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 首先对指定URL的PDF进行切割出图片;
-     * 保存到origin文件夹,存表存图;
-     * 对图片进行切割, 存表存图;
-     * 循环至结束
-     */
-    public static void pdfToPicture(String pdfPath, String originPath, String dirName) {
-        // 将pdf装图片 并且自定义图片得格式大小
-        File file = new File(pdfPath);
-        try {
-            PDDocument doc = PDDocument.load(file);
-            PDFRenderer renderer = new PDFRenderer(doc);
-            int pageCount = doc.getNumberOfPages();
-            for (int i = 0; i < pageCount; i++) {
-                BufferedImage image = renderer.renderImageWithDPI(i, 144);
-                ImageIO.write(image, "png", new File(originPath + "/" + dirName + "_" + (i + 1) + ".png"));
-            }
-        } catch (IOException e) {
             e.printStackTrace();
         }
     }

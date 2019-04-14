@@ -1,5 +1,6 @@
 package com.trs.ibook.service.service;
 
+import com.season.common.DateKit;
 import com.season.common.StrKit;
 import com.season.core.Page;
 import com.trs.ibook.core.exception.IBookException;
@@ -29,8 +30,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static com.trs.ibook.service.util.DateUtil.getTodayStr;
 
 
 /**
@@ -75,7 +74,7 @@ public class BookInfoCRUDService {
         } else if (bookInfo.getSiteId() == BookConstant.CASARTESITEID) {
             locationName.append("casarte_");
         }
-        locationName.append(getTodayStr()).append("_").append(id);
+        locationName.append(DateKit.getDateStr(new Date(),"yyyyMMdd")).append("_").append(id);
         String bookPathStr = bookPath.append(locationName).toString();
         //检查目录
         File uploadDir = new File(bookPathStr);
@@ -251,12 +250,5 @@ public class BookInfoCRUDService {
             bookInfo.setPdfUrl(oppositeDir + albumName + File.separator + albumName + ".pdf");
             return true;
         }
-    }
-
-    /**
-     * 切割PDF为图片
-     */
-    public boolean cutPDF(String pdfUrl, Integer bookId) {
-        return false;
     }
 }
