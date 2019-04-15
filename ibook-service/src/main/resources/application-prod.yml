@@ -17,3 +17,19 @@ ibook:
       oppositeDir: /hsfile/ibook/
       #前置路径
       frontDir: /data/TRS/nas/ts_hudong
+
+spring:
+  redis:
+    cluster:
+      nodes[0]: 10.159.61.150:6380
+      nodes[1]: 10.159.61.150:6381
+      nodes[2]: 10.159.61.150:6382
+      nodes[3]: 10.159.61.151:6380
+      nodes[4]: 10.159.61.151:6381
+      nodes[5]: 10.159.61.151:6382
+  rabbitmq:
+    host: 10.159.61.150
+    port: 5672
+    username: haieradmin
+    password: TstrS28O
+    virtualhost: /

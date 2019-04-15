@@ -17,3 +17,15 @@ ibook:
       oppositeDir: /hsfile/ibook/
       #前置路径
       frontDir: /data/TRS/nas/ts_hudong
+
+spring:
+  redis:
+    host: 10.159.63.66
+    port: 6388
+    password: trs28fgh
+  rabbitmq:
+    host: 10.159.63.66
+    port: 5672
+    username: haieradmin
+    password: WiTrS39G
+    virtualhost: /
