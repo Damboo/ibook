@@ -101,4 +101,13 @@ public interface BookInfoAPI {
             @ApiImplicitParam(name = "bookId", dataType = "Integer", value = "电子书id", paramType = "path"),
     })
     Result<Void> cutPDF(String pdfUrl, Integer bookId);
+
+
+    /******************************电子书上下架*****************************/
+    @ApiOperation(value = "【电子书上下架】")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", dataType = "Integer", value = "【电子书信息】id", paramType = "path"),
+            @ApiImplicitParam(name = "type", dataType = "Integer", value = "上下架属性", paramType = "path"),
+    })
+    Result<Void> changeStatus(Integer id, Integer type);
 }

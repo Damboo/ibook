@@ -24,7 +24,6 @@ import static com.trs.ibook.service.example.BookCatalogExample.*;
 public class BookCatalogAddDTO extends AbstractDTO {
 
     @ApiModelProperty(notes = N_PARENTID, example = E_PARENTID)
-    @NotNull
     private Integer parentId;
 
     @ApiModelProperty(notes = N_BOOKID, example = E_BOOKID)
@@ -50,15 +49,12 @@ public class BookCatalogAddDTO extends AbstractDTO {
     private Integer pageEndIndex;
 
     @ApiModelProperty(notes = N_CREATETIME, example = E_CREATETIME)
-    @NotNull
     private Date createTime;
 
     @ApiModelProperty(notes = N_CREATEUSERID, example = E_CREATEUSERID)
-    @NotNull
     private Long createUserId;
 
     @ApiModelProperty(notes = N_ISDELETE, example = E_ISDELETE)
-    @NotNull
     private Integer isDelete;
 
     public Integer getParentId() {

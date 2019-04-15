@@ -74,7 +74,7 @@ public class BookInfoCRUDService {
         } else if (bookInfo.getSiteId() == BookConstant.CASARTESITEID) {
             locationName.append("casarte_");
         }
-        locationName.append(DateKit.getDateStr(new Date(),"yyyyMMdd")).append("_").append(id);
+        locationName.append(DateKit.getDateStr(new Date(), "yyyyMMdd")).append("_").append(id);
         String bookPathStr = bookPath.append(locationName).toString();
         //检查目录
         File uploadDir = new File(bookPathStr);
@@ -109,6 +109,8 @@ public class BookInfoCRUDService {
             throw new IBookParamException("id有误");
         }
         BookInfoMapper.INSTANCE.setUpdateDTO(bookInfo, bookInfoUpdateDTO);
+        //修改后置于下架
+        bookInfo.setStatus(2);
         bookInfoDAO.update(bookInfo);
     }
 
@@ -250,5 +252,15 @@ public class BookInfoCRUDService {
             bookInfo.setPdfUrl(oppositeDir + albumName + File.separator + albumName + ".pdf");
             return true;
         }
+    }
+
+    /**
+     * 上下架属性
+     * 1: 上架;2: 下架
+     */
+    public void changeStatus(Integer id, Integer type) {
+        BookInfo bookInfo = bookInfoDAO.getBookInfoById(id);
+        bookInfo.setStatus(type);
+        bookInfoDAO.update(bookInfo, "status");
     }
 }

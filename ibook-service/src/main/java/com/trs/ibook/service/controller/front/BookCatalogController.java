@@ -4,6 +4,7 @@ import com.season.core.Page;
 import com.season.core.Result;
 import com.trs.ibook.core.exception.IBookParamException;
 import com.trs.ibook.service.api.BookCatalogAPI;
+import com.trs.ibook.service.dao.BookCatalogDAO;
 import com.trs.ibook.service.dto.BookCatalogAddDTO;
 import com.trs.ibook.service.dto.BookCatalogQueryDTO;
 import com.trs.ibook.service.dto.BookCatalogUpdateDTO;
@@ -89,9 +90,6 @@ public class BookCatalogController implements BookCatalogAPI {
     @Override
     @PostMapping(value = "/sort")
     public Result<Void> sort(Integer id, Integer type) {
-        if (null == id || 0 == id) {
-            throw new IBookParamException("无效的目录id");
-        }
         if (type != -1 && type != 1) {
             throw new IBookParamException("排序参数错误");
         }

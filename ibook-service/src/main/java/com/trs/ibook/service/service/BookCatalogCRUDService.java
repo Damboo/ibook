@@ -4,17 +4,20 @@ import com.season.core.Page;
 import com.trs.ibook.core.exception.IBookException;
 import com.trs.ibook.core.exception.IBookParamException;
 import com.trs.ibook.service.dao.BookCatalogDAO;
+import com.trs.ibook.service.dao.BookInfoDAO;
 import com.trs.ibook.service.dto.BookCatalogAddDTO;
 import com.trs.ibook.service.dto.BookCatalogQueryDTO;
 import com.trs.ibook.service.dto.BookCatalogUpdateDTO;
 import com.trs.ibook.service.mapper.BookCatalogMapper;
 import com.trs.ibook.service.pojo.BookCatalog;
+import com.trs.ibook.service.pojo.BookInfo;
 import com.trs.ibook.service.vo.BookCatalogListVO;
 import com.trs.ibook.service.vo.BookCatalogShowVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -32,6 +35,8 @@ public class BookCatalogCRUDService {
 
     @Autowired
     private BookCatalogDAO bookCatalogDAO;
+    @Autowired
+    private BookInfoDAO bookInfoDAO;
 
     /**
      * 新增【电子书信息】
@@ -39,6 +44,9 @@ public class BookCatalogCRUDService {
     @Transactional
     public BookCatalog save(BookCatalogAddDTO bookCatalogAddDTO) {
         BookCatalog bookCatalog = BookCatalogMapper.INSTANCE.fromAddDTO(bookCatalogAddDTO);
+        bookCatalog.setCreateTime(new Date());
+        bookCatalog.setIsDelete(0);
+        bookCatalog.setCreateUserId(null);
         bookCatalogDAO.save(bookCatalog);
         return bookCatalog;
     }
@@ -54,6 +62,11 @@ public class BookCatalogCRUDService {
             throw new IBookParamException("id有误");
         }
         BookCatalogMapper.INSTANCE.setUpdateDTO(bookCatalog, bookCatalogUpdateDTO);
+        //根据目录找到对应的书籍id,置于下架
+        BookInfo bookInfo = bookInfoDAO.findById(bookCatalog.getBookId());
+        bookInfo.setStatus(2);
+        //对应的书籍进行下架
+        bookInfoDAO.update(bookInfo,"status");
         bookCatalogDAO.update(bookCatalog);
     }
 
@@ -101,6 +114,9 @@ public class BookCatalogCRUDService {
      */
     public void sort(Integer id, Integer type) {
         BookCatalog bookCatalog = bookCatalogDAO.findById(id);
+        if (null == bookCatalog) {
+            throw new IBookParamException("无效的目录id");
+        }
         Integer startIndex = bookCatalog.getPageStartIndex();
         Integer endIndex = bookCatalog.getPageEndIndex();
         //需要交换相邻的数据

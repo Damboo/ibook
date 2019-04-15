@@ -38,7 +38,8 @@ public class PDFToOriginService {
     private OriginPicDAO originPicDAO;
     @Value("${ibook.service.imageUpload.baseDir}")
     private String baseDir;
-
+    @Value("${ibook.service.imageUpload.frontDir}")
+    private String frontDir;
 
     /**
      * 切割PDF为图片
@@ -56,7 +57,7 @@ public class PDFToOriginService {
         originPic.setCreateTime(new Date());
         originPic.setCreateUserId(null);
         // 将pdf转图片 并且自定义图片得格式大小
-        File file = new File(pdfUrl);
+        File file = new File(frontDir + pdfUrl);
         try {
             PDDocument doc = PDDocument.load(file);
             PDFRenderer renderer = new PDFRenderer(doc);
@@ -81,5 +82,4 @@ public class PDFToOriginService {
             e.printStackTrace();
         }
     }
-
 }

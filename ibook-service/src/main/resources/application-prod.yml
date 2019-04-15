@@ -15,3 +15,5 @@ ibook:
       baseDir: /data/TRS/nas/ts_hudong/hsfile/ibook/
       #相对路径
       oppositeDir: /hsfile/ibook/
+      #前置路径
+      frontDir: /data/TRS/nas/ts_hudong

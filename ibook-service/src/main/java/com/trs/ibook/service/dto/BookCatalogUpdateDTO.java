@@ -25,11 +25,9 @@ public class BookCatalogUpdateDTO {
     private Integer id;
 
     @ApiModelProperty(notes = N_PARENTID, example = E_PARENTID)
-    @NotNull
     private Integer parentId;
 
     @ApiModelProperty(notes = N_BOOKID, example = E_BOOKID)
-    @NotNull
     private Integer bookId;
 
     @ApiModelProperty(notes = N_TITLENAME, example = E_TITLENAME)
@@ -43,23 +41,18 @@ public class BookCatalogUpdateDTO {
     private String introduction;
 
     @ApiModelProperty(notes = N_PAGESTARTINDEX, example = E_PAGESTARTINDEX)
-    @NotNull
     private Integer pageStartIndex;
 
     @ApiModelProperty(notes = N_PAGEENDINDEX, example = E_PAGEENDINDEX)
-    @NotNull
     private Integer pageEndIndex;
 
     @ApiModelProperty(notes = N_CREATETIME, example = E_CREATETIME)
-    @NotNull
     private Date createTime;
 
     @ApiModelProperty(notes = N_CREATEUSERID, example = E_CREATEUSERID)
-    @NotNull
     private Long createUserId;
 
     @ApiModelProperty(notes = N_ISDELETE, example = E_ISDELETE)
-    @NotNull
     private Integer isDelete;
 
     public Integer getId() {

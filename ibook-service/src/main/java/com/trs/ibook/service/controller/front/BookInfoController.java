@@ -3,6 +3,7 @@ package com.trs.ibook.service.controller.front;
 import com.season.common.SafeKit;
 import com.season.core.Page;
 import com.season.core.Result;
+import com.trs.ibook.core.exception.IBookParamException;
 import com.trs.ibook.service.api.BookInfoAPI;
 import com.trs.ibook.service.dto.BookInfoAddDTO;
 import com.trs.ibook.service.dto.BookInfoQueryDTO;
@@ -132,5 +133,15 @@ public class BookInfoController implements BookInfoAPI {
         Result<Void> result = Result.success();
         pdfToOriginService.cutPDF(pdfUrl, bookId);
         return result;
+    }
+
+    @Override
+    @PostMapping(value = "changeStatus")
+    public Result<Void> changeStatus(Integer id, Integer type) {
+        if (type != 1 && type != 2) {
+            throw new IBookParamException("上下架参数错误");
+        }
+        bookInfoCRUDService.changeStatus(id, type);
+        return Result.success();
     }
 }
