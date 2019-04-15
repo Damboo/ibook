@@ -1,5 +1,6 @@
 package com.trs.ibook.service.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.season.common.SafeKit;
 import com.season.common.StrKit;
 import com.trs.ibook.service.dao.BookInfoDAO;
@@ -7,6 +8,7 @@ import com.trs.ibook.service.dao.BookPictureDAO;
 import com.trs.ibook.service.pojo.BookInfo;
 import com.trs.ibook.service.pojo.BookPicture;
 import com.trs.ibook.service.util.ImageUtil;
+import org.apache.log4j.Logger;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -32,41 +34,49 @@ public class OriginToPageService {
     private BookPictureDAO bookPictureDAO;
     @Autowired
     private BookInfoDAO bookInfoDAO;
+    private static final Logger logger = Logger.getLogger(OriginToPageService.class);
 
     @RabbitListener(queues = QUEUE)
-    public void cutToPage(String[] data) {
+    public void cutToPage(String message) {
+        JSONObject data = JSONObject.parseObject(message);
         //收到通知,将生产者产出的原始页切分,生成缩略图,存表
         //拼接出目标路径
         try {
-            String[] pagePart = ImageUtil.splitImage(data[0], data[1]);
-            Integer bookId = SafeKit.getInteger(pagePart[2]);
+            String[] pagePart = ImageUtil.splitImage(SafeKit.getString(data.get("originPath")), SafeKit.getString(data.get("targetPath")));
+            Integer bookId = SafeKit.getInteger(SafeKit.getInteger(data.get("bookId")));
             String part1 = pagePart[0];
             String part2 = pagePart[1];
             //根据bookid获取book信息
             BookInfo bookInfo = bookInfoDAO.getBookInfoById(bookId);
-            //页码存库
-            BookPicture bookPicture = new BookPicture();
-            bookPicture.setBookId(bookId);
-            bookPicture.setCreateTime(new Date());
-            bookPicture.setCreateUserId(null);
-            bookPicture.setIsDelete(0);
             int serialNo = bookPictureDAO.getNewSerialNoByBookId(bookId);
             int pageIndex = bookPictureDAO.getNewPageIndexByBookId(bookId);
-            bookPicture.setSerialNo(serialNo);
-            bookPicture.setPageIndex(pageIndex);
-            bookPicture.setPicUrl(part1);
-            bookPictureDAO.save(bookPicture);
-            bookPicture.setSerialNo(serialNo + 1);
-            bookPicture.setPageIndex(pageIndex + 1);
-            bookPicture.setPicUrl(part2);
-            bookPictureDAO.save(bookPicture);
+            //页码存库
+            BookPicture bookPicture1 = new BookPicture();
+            bookPicture1.setBookId(bookId);
+            bookPicture1.setCreateTime(new Date());
+            bookPicture1.setCreateUserId(null);
+            bookPicture1.setIsDelete(0);
+            bookPicture1.setSerialNo(serialNo);
+            bookPicture1.setPageIndex(pageIndex);
+            bookPicture1.setPicUrl(part1);
+            bookPictureDAO.save(bookPicture1);
+
+            BookPicture bookPicture2 = new BookPicture();
+            bookPicture2.setBookId(bookId);
+            bookPicture2.setCreateTime(new Date());
+            bookPicture2.setCreateUserId(null);
+            bookPicture2.setIsDelete(0);
+            bookPicture2.setSerialNo(serialNo + 1);
+            bookPicture2.setPageIndex(pageIndex + 1);
+            bookPicture2.setPicUrl(part2);
+            bookPictureDAO.save(bookPicture2);
             //如果是第一页上传,并且没有封面,默认设置第一页为封面
             if (serialNo == 1 && StrKit.isEmpty(bookInfo.getCoverUrl())) {
                 bookInfo.setCoverUrl(part1);
                 bookInfoDAO.updateCoverUrl(bookInfo);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("[print by tk]切页失败!", e);
         }
     }
 }

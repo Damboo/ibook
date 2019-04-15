@@ -1,5 +1,6 @@
 package com.trs.ibook.service.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.season.common.StrKit;
 import com.trs.ibook.core.exception.IBookParamException;
 import com.trs.ibook.service.dao.BookInfoDAO;
@@ -58,11 +59,6 @@ public class PDFToOriginService {
         if (StrKit.isEmpty(albumName)) {
             throw new IBookParamException("不正确的bookId");
         }
-        OriginPic originPic = new OriginPic();
-        originPic.setIsDelete(0);
-        originPic.setBookId(bookId);
-        originPic.setCreateTime(new Date());
-        originPic.setCreateUserId(null);
         // 将pdf转图片 并且自定义图片得格式大小
         File file = new File(frontDir + pdfUrl);
         if (!file.exists()) {
@@ -85,15 +81,21 @@ public class PDFToOriginService {
                 }
                 ImageIO.write(image, "png", originFile);
                 //存表
+                OriginPic originPic = new OriginPic();
+                originPic.setIsDelete(0);
+                originPic.setBookId(bookId);
+                originPic.setCreateTime(new Date());
+                originPic.setCreateUserId(null);
                 originPic.setSerialNo(i + 1);
                 originPic.setPicUrl(originPath);
                 originPicDAO.save(originPic);
                 //存文件存表后,通知消费者切图,生成缩略图
-                String[] data = new String[3];
-                data[0] = originPath;
-                data[1] = baseDir + albumName + "/normal/" + albumName;
-                data[2] = bookId + "";
-                this.amqpTemplate.convertAndSend(QUEUE, data);
+                //使用jsonObject进行消息通知
+                JSONObject data = new JSONObject();
+                data.put("originPath", originPath);
+                data.put("targetPath", baseDir + albumName + "/normal/" + albumName);
+                data.put("bookId", bookId + "");
+                this.amqpTemplate.convertAndSend(QUEUE, data.toJSONString());
             }
         } catch (IOException e) {
             logger.error("[print by tk]PDF切图出现异常!异常信息为:", e);

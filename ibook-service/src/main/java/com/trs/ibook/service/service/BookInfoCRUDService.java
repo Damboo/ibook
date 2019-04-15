@@ -60,7 +60,7 @@ public class BookInfoCRUDService {
     public int save(BookInfoAddDTO bookInfoAddDTO) {
         BookInfo bookInfo = BookInfoMapper.INSTANCE.fromAddDTO(bookInfoAddDTO);
         bookInfo.setIsDelete(0);
-        bookInfo.setStatus(1);
+        bookInfo.setStatus(2);
         bookInfo.setCreateTime(new Date());
         bookInfo = bookInfoDAO.save(bookInfo);
         int id = bookInfo.getId();
