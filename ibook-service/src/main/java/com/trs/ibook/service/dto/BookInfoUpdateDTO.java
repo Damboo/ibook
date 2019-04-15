@@ -63,9 +63,6 @@ public class BookInfoUpdateDTO {
     @ApiModelProperty(notes = N_STATUS, example = E_STATUS)
     private Integer status;
 
-    @ApiModelProperty(notes = N_ISDELETE, example = E_ISDELETE)
-    private Integer isDelete;
-
     public Integer getId() {
         return id;
     }
@@ -152,13 +149,5 @@ public class BookInfoUpdateDTO {
 
     public void setStatus(Integer status) {
         this.status = status;
-    }
-
-    public Integer getIsDelete() {
-        return isDelete;
-    }
-
-    public void setIsDelete(Integer isDelete) {
-        this.isDelete = isDelete;
     }
 }

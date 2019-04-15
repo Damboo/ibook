@@ -22,10 +22,6 @@ public class BookPictureUpdateDTO {
     @NotNull
     private Integer id;
 
-    @ApiModelProperty(notes = N_BOOKID, example = E_BOOKID)
-    @NotNull
-    private Integer bookId;
-
     @ApiModelProperty(notes = N_CATALOGID, example = E_CATALOGID)
     @NotNull
     private Integer catalogId;
@@ -42,24 +38,12 @@ public class BookPictureUpdateDTO {
     @NotNull
     private Integer serialNo;
 
-    @ApiModelProperty(notes = N_ISDELETE, example = E_ISDELETE)
-    @NotNull
-    private Integer isDelete;
-
     public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Integer getBookId() {
-        return bookId;
-    }
-
-    public void setBookId(Integer bookId) {
-        this.bookId = bookId;
     }
 
     public Integer getCatalogId() {
@@ -92,13 +76,5 @@ public class BookPictureUpdateDTO {
 
     public void setSerialNo(Integer serialNo) {
         this.serialNo = serialNo;
-    }
-
-    public Integer getIsDelete() {
-        return isDelete;
-    }
-
-    public void setIsDelete(Integer isDelete) {
-        this.isDelete = isDelete;
     }
 }

@@ -27,9 +27,6 @@ public class BookCatalogUpdateDTO {
     @ApiModelProperty(notes = N_PARENTID, example = E_PARENTID)
     private Integer parentId;
 
-    @ApiModelProperty(notes = N_BOOKID, example = E_BOOKID)
-    private Integer bookId;
-
     @ApiModelProperty(notes = N_TITLENAME, example = E_TITLENAME)
     @NotBlank(message = "目录标题不能为空")
     @Length(max = 30, message = "titleName最大长度不能超过{max}")
@@ -46,9 +43,6 @@ public class BookCatalogUpdateDTO {
     @ApiModelProperty(notes = N_PAGEENDINDEX, example = E_PAGEENDINDEX)
     private Integer pageEndIndex;
 
-    @ApiModelProperty(notes = N_ISDELETE, example = E_ISDELETE)
-    private Integer isDelete;
-
     public Integer getId() {
         return id;
     }
@@ -63,14 +57,6 @@ public class BookCatalogUpdateDTO {
 
     public void setParentId(Integer parentId) {
         this.parentId = parentId;
-    }
-
-    public Integer getBookId() {
-        return bookId;
-    }
-
-    public void setBookId(Integer bookId) {
-        this.bookId = bookId;
     }
 
     public String getTitleName() {
@@ -105,12 +91,4 @@ public class BookCatalogUpdateDTO {
         this.pageEndIndex = pageEndIndex;
     }
 
-
-    public Integer getIsDelete() {
-        return isDelete;
-    }
-
-    public void setIsDelete(Integer isDelete) {
-        this.isDelete = isDelete;
-    }
 }
