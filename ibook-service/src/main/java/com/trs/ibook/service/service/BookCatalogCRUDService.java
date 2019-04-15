@@ -62,12 +62,15 @@ public class BookCatalogCRUDService {
         if (bookCatalog == null) {
             throw new IBookParamException("id有误");
         }
-        BookCatalogMapper.INSTANCE.setUpdateDTO(bookCatalog, bookCatalogUpdateDTO);
         //根据目录找到对应的书籍id,置于下架
         BookInfo bookInfo = bookInfoDAO.findById(bookCatalog.getBookId());
+        if (bookInfo == null) {
+            throw new IBookParamException("当前目录无对应的书籍信息");
+        }
         bookInfo.setStatus(2);
         //对应的书籍进行下架
         bookInfoDAO.update(bookInfo, "status");
+        BookCatalogMapper.INSTANCE.setUpdateDTO(bookCatalog, bookCatalogUpdateDTO);
         bookCatalogDAO.update(bookCatalog);
     }
 
@@ -122,6 +125,9 @@ public class BookCatalogCRUDService {
         Integer endIndex = bookCatalog.getPageEndIndex();
         //需要交换相邻的数据
         BookCatalog nextBookCatalog = bookCatalogDAO.getNextBookCatalogById(startIndex, type);
+        if (nextBookCatalog == null) {
+            throw new IBookParamException("当前目录已是最底或最顶");
+        }
         Integer nextStartIndex = nextBookCatalog.getPageStartIndex();
         Integer nextEndIndex = nextBookCatalog.getPageEndIndex();
         bookCatalog.setPageStartIndex(nextStartIndex);
