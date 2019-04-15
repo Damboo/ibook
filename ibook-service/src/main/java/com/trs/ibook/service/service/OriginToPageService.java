@@ -13,6 +13,7 @@ import com.rabbitmq.client.Channel;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -36,6 +37,8 @@ public class OriginToPageService {
     private BookPictureDAO bookPictureDAO;
     @Autowired
     private BookInfoDAO bookInfoDAO;
+    @Value("${ibook.service.imageUpload.frontDir}")
+    private String frontDir;
     private static final Logger logger = Logger.getLogger(OriginToPageService.class);
 
     @RabbitListener(queues = QUEUE, containerFactory = "rabbitListenerContainerFactory")
@@ -60,9 +63,7 @@ public class OriginToPageService {
             bookPicture1.setIsDelete(0);
             bookPicture1.setSerialNo(serialNo);
             bookPicture1.setPageIndex(pageIndex);
-            bookPicture1.setPicUrl(part1);
-            //先默认指定无目录
-            bookPicture1.setCatalogId(0);
+            bookPicture1.setPicUrl(part1.replace(frontDir, ""));
             bookPictureDAO.save(bookPicture1);
 
             BookPicture bookPicture2 = new BookPicture();
@@ -72,9 +73,7 @@ public class OriginToPageService {
             bookPicture2.setIsDelete(0);
             bookPicture2.setSerialNo(serialNo + 1);
             bookPicture2.setPageIndex(pageIndex + 1);
-            bookPicture2.setPicUrl(part2);
-            //先默认指定没有目录
-            bookPicture1.setCatalogId(0);
+            bookPicture2.setPicUrl(part2.replace(frontDir, ""));
             bookPictureDAO.save(bookPicture2);
             //如果是第一页上传,并且没有封面,默认设置第一页为封面
             if (serialNo == 1 && StrKit.isEmpty(bookInfo.getCoverUrl())) {

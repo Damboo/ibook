@@ -94,7 +94,7 @@ public class PDFToOriginService {
                 JSONObject data = new JSONObject();
                 data.put("originPath", originPath);
                 data.put("targetPath", baseDir + albumName + "/normal/" + albumName);
-                data.put("bookId", bookId + "");
+                data.put("bookId", bookId);
                 this.amqpTemplate.convertAndSend(QUEUE, data.toJSONString());
             }
         } catch (IOException e) {

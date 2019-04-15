@@ -26,7 +26,6 @@ public class BookPictureAddDTO extends AbstractDTO {
     private Integer bookId;
 
     @ApiModelProperty(notes = N_CATALOGID, example = E_CATALOGID)
-    @NotNull
     private Integer catalogId;
 
     @ApiModelProperty(notes = N_PICURL, example = E_PICURL)
@@ -42,15 +41,12 @@ public class BookPictureAddDTO extends AbstractDTO {
     private Integer serialNo;
 
     @ApiModelProperty(notes = N_CREATETIME, example = E_CREATETIME)
-    @NotNull
     private Date createTime;
 
     @ApiModelProperty(notes = N_CREATEUSERID, example = E_CREATEUSERID)
-    @NotNull
     private Long createUserId;
 
     @ApiModelProperty(notes = N_ISDELETE, example = E_ISDELETE)
-    @NotNull
     private Integer isDelete;
 
     public Integer getBookId() {

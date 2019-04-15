@@ -31,7 +31,7 @@ public class BookPicture extends AbstractPOJO {
     @Column(length = 10, notNull = true, comment = N_BOOKID)
     private Integer bookId;
 
-    @Column(length = 10, notNull = true, comment = N_CATALOGID)
+    @Column(length = 10, comment = N_CATALOGID)
     private Integer catalogId;
 
     @Column(length = 255, comment = N_PICURL)
