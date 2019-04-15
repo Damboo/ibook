@@ -46,12 +46,6 @@ public class BookCatalogUpdateDTO {
     @ApiModelProperty(notes = N_PAGEENDINDEX, example = E_PAGEENDINDEX)
     private Integer pageEndIndex;
 
-    @ApiModelProperty(notes = N_CREATETIME, example = E_CREATETIME)
-    private Date createTime;
-
-    @ApiModelProperty(notes = N_CREATEUSERID, example = E_CREATEUSERID)
-    private Long createUserId;
-
     @ApiModelProperty(notes = N_ISDELETE, example = E_ISDELETE)
     private Integer isDelete;
 
@@ -111,21 +105,6 @@ public class BookCatalogUpdateDTO {
         this.pageEndIndex = pageEndIndex;
     }
 
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Long getCreateUserId() {
-        return createUserId;
-    }
-
-    public void setCreateUserId(Long createUserId) {
-        this.createUserId = createUserId;
-    }
 
     public Integer getIsDelete() {
         return isDelete;

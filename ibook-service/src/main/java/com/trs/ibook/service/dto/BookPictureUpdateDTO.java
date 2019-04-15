@@ -42,14 +42,6 @@ public class BookPictureUpdateDTO {
     @NotNull
     private Integer serialNo;
 
-    @ApiModelProperty(notes = N_CREATETIME, example = E_CREATETIME)
-    @NotNull
-    private Date createTime;
-
-    @ApiModelProperty(notes = N_CREATEUSERID, example = E_CREATEUSERID)
-    @NotNull
-    private Long createUserId;
-
     @ApiModelProperty(notes = N_ISDELETE, example = E_ISDELETE)
     @NotNull
     private Integer isDelete;
@@ -100,22 +92,6 @@ public class BookPictureUpdateDTO {
 
     public void setSerialNo(Integer serialNo) {
         this.serialNo = serialNo;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Long getCreateUserId() {
-        return createUserId;
-    }
-
-    public void setCreateUserId(Long createUserId) {
-        this.createUserId = createUserId;
     }
 
     public Integer getIsDelete() {

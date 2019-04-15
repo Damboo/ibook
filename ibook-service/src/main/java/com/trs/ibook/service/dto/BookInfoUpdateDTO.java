@@ -63,12 +63,6 @@ public class BookInfoUpdateDTO {
     @ApiModelProperty(notes = N_STATUS, example = E_STATUS)
     private Integer status;
 
-    @ApiModelProperty(notes = N_CREATETIME, example = E_CREATETIME)
-    private Date createTime;
-
-    @ApiModelProperty(notes = N_CREATEUSERID, example = E_CREATEUSERID)
-    private Long createUserId;
-
     @ApiModelProperty(notes = N_ISDELETE, example = E_ISDELETE)
     private Integer isDelete;
 
@@ -158,22 +152,6 @@ public class BookInfoUpdateDTO {
 
     public void setStatus(Integer status) {
         this.status = status;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Long getCreateUserId() {
-        return createUserId;
-    }
-
-    public void setCreateUserId(Long createUserId) {
-        this.createUserId = createUserId;
     }
 
     public Integer getIsDelete() {
