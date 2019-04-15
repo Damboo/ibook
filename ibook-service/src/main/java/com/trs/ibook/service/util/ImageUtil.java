@@ -131,8 +131,8 @@ public class ImageUtil {
             }
         }
         // 输出小图
-        String part1 = targetPath + "_" + System.currentTimeMillis() / 1000 + "_" + UUIDUtil.getUUID() + "." + extName;
-        String part2 = targetPath + "_" + System.currentTimeMillis() / 1000 + "." + UUIDUtil.getUUID() + "." + extName;
+        String part1 = targetPath + "_" + UUIDUtil.getUUID() + "." + extName;
+        String part2 = targetPath + "_" + UUIDUtil.getUUID() + "." + extName;
         File part1File = new File(part1);
         if (!part1File.getParentFile().exists()) {
             boolean result = part1File.getParentFile().mkdirs();
