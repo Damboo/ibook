@@ -87,7 +87,7 @@ public class BookCatalogController implements BookCatalogAPI {
     }
 
     @Override
-    @GetMapping(value = "/sort")
+    @PostMapping(value = "/sort")
     public Result<Void> sort(Integer id, Integer type) {
         if (type != -1 && type != 1) {
             throw new IBookParamException("排序参数错误");

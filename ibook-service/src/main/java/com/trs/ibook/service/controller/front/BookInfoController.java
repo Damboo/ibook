@@ -116,7 +116,7 @@ public class BookInfoController implements BookInfoAPI {
     }
 
     @Override
-    @GetMapping(value = "downloadPDF")
+    @PostMapping(value = "downloadPDF")
     public Result<Integer> downloadPDF(Integer id) {
         boolean flag = bookInfoCRUDService.downloadPDF(id);
         Result<Integer> result = Result.success();
@@ -128,7 +128,7 @@ public class BookInfoController implements BookInfoAPI {
     }
 
     @Override
-    @GetMapping(value = "cutPDF")
+    @PostMapping(value = "cutPDF")
     public Result<Void> cutPDF(String pdfUrl, Integer bookId) {
         Result<Void> result = Result.success();
         pdfToOriginService.cutPDF(pdfUrl, bookId);
@@ -136,7 +136,7 @@ public class BookInfoController implements BookInfoAPI {
     }
 
     @Override
-    @GetMapping(value = "changeStatus")
+    @PostMapping(value = "changeStatus")
     public Result<Void> changeStatus(Integer id, Integer type) {
         if (type != 1 && type != 2) {
             throw new IBookParamException("上下架参数错误");
