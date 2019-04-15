@@ -11,15 +11,12 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.Image;
 import com.lowagie.text.Rectangle;
 import com.lowagie.text.pdf.PdfWriter;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.rendering.PDFRenderer;
+import org.apache.log4j.Logger;
 import org.springframework.web.multipart.MultipartFile;
 
 import static com.trs.ibook.service.constant.BookConstant.EXT_NAMES;
@@ -37,6 +34,9 @@ import static com.trs.ibook.service.constant.BookConstant.EXT_NAMES;
  * @author dambo
  */
 public class ImageUtil {
+
+    private static final Logger logger = Logger.getLogger(ImageUtil.class);
+
     /**
      * 原始图片上传
      */
@@ -101,6 +101,9 @@ public class ImageUtil {
         String[] str = new String[2];
         // 读入大图
         File file = new File(originImgPath);
+        if (!file.exists()) {
+            throw new IBookException("不存在的原始图片");
+        }
         String extName = originImgPath.substring(originImgPath.indexOf('.') + 1).toLowerCase();
         FileInputStream fis = new FileInputStream(file);
         BufferedImage image = ImageIO.read(fis);
@@ -130,8 +133,22 @@ public class ImageUtil {
         // 输出小图
         String part1 = targetPath + "_" + System.currentTimeMillis() / 1000 + "_" + UUIDUtil.getUUID() + "." + extName;
         String part2 = targetPath + "_" + System.currentTimeMillis() / 1000 + "." + UUIDUtil.getUUID() + "." + extName;
-        ImageIO.write(imgs[0], extName, new File(part1));
-        ImageIO.write(imgs[1], extName, new File(part2));
+        File part1File = new File(part1);
+        if (!part1File.getParentFile().exists()) {
+            boolean result = part1File.getParentFile().mkdirs();
+            if (!result) {
+                logger.error("创建目录失败!");
+            }
+        }
+        File part2File = new File(part2);
+        if (!part2File.getParentFile().exists()) {
+            boolean result = part2File.getParentFile().mkdirs();
+            if (!result) {
+                logger.error("创建目录失败!");
+            }
+        }
+        ImageIO.write(imgs[0], extName, part1File);
+        ImageIO.write(imgs[1], extName, part2File);
         //生成缩略图
         ImageUtil.buildSmallPic(part1);
         ImageUtil.buildSmallPic(part2);
@@ -146,6 +163,13 @@ public class ImageUtil {
     private static void buildSmallPic(String originImgPath) throws IOException {
         //scale(比例)
         String targetPath = originImgPath.replace("/normal", "/small");
+        File file = new File(targetPath);
+        if (!file.getParentFile().exists()) {
+            boolean result = file.getParentFile().mkdirs();
+            if (!result) {
+                logger.error("创建目录失败!");
+            }
+        }
         Thumbnails.of(originImgPath).scale(0.25f).toFile(targetPath);
     }
 
@@ -189,7 +213,7 @@ public class ImageUtil {
             // 关闭文档
             doc.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("生成PDF出现异常!", e);
         }
     }
 }

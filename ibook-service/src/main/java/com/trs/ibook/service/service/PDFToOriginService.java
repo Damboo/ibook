@@ -1,8 +1,11 @@
 package com.trs.ibook.service.service;
 
+import com.season.common.StrKit;
+import com.trs.ibook.core.exception.IBookParamException;
 import com.trs.ibook.service.dao.BookInfoDAO;
 import com.trs.ibook.service.dao.OriginPicDAO;
 import com.trs.ibook.service.pojo.OriginPic;
+import org.apache.log4j.Logger;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.PDFRenderer;
 import org.springframework.amqp.core.AmqpTemplate;
@@ -40,6 +43,7 @@ public class PDFToOriginService {
     private String baseDir;
     @Value("${ibook.service.imageUpload.frontDir}")
     private String frontDir;
+    private static final Logger logger = Logger.getLogger(PDFToOriginService.class);
 
     /**
      * 切割PDF为图片
@@ -51,6 +55,9 @@ public class PDFToOriginService {
     public void cutPDF(String pdfUrl, Integer bookId) {
         //首先根据bookId, 获取到文件夹名称
         String albumName = bookInfoDAO.getLocationNameById(bookId);
+        if (StrKit.isEmpty(albumName)) {
+            throw new IBookParamException("不正确的bookId");
+        }
         OriginPic originPic = new OriginPic();
         originPic.setIsDelete(0);
         originPic.setBookId(bookId);
@@ -58,6 +65,9 @@ public class PDFToOriginService {
         originPic.setCreateUserId(null);
         // 将pdf转图片 并且自定义图片得格式大小
         File file = new File(frontDir + pdfUrl);
+        if (!file.exists()) {
+            throw new IBookParamException("不存在的PDF路径");
+        }
         try {
             PDDocument doc = PDDocument.load(file);
             PDFRenderer renderer = new PDFRenderer(doc);
@@ -66,7 +76,14 @@ public class PDFToOriginService {
                 BufferedImage image = renderer.renderImageWithDPI(i, 144);
                 //写出切出的单页图片
                 String originPath = baseDir + albumName + "/origin/" + albumName + "_" + (i + 1) + ".png";
-                ImageIO.write(image, "png", new File(originPath));
+                File originFile = new File(originPath);
+                if (!originFile.getParentFile().exists()) {
+                    boolean result = originFile.getParentFile().mkdirs();
+                    if (!result) {
+                        logger.error("[print by tk]创建目录失败!");
+                    }
+                }
+                ImageIO.write(image, "png", originFile);
                 //存表
                 originPic.setSerialNo(i + 1);
                 originPic.setPicUrl(originPath);
@@ -79,7 +96,7 @@ public class PDFToOriginService {
                 this.amqpTemplate.convertAndSend(QUEUE, data);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("[print by tk]PDF切图出现异常!异常信息为:", e);
         }
     }
 }
