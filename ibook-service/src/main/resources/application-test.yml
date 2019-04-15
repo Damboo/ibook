@@ -29,3 +29,6 @@ spring:
     username: haieradmin
     password: WiTrS39G
     virtualhost: /
+    listener:
+      direct:
+        acknowledge-mode: manual   # 配置该消费者的ack方式为手动

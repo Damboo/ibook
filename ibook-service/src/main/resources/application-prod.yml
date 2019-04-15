@@ -33,3 +33,6 @@ spring:
     username: haieradmin
     password: TstrS28O
     virtualhost: /
+    listener:
+      direct:
+        acknowledge-mode: manual   # 配置该消费者的ack方式为手动

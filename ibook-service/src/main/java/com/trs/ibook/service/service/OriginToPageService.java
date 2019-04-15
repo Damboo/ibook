@@ -9,6 +9,8 @@ import com.trs.ibook.service.pojo.BookInfo;
 import com.trs.ibook.service.pojo.BookPicture;
 import com.trs.ibook.service.util.ImageUtil;
 import org.apache.log4j.Logger;
+import com.rabbitmq.client.Channel;
+import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -36,12 +38,12 @@ public class OriginToPageService {
     private BookInfoDAO bookInfoDAO;
     private static final Logger logger = Logger.getLogger(OriginToPageService.class);
 
-    @RabbitListener(queues = QUEUE)
-    public void cutToPage(String message) {
-        JSONObject data = JSONObject.parseObject(message);
+    @RabbitListener(queues = QUEUE, containerFactory = "rabbitListenerContainerFactory")
+    public void cutToPage(String dataMessage, Message message, Channel channel) {
         //收到通知,将生产者产出的原始页切分,生成缩略图,存表
         //拼接出目标路径
         try {
+            JSONObject data = JSONObject.parseObject(dataMessage);
             String[] pagePart = ImageUtil.splitImage(SafeKit.getString(data.get("originPath")), SafeKit.getString(data.get("targetPath")));
             Integer bookId = SafeKit.getInteger(SafeKit.getInteger(data.get("bookId")));
             String part1 = pagePart[0];
@@ -75,8 +77,13 @@ public class OriginToPageService {
                 bookInfo.setCoverUrl(part1);
                 bookInfoDAO.updateCoverUrl(bookInfo);
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             logger.error("[print by tk]切页失败!", e);
+            try {
+                channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
+            } catch (IOException e1) {
+                logger.error("消费失败!", e);
+            }
         }
     }
 }
