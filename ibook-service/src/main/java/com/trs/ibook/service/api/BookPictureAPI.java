@@ -69,8 +69,8 @@ public interface BookPictureAPI {
     /******************************排序【电子书页码信息】*****************************/
     @ApiOperation(value = "排序【电子书页码信息】")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", dataType = "Integer", value = "【电子书页码信息】id", paramType = "query"),
-            @ApiImplicitParam(name = "type", dataType = "Integer", value = "排序顺序属性", paramType = "query"),
+            @ApiImplicitParam(name = "id", dataType = "Integer", value = "【电子书页码信息】id", paramType = "form"),
+            @ApiImplicitParam(name = "type", dataType = "Integer", value = "排序顺序属性", paramType = "form"),
     })
     Result<Void> sort(Integer id,Integer type);
 
@@ -78,7 +78,7 @@ public interface BookPictureAPI {
     @ApiOperation(value = "电子书图片上传")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "multipartFile", dataType = "MultipartFile", value = "文件内容", paramType = "body", allowMultiple = true),
-            @ApiImplicitParam(name = "bookId", dataType = "Integer", value = "电子书id", paramType = "body"),
+            @ApiImplicitParam(name = "bookId", dataType = "Integer", value = "电子书id", paramType = "form"),
     })
     Result<Void> imageUpload(MultipartFile multipartFile, Integer bookId);
 }

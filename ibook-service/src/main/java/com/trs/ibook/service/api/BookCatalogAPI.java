@@ -76,8 +76,8 @@ public interface BookCatalogAPI {
     /******************************排序【电子书目录信息】*****************************/
     @ApiOperation(value = "排序【电子书目录信息】")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", dataType = "Integer", value = "【电子书目录信息】id", paramType = "query"),
-            @ApiImplicitParam(name = "type", dataType = "Integer", value = "排序顺序属性", paramType = "query"),
+            @ApiImplicitParam(name = "id", dataType = "Integer", value = "【电子书目录信息】id", paramType = "form"),
+            @ApiImplicitParam(name = "type", dataType = "Integer", value = "排序顺序属性", paramType = "form"),
     })
     Result<Void> sort(Integer id, Integer type);
 }

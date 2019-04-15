@@ -48,20 +48,8 @@ public class BookInfoUpdateDTO {
     @ApiModelProperty(notes = N_PERIODICAL, example = E_PERIODICAL)
     private Integer periodical;
 
-    @ApiModelProperty(notes = N_LOCATIONNAME, example = E_LOCATIONNAME)
-    private String locationName;
-
     @ApiModelProperty(notes = N_PDFURL, example = E_PDFURL)
     private String pdfUrl;
-
-    @ApiModelProperty(notes = N_COVERURL, example = E_COVERURL)
-    private String coverUrl;
-
-    @ApiModelProperty(notes = N_SITEID, example = E_SITEID)
-    private Integer siteId;
-
-    @ApiModelProperty(notes = N_STATUS, example = E_STATUS)
-    private Integer status;
 
     public Integer getId() {
         return id;
@@ -111,43 +99,11 @@ public class BookInfoUpdateDTO {
         this.periodical = periodical;
     }
 
-    public String getLocationName() {
-        return locationName;
-    }
-
-    public void setLocationName(String locationName) {
-        this.locationName = locationName;
-    }
-
     public String getPdfUrl() {
         return pdfUrl;
     }
 
     public void setPdfUrl(String pdfUrl) {
         this.pdfUrl = pdfUrl;
-    }
-
-    public String getCoverUrl() {
-        return coverUrl;
-    }
-
-    public void setCoverUrl(String coverUrl) {
-        this.coverUrl = coverUrl;
-    }
-
-    public Integer getSiteId() {
-        return siteId;
-    }
-
-    public void setSiteId(Integer siteId) {
-        this.siteId = siteId;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
     }
 }

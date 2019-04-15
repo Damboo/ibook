@@ -81,7 +81,7 @@ public interface BookInfoAPI {
     @ApiOperation(value = "导入电子书PDF")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "multipartFile", dataType = "MultipartFile", value = "文件内容", paramType = "body", allowMultiple = true),
-            @ApiImplicitParam(name = "id", dataType = "Integer", value = "电子书id", paramType = "path"),
+            @ApiImplicitParam(name = "id", dataType = "Integer", value = "电子书id", paramType = "form"),
     })
     Result<Map<String, Object>> uploadPDF(MultipartFile multipartFile, Integer id);
 
@@ -89,7 +89,7 @@ public interface BookInfoAPI {
     /******************************导出电子书PDF*****************************/
     @ApiOperation(value = "导出电子书PDF")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", dataType = "Integer", value = "【电子书信息】id", paramType = "query"),
+            @ApiImplicitParam(name = "id", dataType = "Integer", value = "【电子书信息】id", paramType = "form"),
     })
     Result<Integer> downloadPDF(Integer id);
 
@@ -97,8 +97,8 @@ public interface BookInfoAPI {
     /******************************PDF处理*****************************/
     @ApiOperation(value = "PDF处理")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "pdfUrl", dataType = "String", value = "PDFurl", paramType = "query"),
-            @ApiImplicitParam(name = "bookId", dataType = "Integer", value = "电子书id", paramType = "query"),
+            @ApiImplicitParam(name = "pdfUrl", dataType = "String", value = "PDFurl", paramType = "form"),
+            @ApiImplicitParam(name = "bookId", dataType = "Integer", value = "电子书id", paramType = "form"),
     })
     Result<Void> cutPDF(String pdfUrl, Integer bookId);
 
@@ -106,8 +106,8 @@ public interface BookInfoAPI {
     /******************************电子书上下架*****************************/
     @ApiOperation(value = "【电子书上下架】")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", dataType = "Integer", value = "【电子书信息】id", paramType = "query"),
-            @ApiImplicitParam(name = "type", dataType = "Integer", value = "上下架属性", paramType = "query"),
+            @ApiImplicitParam(name = "id", dataType = "Integer", value = "【电子书信息】id", paramType = "form"),
+            @ApiImplicitParam(name = "type", dataType = "Integer", value = "上下架属性", paramType = "form"),
     })
     Result<Void> changeStatus(Integer id, Integer type);
 }
