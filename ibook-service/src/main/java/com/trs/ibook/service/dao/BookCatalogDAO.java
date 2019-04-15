@@ -34,11 +34,11 @@ public class BookCatalogDAO extends AbstractDAO<BookCatalog> {
     public List<BookCatalogListVO> getBookCatalogList(Integer bookId) {
         Map<String, Object> params = new HashMap<>();
         params.put("bookId", bookId);
-        String sql = "SELECT c.id,c.parentId,c.bookId,c.titleName,c.introduction,c.pageStartIndex,p.serialNo " +
-                "FROM " + BookCatalog.TABLE_NAME + " AS c " +
-                "LEFT JOIN " + BookPicture.TABLE_NAME + " AS p ON c.pageStartIndex = p.pageIndex " +
-                "WHERE c.bookId = :bookId AND p.bookId = :bookId AND c.isDelete = 0 AND p.isDelete = 0 " +
-                "ORDER BY c.pageStartIndex ASC ";
+        String sql = " SELECT c.id,c.parentId,c.bookId,c.titleName,c.introduction,c.pageStartIndex,p.serialNo " +
+                " FROM " + BookCatalog.TABLE_NAME + " AS c " +
+                " LEFT JOIN " + BookPicture.TABLE_NAME + " AS p ON c.pageStartIndex = p.pageIndex " +
+                " WHERE c.bookId = :bookId AND p.bookId = :bookId AND c.isDelete = 0 AND p.isDelete = 0 " +
+                " ORDER BY c.pageStartIndex ASC ";
         return seasonDao.find(BookCatalogListVO.class, params, sql);
     }
 
@@ -47,29 +47,29 @@ public class BookCatalogDAO extends AbstractDAO<BookCatalog> {
      */
     public Page<BookCatalogListVO> findByQuery(BookCatalogQueryDTO bookCatalogQueryDTO) {
         Map<String, Object> params = new HashMap<>();
-        String sql = "select * from " + BookCatalog.TABLE_NAME + " t where isDelete = 0 ";
+        String sql = " select * from " + BookCatalog.TABLE_NAME + " t where isDelete = 0 ";
         if (StrKit.isNotEmpty(bookCatalogQueryDTO.getId())) {
-            sql += "and t.id = :id ";
+            sql += " and t.id = :id ";
             params.put("id", bookCatalogQueryDTO.getId());
         }
         if (StrKit.isNotEmpty(bookCatalogQueryDTO.getBookId())) {
-            sql += "and t.bookId = :bookId ";
+            sql += " and t.bookId = :bookId ";
             params.put("bookId", bookCatalogQueryDTO.getBookId());
         }
         if (StrKit.isNotEmpty(bookCatalogQueryDTO.getIntroduction())) {
-            sql += "and t.introduction = :introduction ";
+            sql += " and t.introduction = :introduction ";
             params.put("introduction", bookCatalogQueryDTO.getIntroduction());
         }
         if (StrKit.isNotEmpty(bookCatalogQueryDTO.getPageStartIndex())) {
-            sql += "and t.pageStartIndex = :pageStartIndex ";
+            sql += " and t.pageStartIndex = :pageStartIndex ";
             params.put("pageStartIndex", bookCatalogQueryDTO.getPageStartIndex());
         }
         if (StrKit.isNotEmpty(bookCatalogQueryDTO.getPageEndIndex())) {
-            sql += "and t.pageEndIndex = :pageEndIndex ";
+            sql += " and t.pageEndIndex = :pageEndIndex ";
             params.put("pageEndIndex", bookCatalogQueryDTO.getPageEndIndex());
         }
         if (StrKit.isNotEmpty(bookCatalogQueryDTO.getTitleName())) {
-            sql += "and t.titleName = :titleName ";
+            sql += " and t.titleName = :titleName ";
             params.put("titleName", bookCatalogQueryDTO.getTitleName());
         }
         //默认按照开始页排序
@@ -83,29 +83,29 @@ public class BookCatalogDAO extends AbstractDAO<BookCatalog> {
      */
     public List<BookCatalogListVO> queryList(BookCatalogQueryDTO bookCatalogQueryDTO) {
         Map<String, Object> params = new HashMap<>();
-        String sql = "select * from " + BookCatalog.TABLE_NAME + " t where isDelete = 0 ";
+        String sql = " select * from " + BookCatalog.TABLE_NAME + " t where isDelete = 0 ";
         if (StrKit.isNotEmpty(bookCatalogQueryDTO.getId())) {
-            sql += "and t.id = :id ";
+            sql += " and t.id = :id ";
             params.put("id", bookCatalogQueryDTO.getId());
         }
         if (StrKit.isNotEmpty(bookCatalogQueryDTO.getBookId())) {
-            sql += "and t.bookId = :bookId ";
+            sql += " and t.bookId = :bookId ";
             params.put("bookId", bookCatalogQueryDTO.getBookId());
         }
         if (StrKit.isNotEmpty(bookCatalogQueryDTO.getIntroduction())) {
-            sql += "and t.introduction = :introduction ";
+            sql += " and t.introduction = :introduction ";
             params.put("introduction", bookCatalogQueryDTO.getIntroduction());
         }
         if (StrKit.isNotEmpty(bookCatalogQueryDTO.getPageStartIndex())) {
-            sql += "and t.pageStartIndex = :pageStartIndex ";
+            sql += " and t.pageStartIndex = :pageStartIndex ";
             params.put("pageStartIndex", bookCatalogQueryDTO.getPageStartIndex());
         }
         if (StrKit.isNotEmpty(bookCatalogQueryDTO.getPageEndIndex())) {
-            sql += "and t.pageEndIndex = :pageEndIndex ";
+            sql += " and t.pageEndIndex = :pageEndIndex ";
             params.put("pageEndIndex", bookCatalogQueryDTO.getPageEndIndex());
         }
         if (StrKit.isNotEmpty(bookCatalogQueryDTO.getTitleName())) {
-            sql += "and t.titleName = :titleName ";
+            sql += " and t.titleName = :titleName ";
             params.put("titleName", bookCatalogQueryDTO.getTitleName());
         }
         //默认按照开始页排序

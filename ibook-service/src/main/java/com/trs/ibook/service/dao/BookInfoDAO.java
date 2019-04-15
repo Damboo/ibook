@@ -36,23 +36,23 @@ public class BookInfoDAO extends AbstractDAO<BookInfo> {
         Map<String, Object> params = new HashMap<>();
         String sql = "select * from " + BookInfo.TABLE_NAME + " t where isDelete = 0 ";
         if (StrKit.isNotEmpty(bookInfoQueryDTO.getId())) {
-            sql += "and t.id = :id ";
+            sql += " and t.id = :id ";
             params.put("id", bookInfoQueryDTO.getId());
         }
         if (StrKit.isNotEmpty(bookInfoQueryDTO.getAuthor())) {
-            sql += "and t.author = :author ";
+            sql += " and t.author = :author ";
             params.put("author", bookInfoQueryDTO.getAuthor());
         }
         if (StrKit.isNotEmpty(bookInfoQueryDTO.getSiteId())) {
-            sql += "and t.siteId = :siteId ";
+            sql += " and t.siteId = :siteId ";
             params.put("siteId", bookInfoQueryDTO.getSiteId());
         }
         if (StrKit.isNotEmpty(bookInfoQueryDTO.getTitleName())) {
-            sql += "and t.titleName = :titleName ";
+            sql += " and t.titleName = :titleName ";
             params.put("titleName", bookInfoQueryDTO.getTitleName());
         }
         if (StrKit.isNotEmpty(bookInfoQueryDTO.getStatus())) {
-            sql += "and t.status = :status ";
+            sql += " and t.status = :status ";
             params.put("status", bookInfoQueryDTO.getStatus());
         }
         return seasonDao.findPage(BookInfoListVO.class, bookInfoQueryDTO.getPageNo(),
@@ -64,25 +64,25 @@ public class BookInfoDAO extends AbstractDAO<BookInfo> {
      */
     public List<BookInfoListVO> queryList(BookInfoQueryDTO bookInfoQueryDTO) {
         Map<String, Object> params = new HashMap<>();
-        String sql = "select * from " + BookInfo.TABLE_NAME + " t where isDelete = 0 ";
+        String sql = " select * from " + BookInfo.TABLE_NAME + " t where isDelete = 0 ";
         if (StrKit.isNotEmpty(bookInfoQueryDTO.getId())) {
-            sql += "and t.id = :id ";
+            sql += " and t.id = :id ";
             params.put("id", bookInfoQueryDTO.getId());
         }
         if (StrKit.isNotEmpty(bookInfoQueryDTO.getAuthor())) {
-            sql += "and t.author = :author ";
+            sql += " and t.author = :author ";
             params.put("author", bookInfoQueryDTO.getAuthor());
         }
         if (StrKit.isNotEmpty(bookInfoQueryDTO.getSiteId())) {
-            sql += "and t.siteId = :siteId ";
+            sql += " and t.siteId = :siteId ";
             params.put("siteId", bookInfoQueryDTO.getSiteId());
         }
         if (StrKit.isNotEmpty(bookInfoQueryDTO.getTitleName())) {
-            sql += "and t.titleName = :titleName ";
+            sql += " and t.titleName = :titleName ";
             params.put("titleName", bookInfoQueryDTO.getTitleName());
         }
         if (StrKit.isNotEmpty(bookInfoQueryDTO.getStatus())) {
-            sql += "and t.status = :status ";
+            sql += " and t.status = :status ";
             params.put("status", bookInfoQueryDTO.getStatus());
         }
         return seasonDao.find(BookInfoListVO.class, params, sql);

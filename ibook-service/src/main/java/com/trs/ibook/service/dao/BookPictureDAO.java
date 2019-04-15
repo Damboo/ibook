@@ -54,8 +54,8 @@ public class BookPictureDAO extends AbstractDAO<BookPicture> {
         Map<String, Object> params = new HashMap<>();
         params.put("bookId", bookId);
         params.put("serialNo", serialNo);
-        String sql = "SELECT id,bookId,picUrl,pageIndex,serialNo FROM " + BookPicture.TABLE_NAME + " " +
-                "WHERE bookId = :bookId AND serialNo = :serialNo AND isDelete = 0 ";
+        String sql = "SELECT id,bookId,picUrl,pageIndex,serialNo FROM " + BookPicture.TABLE_NAME +
+                " WHERE bookId = :bookId AND serialNo = :serialNo AND isDelete = 0 ";
         return seasonDao.findFirst(BookPicturePageVO.class, params, sql);
     }
 
@@ -162,7 +162,7 @@ public class BookPictureDAO extends AbstractDAO<BookPicture> {
      * 根据bookId获取下一页的pageIndex
      */
     public int getNewPageIndexByBookId(Integer bookId) {
-        String sql = " select pageIndex from " + BookPicture.TABLE_NAME + "where bookId=? and isDelete = 0 order by pageIndex desc limit 1";
+        String sql = " select pageIndex from " + BookPicture.TABLE_NAME + " where bookId=? and isDelete = 0 order by pageIndex desc limit 1";
         Map<String, Object> map = seasonDao.queryFirst(sql, bookId);
         return map == null || map.isEmpty() ? 1 : SafeKit.getInteger(map.get("pageIndex")) + 1;
     }
@@ -171,7 +171,7 @@ public class BookPictureDAO extends AbstractDAO<BookPicture> {
      * 根据bookId获取下一页的serialNo
      */
     public int getNewSerialNoByBookId(Integer bookId) {
-        String sql = " select serialNo from " + BookPicture.TABLE_NAME + "where bookId=? and isDelete = 0 order by serialNo desc limit 1";
+        String sql = " select serialNo from " + BookPicture.TABLE_NAME + " where bookId=? and isDelete = 0 order by serialNo desc limit 1 ";
         Map<String, Object> map = seasonDao.queryFirst(sql, bookId);
         return map == null || map.isEmpty() ? 1 : SafeKit.getInteger(map.get("serialNo")) + 1;
     }
