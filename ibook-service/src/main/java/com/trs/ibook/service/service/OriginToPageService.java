@@ -61,6 +61,8 @@ public class OriginToPageService {
             bookPicture1.setSerialNo(serialNo);
             bookPicture1.setPageIndex(pageIndex);
             bookPicture1.setPicUrl(part1);
+            //先默认指定无目录
+            bookPicture1.setCatalogId(0);
             bookPictureDAO.save(bookPicture1);
 
             BookPicture bookPicture2 = new BookPicture();
@@ -71,6 +73,8 @@ public class OriginToPageService {
             bookPicture2.setSerialNo(serialNo + 1);
             bookPicture2.setPageIndex(pageIndex + 1);
             bookPicture2.setPicUrl(part2);
+            //先默认指定没有目录
+            bookPicture1.setCatalogId(0);
             bookPictureDAO.save(bookPicture2);
             //如果是第一页上传,并且没有封面,默认设置第一页为封面
             if (serialNo == 1 && StrKit.isEmpty(bookInfo.getCoverUrl())) {
