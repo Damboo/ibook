@@ -84,7 +84,7 @@ public class BookPictureController implements BookPictureAPI {
 
     @Override
     @PostMapping(value = "/sort")
-    public Result<Void> sort(Integer id, Integer type) {
+    public Result<Void> sort(@RequestParam("id") Integer id, @RequestParam("type") Integer type) {
         if (null == id || 0 == id) {
             throw new IBookParamException("无效的页码id");
         }
@@ -98,7 +98,7 @@ public class BookPictureController implements BookPictureAPI {
     @Override
     @ResponseBody
     @PostMapping(value = "imageUpload")
-    public Result<Void> imageUpload(@RequestParam("file") MultipartFile file, Integer bookId) {
+    public Result<Void> imageUpload(@RequestParam("file") MultipartFile file, @RequestParam("bookId") Integer bookId) {
         Result result = Result.success();
         if (StrKit.isEmpty(bookId)) {
             throw new IBookParamException("电子书id不能为空");

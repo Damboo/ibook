@@ -47,6 +47,7 @@ public class BookCatalogCRUDService {
         bookCatalog.setCreateTime(new Date());
         bookCatalog.setIsDelete(0);
         bookCatalog.setCreateUserId(null);
+        bookCatalog.setParentId(null == bookCatalog.getParentId() ? 0 : bookCatalog.getParentId());
         bookCatalogDAO.save(bookCatalog);
         return bookCatalog;
     }
@@ -66,7 +67,7 @@ public class BookCatalogCRUDService {
         BookInfo bookInfo = bookInfoDAO.findById(bookCatalog.getBookId());
         bookInfo.setStatus(2);
         //对应的书籍进行下架
-        bookInfoDAO.update(bookInfo,"status");
+        bookInfoDAO.update(bookInfo, "status");
         bookCatalogDAO.update(bookCatalog);
     }
 
