@@ -117,11 +117,11 @@ public class BookCatalogDAO extends AbstractDAO<BookCatalog> {
      * 根据电子书目录起始页,获取下一个目录的实体类
      */
     public BookCatalog getNextBookCatalogById(Integer pageStartIndex, Integer type) {
-        StringBuilder sql = new StringBuilder(" select * from " + BookCatalog.TABLE_NAME);
+        StringBuilder sql = new StringBuilder(" select * from " + BookCatalog.TABLE_NAME + " where isDelete = 0 and ");
         if (type == -1) {
-            sql.append("pageStartIndex < ? order by pageStartIndex desc limit 1 ");
+            sql.append(" pageStartIndex < ? order by pageStartIndex desc limit 1 ");
         } else if (type == 1) {
-            sql.append("pageStartIndex > ? order by pageStartIndex limit 1 ");
+            sql.append(" pageStartIndex > ? order by pageStartIndex limit 1 ");
         }
         return seasonDao.findFirst(BookCatalog.class, sql.toString(), pageStartIndex);
     }
