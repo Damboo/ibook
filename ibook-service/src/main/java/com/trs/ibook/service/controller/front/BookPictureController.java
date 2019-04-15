@@ -83,8 +83,8 @@ public class BookPictureController implements BookPictureAPI {
     }
 
     @Override
-    @PostMapping(value = "/sort")
-    public Result<Void> sort(@RequestParam("id") Integer id, @RequestParam("type") Integer type) {
+    @GetMapping(value = "/sort")
+    public Result<Void> sort(Integer id, Integer type) {
         if (null == id || 0 == id) {
             throw new IBookParamException("无效的页码id");
         }
