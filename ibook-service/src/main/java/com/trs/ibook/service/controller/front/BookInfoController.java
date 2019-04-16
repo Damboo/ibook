@@ -9,6 +9,7 @@ import com.trs.ibook.service.dto.BookInfoAddDTO;
 import com.trs.ibook.service.dto.BookInfoQueryDTO;
 import com.trs.ibook.service.dto.BookInfoUpdateDTO;
 import com.trs.ibook.service.service.BookInfoCRUDService;
+import com.trs.ibook.service.service.BookPictureCRUDService;
 import com.trs.ibook.service.service.PDFToOriginService;
 import com.trs.ibook.service.vo.BookInfoListVO;
 import com.trs.ibook.service.vo.BookInfoShowVO;
@@ -38,6 +39,8 @@ public class BookInfoController implements BookInfoAPI {
     private BookInfoCRUDService bookInfoCRUDService;
     @Autowired
     private PDFToOriginService pdfToOriginService;
+    @Autowired
+    private BookPictureCRUDService bookPictureCRUDService;
 
     @Override
     @PostMapping(value = "/save")
@@ -131,6 +134,9 @@ public class BookInfoController implements BookInfoAPI {
     @PostMapping(value = "cutPDF")
     public Result<Void> cutPDF(String pdfUrl, Integer bookId) {
         Result<Void> result = Result.success();
+        //首先判断是否存在这本书的页码和原图,进行逻辑删除
+        bookPictureCRUDService.dealOldPic(bookId);
+        //开始进行生产者消费者模式切图
         pdfToOriginService.cutPDF(pdfUrl, bookId);
         return result;
     }

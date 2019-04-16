@@ -39,6 +39,7 @@ public class OriginToPageService {
     private BookInfoDAO bookInfoDAO;
     @Value("${ibook.service.imageUpload.frontDir}")
     private String frontDir;
+
     private static final Logger logger = Logger.getLogger(OriginToPageService.class);
 
     @RabbitListener(queues = QUEUE, containerFactory = "rabbitListenerContainerFactory")
@@ -49,8 +50,8 @@ public class OriginToPageService {
             JSONObject data = JSONObject.parseObject(dataMessage);
             String[] pagePart = ImageUtil.splitImage(SafeKit.getString(data.get("originPath")), SafeKit.getString(data.get("targetPath")));
             Integer bookId = SafeKit.getInteger(SafeKit.getInteger(data.get("bookId")));
-            String part1 = pagePart[0];
-            String part2 = pagePart[1];
+            String part1 = pagePart[0].replace(frontDir, "");
+            String part2 = pagePart[1].replace(frontDir, "");
             //根据bookid获取book信息
             BookInfo bookInfo = bookInfoDAO.getBookInfoById(bookId);
             int serialNo = bookPictureDAO.getNewSerialNoByBookId(bookId);
@@ -63,9 +64,13 @@ public class OriginToPageService {
             bookPicture1.setIsDelete(0);
             bookPicture1.setSerialNo(serialNo);
             bookPicture1.setPageIndex(pageIndex);
-            bookPicture1.setPicUrl(part1.replace(frontDir, ""));
+            bookPicture1.setPicUrl(part1);
             bookPictureDAO.save(bookPicture1);
-
+            //如果是第一页上传,并且没有封面,默认设置第一页为封面
+            if (serialNo == 1 && StrKit.isEmpty(bookInfo.getCoverUrl())) {
+                bookInfo.setCoverUrl(part1);
+                bookInfoDAO.updateCoverUrl(bookInfo);
+            }
             BookPicture bookPicture2 = new BookPicture();
             bookPicture2.setBookId(bookId);
             bookPicture2.setCreateTime(new Date());
@@ -73,13 +78,9 @@ public class OriginToPageService {
             bookPicture2.setIsDelete(0);
             bookPicture2.setSerialNo(serialNo + 1);
             bookPicture2.setPageIndex(pageIndex + 1);
-            bookPicture2.setPicUrl(part2.replace(frontDir, ""));
+            bookPicture2.setPicUrl(part2);
             bookPictureDAO.save(bookPicture2);
-            //如果是第一页上传,并且没有封面,默认设置第一页为封面
-            if (serialNo == 1 && StrKit.isEmpty(bookInfo.getCoverUrl())) {
-                bookInfo.setCoverUrl(part1);
-                bookInfoDAO.updateCoverUrl(bookInfo);
-            }
+
         } catch (Exception e) {
             logger.error("[print by tk]切页失败!", e);
             try {

@@ -175,4 +175,12 @@ public class BookPictureDAO extends AbstractDAO<BookPicture> {
         Map<String, Object> map = seasonDao.queryFirst(sql, bookId);
         return map == null || map.isEmpty() ? 1 : SafeKit.getInteger(map.get("serialNo")) + 1;
     }
+
+    /**
+     * 判断是否有历史书页进行逻辑删除(重新上传PDF时)
+     */
+    public void deleteByBookId(Integer bookId) {
+        String sql = " update " + BookPicture.TABLE_NAME + " set isDelete=1 where bookId=? and isDelete=0 ";
+        seasonDao.execute(sql, bookId);
+    }
 }

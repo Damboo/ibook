@@ -15,6 +15,7 @@ import com.trs.ibook.service.util.ImageUtil;
 import com.trs.ibook.service.vo.BookPictureListVO;
 import com.trs.ibook.service.vo.BookPictureShowVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,6 +43,8 @@ public class BookPictureCRUDService {
     private OriginPicDAO originPicDAO;
     @Autowired
     private BookPictureDAO bookPictureDAO;
+    @Value("${ibook.service.imageUpload.frontDir}")
+    private String frontDir;
 
     /**
      * 修改【电子书页码信息】
@@ -116,8 +119,8 @@ public class BookPictureCRUDService {
         originPicDAO.save(originPic);
         //切割原图后, 取到两页路径
         String[] pagePart = ImageUtil.splitImage(fileFullName, pagePath);
-        String part1 = pagePart[0];
-        String part2 = pagePart[1];
+        String part1 = pagePart[0].replace(frontDir, "");
+        String part2 = pagePart[1].replace(frontDir, "");
         //页码存库
         BookPicture bookPicture = new BookPicture();
         bookPicture.setBookId(bookId);
@@ -157,5 +160,13 @@ public class BookPictureCRUDService {
         preBookPicture.setSerialNo(oldSerialNo);
         bookPictureDAO.update(bookPicture);
         bookPictureDAO.update(preBookPicture);
+    }
+
+    /**
+     * 判断指定书是否有历史书页,进行逻辑删除
+     */
+    public void dealOldPic(Integer bookId) {
+        originPicDAO.deleteByBookId(bookId);
+        bookPictureDAO.deleteByBookId(bookId);
     }
 }

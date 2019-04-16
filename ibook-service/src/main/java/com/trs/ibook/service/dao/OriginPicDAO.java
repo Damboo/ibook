@@ -23,8 +23,16 @@ public class OriginPicDAO extends AbstractDAO<OriginPic> {
      * 根据bookId获取下一页SerialNo
      */
     public int getNewSerialNo(Integer bookId) {
-        String sql = " select serialNo from " + OriginPic.TABLE_NAME + " where bookId=? order by serialNo desc limit 1 ";
+        String sql = " select serialNo from " + OriginPic.TABLE_NAME + " where isDelete=0 and bookId=? order by serialNo desc limit 1 ";
         Map<String, Object> lastSerialNo = seasonDao.queryFirst(sql, bookId);
         return lastSerialNo == null || lastSerialNo.isEmpty() ? 1 : SafeKit.getInteger(lastSerialNo.get("serialNo")) + 1;
+    }
+
+    /**
+     * 删除指定电子书的原始页(重新上传PDF时)
+     */
+    public void deleteByBookId(Integer bookId) {
+        String sql = " update " + OriginPic.TABLE_NAME + " set isDelete=1 where bookId=? and isDelete=0 ";
+        seasonDao.execute(sql, bookId);
     }
 }

@@ -60,6 +60,7 @@ public class BookInfoCRUDService {
     public int save(BookInfoAddDTO bookInfoAddDTO) {
         BookInfo bookInfo = BookInfoMapper.INSTANCE.fromAddDTO(bookInfoAddDTO);
         bookInfo.setIsDelete(0);
+        //第一次存书置于下架
         bookInfo.setStatus(2);
         bookInfo.setCreateTime(new Date());
         bookInfo = bookInfoDAO.save(bookInfo);

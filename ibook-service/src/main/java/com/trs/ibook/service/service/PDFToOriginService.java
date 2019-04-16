@@ -69,7 +69,7 @@ public class PDFToOriginService {
             int pageCount = doc.getNumberOfPages();
             logger.info("开始对上传的PDF切图,当前页码有" + pageCount + "张");
             for (int i = 0; i < pageCount; i++) {
-                logger.info("开始切第" + pageCount + "张");
+                logger.info("开始切第" + i + "张");
                 BufferedImage image = renderer.renderImageWithDPI(i, 144);
                 String originPath = baseDir + albumName + "/origin/" + albumName + "_" + (i + 1) + ".png";
                 File originFile = new File(originPath);
