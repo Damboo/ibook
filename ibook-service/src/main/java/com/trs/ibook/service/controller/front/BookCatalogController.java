@@ -1,5 +1,6 @@
 package com.trs.ibook.service.controller.front;
 
+import com.season.common.StrKit;
 import com.season.core.Page;
 import com.season.core.Result;
 import com.trs.ibook.core.exception.IBookParamException;
@@ -15,7 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Title:
@@ -36,8 +39,19 @@ public class BookCatalogController implements BookCatalogAPI {
     @Override
     @PostMapping(value = "/save")
     public Result<Integer> save(@Valid @RequestBody BookCatalogAddDTO bookCatalogAddDTO) {
-        BookCatalog bookCatalog = bookCatalogCRUDService.save(bookCatalogAddDTO);
         Result<Integer> result = Result.success();
+        Map<String, Object> map = new HashMap<>();
+        map.put("pageStartIndex", bookCatalogAddDTO.getPageStartIndex());
+        map.put("pageEndIndex", bookCatalogAddDTO.getPageEndIndex());
+        map.put("bookId", bookCatalogAddDTO.getBookId());
+        //校验页码格式
+        String errorMsg = bookCatalogCRUDService.checkCatalogPage(map);
+        if (StrKit.isNotEmpty(errorMsg)) {
+            result.setIsSuccess(false);
+            result.setResultMsg(errorMsg);
+            return result;
+        }
+        BookCatalog bookCatalog = bookCatalogCRUDService.save(bookCatalogAddDTO, map);
         result.setData(bookCatalog.getId());
         return result;
     }
@@ -45,6 +59,18 @@ public class BookCatalogController implements BookCatalogAPI {
     @Override
     @PostMapping(value = "/update")
     public Result<Void> update(@Valid @RequestBody BookCatalogUpdateDTO bookCatalogUpdateDTO) {
+        Result<Void> result = Result.success();
+        Map<String, Object> map = new HashMap<>();
+        map.put("pageStartIndex", bookCatalogUpdateDTO.getPageStartIndex());
+        map.put("pageEndIndex", bookCatalogUpdateDTO.getPageEndIndex());
+        map.put("bookId", bookCatalogUpdateDTO.getBookId());
+        //校验页码格式
+        String errorMsg = bookCatalogCRUDService.checkCatalogPage(map);
+        if (StrKit.isNotEmpty(errorMsg)) {
+            result.setIsSuccess(false);
+            result.setResultMsg(errorMsg);
+            return result;
+        }
         bookCatalogCRUDService.update(bookCatalogUpdateDTO);
         return Result.success();
     }

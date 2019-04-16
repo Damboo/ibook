@@ -183,4 +183,22 @@ public class BookPictureDAO extends AbstractDAO<BookPicture> {
         String sql = " update " + BookPicture.TABLE_NAME + " set isDelete=1 where bookId=? and isDelete=0 ";
         seasonDao.execute(sql, bookId);
     }
+
+    /**
+     * 指定页码区间,修改对应的目录id
+     */
+    public void setCatalogIdByPageIndex(Map<String, Object> map) {
+        String sql = " update " + BookPicture.TABLE_NAME + " set catalogId=:catalogId where isDelete=0 " +
+                "and pageIndex>=:pageStartIndex and pageIndex<=:pageEndIndex and bookId=:bookId ";
+        seasonDao.execute(map, sql);
+    }
+
+    /**
+     * 获取最大结束页
+     */
+    public int getMaxEndIndexByBookId(Integer bookId) {
+        String sql = " select * from " + BookPicture.TABLE_NAME + " where bookId=? order by pageIndex desc limit 1 ";
+        BookPicture bookPicture = seasonDao.findFirst(BookPicture.class, sql, bookId);
+        return bookPicture != null ? bookPicture.getPageIndex() : 0;
+    }
 }

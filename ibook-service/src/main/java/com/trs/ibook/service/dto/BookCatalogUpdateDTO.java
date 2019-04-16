@@ -27,6 +27,9 @@ public class BookCatalogUpdateDTO {
     @ApiModelProperty(notes = N_PARENTID, example = E_PARENTID)
     private Integer parentId;
 
+    @ApiModelProperty(notes = N_BOOKID, example = E_BOOKID)
+    private Integer bookId;
+
     @ApiModelProperty(notes = N_TITLENAME, example = E_TITLENAME)
     @NotBlank(message = "目录标题不能为空")
     @Length(max = 30, message = "titleName最大长度不能超过{max}")
@@ -57,6 +60,14 @@ public class BookCatalogUpdateDTO {
 
     public void setParentId(Integer parentId) {
         this.parentId = parentId;
+    }
+
+    public Integer getBookId() {
+        return bookId;
+    }
+
+    public void setBookId(Integer bookId) {
+        this.bookId = bookId;
     }
 
     public String getTitleName() {

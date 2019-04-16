@@ -1,10 +1,13 @@
 package com.trs.ibook.service.service;
 
+import com.season.common.SafeKit;
+import com.season.common.StrKit;
 import com.season.core.Page;
 import com.trs.ibook.core.exception.IBookException;
 import com.trs.ibook.core.exception.IBookParamException;
 import com.trs.ibook.service.dao.BookCatalogDAO;
 import com.trs.ibook.service.dao.BookInfoDAO;
+import com.trs.ibook.service.dao.BookPictureDAO;
 import com.trs.ibook.service.dto.BookCatalogAddDTO;
 import com.trs.ibook.service.dto.BookCatalogQueryDTO;
 import com.trs.ibook.service.dto.BookCatalogUpdateDTO;
@@ -18,7 +21,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Title:
@@ -37,23 +42,28 @@ public class BookCatalogCRUDService {
     private BookCatalogDAO bookCatalogDAO;
     @Autowired
     private BookInfoDAO bookInfoDAO;
+    @Autowired
+    private BookPictureDAO bookPictureDAO;
 
     /**
-     * 新增【电子书信息】
+     * 新增【目录信息】
      */
     @Transactional
-    public BookCatalog save(BookCatalogAddDTO bookCatalogAddDTO) {
+    public BookCatalog save(BookCatalogAddDTO bookCatalogAddDTO, Map<String, Object> map) {
         BookCatalog bookCatalog = BookCatalogMapper.INSTANCE.fromAddDTO(bookCatalogAddDTO);
         bookCatalog.setCreateTime(new Date());
         bookCatalog.setIsDelete(0);
         bookCatalog.setCreateUserId(null);
         bookCatalog.setParentId(null == bookCatalog.getParentId() ? 0 : bookCatalog.getParentId());
-        bookCatalogDAO.save(bookCatalog);
+        bookCatalog = bookCatalogDAO.save(bookCatalog);
+        //新增页码后修改对应的页码
+        map.put("catalogId", bookCatalog.getId());
+        bookPictureDAO.setCatalogIdByPageIndex(map);
         return bookCatalog;
     }
 
     /**
-     * 修改【地区信息】
+     * 修改【目录信息】
      */
     @Transactional(rollbackFor = IBookParamException.class)
     public void update(BookCatalogUpdateDTO bookCatalogUpdateDTO) {
@@ -114,7 +124,7 @@ public class BookCatalogCRUDService {
     }
 
     /**
-     * 电子书排序,-1表示向上排序,1表示向下排序
+     * 电子书目录排序,-1表示向上排序,1表示向下排序
      */
     public void sort(Integer id, Integer type) {
         BookCatalog bookCatalog = bookCatalogDAO.findById(id);
@@ -123,8 +133,14 @@ public class BookCatalogCRUDService {
         }
         Integer startIndex = bookCatalog.getPageStartIndex();
         Integer endIndex = bookCatalog.getPageEndIndex();
+        Integer bookId = bookCatalog.getBookId();
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("startIndex", startIndex);
+        map.put("endIndex", endIndex);
+        map.put("bookId", bookId);
+        map.put("type", type);
         //需要交换相邻的数据
-        BookCatalog nextBookCatalog = bookCatalogDAO.getNextBookCatalogById(startIndex, type);
+        BookCatalog nextBookCatalog = bookCatalogDAO.getNextBookCatalogById(map);
         if (nextBookCatalog == null) {
             throw new IBookParamException("当前目录已是最底或最顶");
         }
@@ -136,5 +152,29 @@ public class BookCatalogCRUDService {
         nextBookCatalog.setPageEndIndex(endIndex);
         bookCatalogDAO.update(bookCatalog);
         bookCatalogDAO.update(nextBookCatalog);
+    }
+
+    /**
+     * 校验目录页码的格式
+     */
+    public String checkCatalogPage(Map<String, Object> map) {
+        int startIndex = SafeKit.getInteger(map.get("pageStartIndex"));
+        int endIndex = SafeKit.getInteger(map.get("pageEndIndex"));
+        int bookId = SafeKit.getInteger(map.get("bookId"));
+        if (startIndex < 1) {
+            return "起始页不得小于1";
+        }
+        if (startIndex >= endIndex) {
+            return "结束页不得小于或等于起始页";
+        }
+        if (endIndex > bookPictureDAO.getMaxEndIndexByBookId(bookId)) {
+            return "结束页超过最大页码";
+        }
+        //检验目录页码是否存在重叠
+        String errorMsg = bookCatalogDAO.checkCatalogSort(map);
+        if (StrKit.isNotEmpty(errorMsg)) {
+            return errorMsg;
+        }
+        return "";
     }
 }
