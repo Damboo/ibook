@@ -51,7 +51,6 @@ public class PDFToOriginService {
      * 注意:这里使用生产者消费者模式,原图PDF作为生产者切割产出大图,存入origin文件夹,以及写库;
      * 大图存入缓冲区;
      * 切割工具作为消费者,在缓冲区拿出大图并且切割,同时生成略缩图,以及写库;
-     * 生产者和消费者均开线程
      */
     public void cutPDF(String pdfUrl, Integer bookId) {
         //首先根据bookId, 获取到文件夹名称
@@ -68,9 +67,10 @@ public class PDFToOriginService {
             PDDocument doc = PDDocument.load(file);
             PDFRenderer renderer = new PDFRenderer(doc);
             int pageCount = doc.getNumberOfPages();
+            logger.info("开始对上传的PDF切图,当前页码有" + pageCount + "张");
             for (int i = 0; i < pageCount; i++) {
+                logger.info("开始切第" + pageCount + "张");
                 BufferedImage image = renderer.renderImageWithDPI(i, 144);
-                //写出切出的单页图片
                 String originPath = baseDir + albumName + "/origin/" + albumName + "_" + (i + 1) + ".png";
                 File originFile = new File(originPath);
                 if (!originFile.getParentFile().exists()) {
@@ -79,6 +79,7 @@ public class PDFToOriginService {
                         logger.error("[print by tk]创建目录失败!");
                     }
                 }
+                //写出切出的单页图
                 ImageIO.write(image, "png", originFile);
                 //存表
                 OriginPic originPic = new OriginPic();
@@ -87,7 +88,7 @@ public class PDFToOriginService {
                 originPic.setCreateTime(new Date());
                 originPic.setCreateUserId(null);
                 originPic.setSerialNo(i + 1);
-                originPic.setPicUrl(originPath);
+                originPic.setPicUrl(originPath.replace(frontDir, ""));
                 originPicDAO.save(originPic);
                 //存文件存表后,通知消费者切图,生成缩略图
                 //使用jsonObject进行消息通知
