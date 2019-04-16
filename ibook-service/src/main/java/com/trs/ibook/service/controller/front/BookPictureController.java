@@ -2,7 +2,6 @@ package com.trs.ibook.service.controller.front;
 
 import com.season.common.StrKit;
 import com.season.core.Result;
-import com.trs.ibook.core.exception.IBookException;
 import com.trs.ibook.core.exception.IBookParamException;
 import com.trs.ibook.service.api.BookPictureAPI;
 import com.trs.ibook.service.dto.*;
@@ -96,10 +95,9 @@ public class BookPictureController implements BookPictureAPI {
     }
 
     @Override
-    @ResponseBody
     @PostMapping(value = "imageUpload")
-    public Result<Void> imageUpload(@RequestParam("file") MultipartFile file, @RequestParam("bookId") Integer bookId) {
-        Result result = Result.success();
+    public Result<Void> imageUpload(@RequestParam("file") MultipartFile file, Integer bookId) {
+        Result<Void> result = Result.success();
         if (StrKit.isEmpty(bookId)) {
             throw new IBookParamException("电子书id不能为空");
         }

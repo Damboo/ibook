@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -58,6 +59,13 @@ public class BookPictureCRUDService {
         }
         BookPictureMapper.INSTANCE.setUpdateDTO(bookPicture, bookPictureUpdateDTO);
         bookPictureDAO.update(bookPicture);
+        //如果修改页码时,指定某页码的目录id为0,那么以当前页为差值,对下面所有页码重新排序
+        if (0 == bookPictureUpdateDTO.getCatalogId()) {
+            Map<String,Object> map = new HashMap<>();
+            map.put("bookId",bookPicture.getBookId());
+            map.put("difference",bookPicture.getPageIndex());
+            bookPictureDAO.resetPageIndexByDifference(map);
+        }
     }
 
     /**

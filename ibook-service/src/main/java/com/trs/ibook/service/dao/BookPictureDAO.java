@@ -197,8 +197,17 @@ public class BookPictureDAO extends AbstractDAO<BookPicture> {
      * 获取最大结束页
      */
     public int getMaxEndIndexByBookId(Integer bookId) {
-        String sql = " select * from " + BookPicture.TABLE_NAME + " where bookId=? order by pageIndex desc limit 1 ";
+        String sql = " select * from " + BookPicture.TABLE_NAME + " where bookId=? and isDelete=0 order by pageIndex desc limit 1 ";
         BookPicture bookPicture = seasonDao.findFirst(BookPicture.class, sql, bookId);
         return bookPicture != null ? bookPicture.getPageIndex() : 0;
+    }
+
+    /**
+     * 对指定页码后的所有页重新排序
+     * 参数:书籍id,差值
+     */
+    public void resetPageIndexByDifference(Map<String, Object> map) {
+        String sql = " update " + BookPicture.TABLE_NAME + " set pageIndex = pageIndex-:difference where isDelete=0 and bookId=:bookId and pageIndex>:difference ";
+        seasonDao.execute(map, sql);
     }
 }
