@@ -23,8 +23,8 @@ import java.util.Date;
 import static com.ServiceApp.QUEUE;
 
 /**
- * Title:生产者
- * Description:
+ * Title:生产者消费者模式
+ * Description:PDF转页的生产者
  * Copyright: 2019 北京拓尔思信息技术股份有限公司 版权所有.保留所有权
  * Company:北京拓尔思信息技术股份有限公司(TRS)
  * Project: ibook
@@ -49,8 +49,8 @@ public class PDFToOriginService {
     /**
      * 切割PDF为图片
      * 注意:这里使用生产者消费者模式,原图PDF作为生产者切割产出大图,存入origin文件夹,以及写库;
-     * 大图存入缓冲区;
-     * 切割工具作为消费者,在缓冲区拿出大图并且切割,同时生成略缩图,以及写库;
+     * 大图作为通知,以json形式通知到消费者;
+     * 切割工具作为消费者,收到通知并且切割,同时生成略缩图,以及写库;
      */
     public void cutPDF(String pdfUrl, Integer bookId) {
         //首先根据bookId, 获取到文件夹名称
@@ -67,9 +67,9 @@ public class PDFToOriginService {
             PDDocument doc = PDDocument.load(file);
             PDFRenderer renderer = new PDFRenderer(doc);
             int pageCount = doc.getNumberOfPages();
-            logger.info("开始对上传的PDF切图,当前页码有" + pageCount + "张");
+            logger.info("开始对上传的PDF切页,当前PDF有" + pageCount + "页");
             for (int i = 0; i < pageCount; i++) {
-                logger.info("开始切第" + i + "张");
+                logger.info("开始切出第" + i + "页");
                 BufferedImage image = renderer.renderImageWithDPI(i, 144);
                 String originPath = baseDir + albumName + "/origin/" + albumName + "_" + (i + 1) + ".png";
                 File originFile = new File(originPath);
