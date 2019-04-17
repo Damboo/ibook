@@ -99,8 +99,10 @@ public interface BookInfoAPI {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pdfUrl", dataType = "String", value = "PDFurl", paramType = "form"),
             @ApiImplicitParam(name = "bookId", dataType = "Integer", value = "电子书id", paramType = "form"),
+            @ApiImplicitParam(name = "startBlankNum", dataType = "Integer", value = "起始页空白数量", paramType = "form"),
+            @ApiImplicitParam(name = "endBlankNum", dataType = "Integer", value = "结束页空白数量", paramType = "form"),
     })
-    Result<Void> cutPDF(String pdfUrl, Integer bookId);
+    Result<Void> cutPDF(String pdfUrl, Integer bookId, Integer startBlankNum, Integer endBlankNum);
 
 
     /******************************电子书上下架*****************************/

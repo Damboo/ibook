@@ -49,13 +49,14 @@ public class OriginToPageService {
         try {
             JSONObject data = JSONObject.parseObject(dataMessage);
             String[] pagePart = ImageUtil.splitImage(SafeKit.getString(data.get("originPath")), SafeKit.getString(data.get("targetPath")));
-            Integer bookId = SafeKit.getInteger(SafeKit.getInteger(data.get("bookId")));
+            Integer bookId = SafeKit.getInteger(data.get("bookId"));
+            Integer pageIndex1 = SafeKit.getInteger(data.get("pageIndex1"));
+            Integer pageIndex2 = SafeKit.getInteger(data.get("pageIndex2"));
             String part1 = pagePart[0].replace(frontDir, "");
             String part2 = pagePart[1].replace(frontDir, "");
             //根据bookid获取book信息
             BookInfo bookInfo = bookInfoDAO.getBookInfoById(bookId);
             int serialNo = bookPictureDAO.getNewSerialNoByBookId(bookId);
-            int pageIndex = bookPictureDAO.getNewPageIndexByBookId(bookId);
             //页码存库
             BookPicture bookPicture1 = new BookPicture();
             bookPicture1.setBookId(bookId);
@@ -63,7 +64,7 @@ public class OriginToPageService {
             bookPicture1.setCreateUserId(null);
             bookPicture1.setIsDelete(0);
             bookPicture1.setSerialNo(serialNo);
-            bookPicture1.setPageIndex(pageIndex);
+            bookPicture1.setPageIndex(pageIndex1);
             bookPicture1.setPicUrl(part1);
             bookPictureDAO.save(bookPicture1);
             //如果是第一页上传,并且没有封面,默认设置第一页为封面
@@ -77,10 +78,9 @@ public class OriginToPageService {
             bookPicture2.setCreateUserId(null);
             bookPicture2.setIsDelete(0);
             bookPicture2.setSerialNo(serialNo + 1);
-            bookPicture2.setPageIndex(pageIndex + 1);
+            bookPicture2.setPageIndex(pageIndex2);
             bookPicture2.setPicUrl(part2);
             bookPictureDAO.save(bookPicture2);
-
         } catch (Exception e) {
             logger.error("[print by tk]切页失败!", e);
             try {

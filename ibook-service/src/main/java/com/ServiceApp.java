@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class ServiceApp {
 
-    public final static String QUEUE = "dealPDF-queue";
+    public static final String QUEUE = "dealPDF-queue";
 
     @Bean
     public Queue queue() {

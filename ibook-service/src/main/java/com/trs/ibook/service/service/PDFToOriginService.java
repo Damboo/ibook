@@ -52,21 +52,29 @@ public class PDFToOriginService {
      * 大图作为通知,以json形式通知到消费者;
      * 切割工具作为消费者,收到通知并且切割,同时生成略缩图,以及写库;
      */
-    public void cutPDF(String pdfUrl, Integer bookId) {
+    public String cutPDF(String pdfUrl, Integer bookId, Integer startBlankNum, Integer endBlankNum) {
         //首先根据bookId, 获取到文件夹名称
         String albumName = bookInfoDAO.getLocationNameById(bookId);
         if (StrKit.isEmpty(albumName)) {
-            throw new IBookParamException("不正确的bookId");
+            return "不正确的bookId";
         }
         // 将pdf转图片 并且自定义图片得格式大小
         File file = new File(frontDir + pdfUrl);
         if (!file.exists()) {
-            throw new IBookParamException("不存在的PDF路径");
+            return "不存在的PDF路径";
         }
         try {
             PDDocument doc = PDDocument.load(file);
             PDFRenderer renderer = new PDFRenderer(doc);
             int pageCount = doc.getNumberOfPages();
+            //需要校验起始空白页和结束空白页是否正确
+            if (startBlankNum >= pageCount * 2) {
+                return "起始空白页不得等于或大于总页码数量";
+            }
+            //去除起始空白页后的
+            if (endBlankNum >= pageCount * 2 - startBlankNum) {
+                return "没有足够的结束空白页,请确认起始空白页码是否过多";
+            }
             logger.info("开始对上传的PDF切页,当前PDF有" + pageCount + "页");
             for (int i = 0; i < pageCount; i++) {
                 logger.info("开始切出第" + i + "页");
@@ -96,10 +104,25 @@ public class PDFToOriginService {
                 data.put("originPath", originPath);
                 data.put("targetPath", baseDir + albumName + "/normal/" + albumName);
                 data.put("bookId", bookId);
+                Integer pageIndex1 = i * 2 + 1;
+                Integer pageIndex2 = i * 2 + 2;
+                //处理起始的空白页
+                pageIndex1 = pageIndex1 - startBlankNum <= 0 ? null : pageIndex1 - startBlankNum;
+                pageIndex2 = pageIndex2 - startBlankNum <= 0 ? null : pageIndex2 - startBlankNum;
+                //处理结束的空白页
+                if (2 * pageCount - endBlankNum < i * 2 + 1) {
+                    pageIndex1 = null;
+                }
+                if (2 * pageCount - endBlankNum < i * 2 + 2) {
+                    pageIndex2 = null;
+                }
+                data.put("pageIndex1", pageIndex1);
+                data.put("pageIndex2", pageIndex2);
                 this.amqpTemplate.convertAndSend(QUEUE, data.toJSONString());
             }
         } catch (IOException e) {
             logger.error("[print by tk]PDF切图出现异常!异常信息为:", e);
         }
+        return "";
     }
 }

@@ -1,6 +1,7 @@
 package com.trs.ibook.service.controller.front;
 
 import com.season.common.SafeKit;
+import com.season.common.StrKit;
 import com.season.core.Page;
 import com.season.core.Result;
 import com.trs.ibook.core.exception.IBookParamException;
@@ -132,12 +133,17 @@ public class BookInfoController implements BookInfoAPI {
 
     @Override
     @PostMapping(value = "cutPDF")
-    public Result<Void> cutPDF(String pdfUrl, Integer bookId) {
+    public Result<Void> cutPDF(String pdfUrl, Integer bookId, Integer startBlankNum, Integer endBlankNum) {
         Result<Void> result = Result.success();
         //首先判断是否存在这本书的页码和原图,进行逻辑删除
         bookPictureCRUDService.dealOldPic(bookId);
         //开始进行生产者消费者模式切图
-        pdfToOriginService.cutPDF(pdfUrl, bookId);
+        String errorMsg = pdfToOriginService.cutPDF(pdfUrl, bookId, startBlankNum, endBlankNum);
+        if (StrKit.isNotEmpty(errorMsg)) {
+            result.setResultMsg(errorMsg);
+            result.setIsSuccess(false);
+            return result;
+        }
         return result;
     }
 
