@@ -15,6 +15,7 @@ import com.trs.ibook.service.pojo.BookInfo;
 import com.trs.ibook.service.util.ImageUtil;
 import com.trs.ibook.service.vo.BookInfoListVO;
 import com.trs.ibook.service.vo.BookInfoShowVO;
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -263,5 +264,24 @@ public class BookInfoCRUDService {
         BookInfo bookInfo = bookInfoDAO.getBookInfoById(id);
         bookInfo.setStatus(type);
         bookInfoDAO.update(bookInfo, "status");
+    }
+
+    /**
+     * 删除数据
+     */
+    public void deleteBook(Integer bookId) {
+        //物理删除
+        bookInfoDAO.physicalDelete(bookId);
+        //删除文件
+        String locationName = bookInfoDAO.getLocationNameById(bookId);
+        if (StrKit.isNotEmpty(locationName)) {
+            File dirFile = new File(baseDir + locationName);
+            try {
+                FileUtils.deleteDirectory(dirFile);
+            } catch (IOException e) {
+                logger.error("[print by tk]delete error!please check", e);
+            }
+
+        }
     }
 }

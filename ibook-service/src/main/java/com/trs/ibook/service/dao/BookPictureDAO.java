@@ -185,6 +185,14 @@ public class BookPictureDAO extends AbstractDAO<BookPicture> {
     }
 
     /**
+     * 恢复已经删除的历史书页(cutPDF失败时)
+     */
+    public void recoverByBookId(Integer bookId) {
+        String sql = " update " + BookPicture.TABLE_NAME + " set isDelete=0 where bookId=? and isDelete=1 ";
+        seasonDao.execute(sql, bookId);
+    }
+
+    /**
      * 指定页码区间,修改对应的目录id
      */
     public void setCatalogIdByPageIndex(Map<String, Object> map) {

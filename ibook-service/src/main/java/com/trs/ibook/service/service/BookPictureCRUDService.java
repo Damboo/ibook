@@ -173,8 +173,16 @@ public class BookPictureCRUDService {
     /**
      * 判断指定书是否有历史书页,进行逻辑删除
      */
-    public void dealOldPic(Integer bookId) {
+    public void deleteOldPic(Integer bookId) {
         originPicDAO.deleteByBookId(bookId);
         bookPictureDAO.deleteByBookId(bookId);
+    }
+
+    /**
+     * 恢复已经删除的历史书页
+     */
+    public void recoverOldPic(Integer bookId){
+        originPicDAO.recoverByBookId(bookId);
+        bookPictureDAO.recoverByBookId(bookId);
     }
 }

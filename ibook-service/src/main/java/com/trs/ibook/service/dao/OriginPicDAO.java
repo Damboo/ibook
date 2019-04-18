@@ -35,4 +35,12 @@ public class OriginPicDAO extends AbstractDAO<OriginPic> {
         String sql = " update " + OriginPic.TABLE_NAME + " set isDelete=1 where bookId=? and isDelete=0 ";
         seasonDao.execute(sql, bookId);
     }
+
+    /**
+     * cutPDF失败,回滚操作,恢复已经删除指定电子书的原始页
+     */
+    public void recoverByBookId(Integer bookId) {
+        String sql = " update " + OriginPic.TABLE_NAME + " set isDelete=0 where bookId=? and isDelete=1 ";
+        seasonDao.execute(sql, bookId);
+    }
 }

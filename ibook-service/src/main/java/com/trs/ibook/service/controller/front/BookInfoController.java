@@ -133,13 +133,20 @@ public class BookInfoController implements BookInfoAPI {
 
     @Override
     @PostMapping(value = "cutPDF")
-    public Result<Void> cutPDF(String pdfUrl, Integer bookId, Integer startBlankNum, Integer endBlankNum) {
+    public Result<Void> cutPDF(String pdfUrl, Integer bookId, Integer startBlankNum, Integer endBlankNum, Integer source) {
         Result<Void> result = Result.success();
         //首先判断是否存在这本书的页码和原图,进行逻辑删除
-        bookPictureCRUDService.dealOldPic(bookId);
+        bookPictureCRUDService.deleteOldPic(bookId);
         //开始进行生产者消费者模式切图
         String errorMsg = pdfToOriginService.cutPDF(pdfUrl, bookId, startBlankNum, endBlankNum);
         if (StrKit.isNotEmpty(errorMsg)) {
+            //如果是新增来源(0),删除表记录,文件
+            if (source == 0) {
+                bookInfoCRUDService.deleteBook(bookId);
+                //如果是修改来源(1),恢复上次被删文件
+            } else if (source == 1) {
+                bookPictureCRUDService.recoverOldPic(bookId);
+            }
             result.setResultMsg(errorMsg);
             result.setIsSuccess(false);
             return result;
