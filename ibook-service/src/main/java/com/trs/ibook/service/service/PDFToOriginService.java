@@ -120,6 +120,7 @@ public class PDFToOriginService {
                 data.put("pageIndex2", pageIndex2);
                 this.amqpTemplate.convertAndSend(QUEUE, data.toJSONString());
             }
+            doc.close();
         } catch (IOException e) {
             logger.error("[print by tk]PDF切图出现异常!异常信息为:", e);
         }

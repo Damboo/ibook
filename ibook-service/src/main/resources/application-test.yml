@@ -17,7 +17,16 @@ ibook:
       oppositeDir: /hsfile/ibook/
       #前置路径
       frontDir: /data/TRS/nas/ts_hudong
-
+  #wcm原子权限校验
+  admin:
+    authServiceUrl: http://testw.haier.com/hshop/opendata.do
+    operationCenter:
+      moduleId:  150
+    objType: 103
+    objId: 5
+    idsAdminUrl: http://testw.haier.com/ids
+    adminAppName: wcm-hshop
+    adminAppKey: 12345678
 spring:
   redis:
     host: 10.159.63.66

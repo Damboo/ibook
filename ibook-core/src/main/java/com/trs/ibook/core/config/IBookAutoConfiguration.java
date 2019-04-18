@@ -18,6 +18,14 @@ import org.springframework.context.annotation.PropertySources;
 @PropertySources(value = @PropertySource("classpath:/config/ibook.properties"))
 @ComponentScan(basePackages = "com.trs.ibook.core")
 public class IBookAutoConfiguration {
+    private boolean localVirtualUser = false;
 
+    public boolean isLocalVirtualUser() {
+        return localVirtualUser;
+    }
+
+    public void setLocalVirtualUser(boolean localVirtualUser) {
+        this.localVirtualUser = localVirtualUser;
+    }
 
 }
