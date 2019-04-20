@@ -140,7 +140,7 @@ public class BookCatalogDAO extends AbstractDAO<BookCatalog> {
      * @return
      */
     public List<BookCatalog> getCatalogListByBookId(Integer bookId) {
-        String sql = " select * from " + BookCatalog.TABLE_NAME + " where isDelete=0 and bookId=:bookId order by pageStartIndex ";
+        String sql = " select * from " + BookCatalog.TABLE_NAME + " where isDelete=0 and bookId=? order by pageStartIndex ";
         return seasonDao.find(BookCatalog.class, sql, bookId);
     }
 }
