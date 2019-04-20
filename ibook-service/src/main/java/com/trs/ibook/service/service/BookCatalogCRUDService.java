@@ -156,8 +156,9 @@ public class BookCatalogCRUDService {
 
     /**
      * 校验目录页码的格式
+     * type:0.新增,1.修改
      */
-    public String checkCatalogPage(Map<String, Object> map) {
+    public String checkCatalogPage(Map<String, Object> map, Integer type) {
         String errorMsg = "";
         int startIndex = SafeKit.getInteger(map.get("pageStartIndex"));
         int endIndex = SafeKit.getInteger(map.get("pageEndIndex"));
@@ -172,13 +173,23 @@ public class BookCatalogCRUDService {
             errorMsg = "结束页超过最大页码";
         }
         List<BookCatalog> list = bookCatalogDAO.getCatalogListByBookId(bookId);
+        //不为空,1.修改当前目录;2.新增第二条(以上目录)
         if (list != null && !list.isEmpty()) {
-            //数量大于1
-            boolean flag1 = list.size() > 1;
-            //区间不在首尾
-            boolean flag2 = !(endIndex < list.get(0).getPageStartIndex() || startIndex > list.get(list.size() - 1).getPageEndIndex());
-            if (flag1 && flag2) {
-                //判断当前页码是否在当前区间
+            //如果是新增来源
+            if (type == 0) {
+                //区间不在首尾
+                boolean flag2 = !(endIndex < list.get(0).getPageStartIndex() || startIndex > list.get(list.size() - 1).getPageEndIndex());
+                if (flag2) {
+                    //判断当前页码是否在当前区间
+                    for (int i = 0; i < list.size(); i++) {
+                        if (!(startIndex > list.get(i).getPageEndIndex() && endIndex < list.get(i + 1).getPageStartIndex())) {
+                            errorMsg = "起始页码和结束页码不能处于当前目录指定页区间";
+                        }
+                    }
+                }
+                //修改来源,如果当前只有一个值则返回成功
+            } else if (type == 1 && list.size() > 1) {
+                //多个目录,需要检查区间
                 for (int i = 0; i < list.size(); i++) {
                     if (!(startIndex > list.get(i).getPageEndIndex() && endIndex < list.get(i + 1).getPageStartIndex())) {
                         errorMsg = "起始页码和结束页码不能处于当前目录指定页区间";
@@ -186,6 +197,7 @@ public class BookCatalogCRUDService {
                 }
             }
         }
+        //若为空表示为新建目录,直接成功返回
         return errorMsg;
     }
 }

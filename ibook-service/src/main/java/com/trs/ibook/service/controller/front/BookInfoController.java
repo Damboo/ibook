@@ -137,6 +137,8 @@ public class BookInfoController implements BookInfoAPI {
         Result<Void> result = Result.success();
         //首先判断是否存在这本书的页码和原图,进行逻辑删除
         bookPictureCRUDService.deleteOldPic(bookId);
+        //对当前书置于下架
+        bookInfoCRUDService.changeStatus(bookId, 2);
         //开始进行生产者消费者模式切图
         String errorMsg = pdfToOriginService.cutPDF(pdfUrl, bookId, startBlankNum, endBlankNum);
         if (StrKit.isNotEmpty(errorMsg)) {

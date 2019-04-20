@@ -45,7 +45,7 @@ public class BookCatalogController implements BookCatalogAPI {
         map.put("pageEndIndex", bookCatalogAddDTO.getPageEndIndex());
         map.put("bookId", bookCatalogAddDTO.getBookId());
         //校验页码格式
-        String errorMsg = bookCatalogCRUDService.checkCatalogPage(map);
+        String errorMsg = bookCatalogCRUDService.checkCatalogPage(map, 0);
         if (StrKit.isNotEmpty(errorMsg)) {
             result.setIsSuccess(false);
             result.setResultMsg(errorMsg);
@@ -65,7 +65,7 @@ public class BookCatalogController implements BookCatalogAPI {
         map.put("pageEndIndex", bookCatalogUpdateDTO.getPageEndIndex());
         map.put("bookId", bookCatalogUpdateDTO.getBookId());
         //校验页码格式
-        String errorMsg = bookCatalogCRUDService.checkCatalogPage(map);
+        String errorMsg = bookCatalogCRUDService.checkCatalogPage(map, 1);
         if (StrKit.isNotEmpty(errorMsg)) {
             result.setIsSuccess(false);
             result.setResultMsg(errorMsg);
