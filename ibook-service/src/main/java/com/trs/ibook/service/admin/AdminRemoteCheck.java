@@ -1,4 +1,4 @@
-package com.trs.ibook.core.admin;
+package com.trs.ibook.service.admin;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;

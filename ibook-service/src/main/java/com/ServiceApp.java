@@ -45,6 +45,7 @@ public class ServiceApp {
         return factory;
     }
 
+
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(ServiceApp.class);
         app.setBanner(new SeasonBanner());

@@ -1,4 +1,4 @@
-package com.trs.ibook.core.admin;
+package com.trs.ibook.service.admin;
 
 import com.trs.ibook.core.exception.IBookException;
 import org.springframework.util.Assert;

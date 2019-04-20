@@ -1,4 +1,4 @@
-package com.trs.ibook.core.admin;
+package com.trs.ibook.service.admin;
 
 /**
  * 管理员信息
