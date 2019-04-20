@@ -158,35 +158,34 @@ public class BookCatalogCRUDService {
      * 校验目录页码的格式
      */
     public String checkCatalogPage(Map<String, Object> map) {
+        String errorMsg = "";
         int startIndex = SafeKit.getInteger(map.get("pageStartIndex"));
         int endIndex = SafeKit.getInteger(map.get("pageEndIndex"));
         int bookId = SafeKit.getInteger(map.get("bookId"));
         if (startIndex < 1) {
-            return "起始页不得小于1";
+            errorMsg = "起始页不得小于1";
         }
         if (startIndex >= endIndex) {
-            return "结束页必须大于起始页";
+            errorMsg = "结束页必须大于起始页";
         }
         if (endIndex > bookPictureDAO.getMaxEndIndexByBookId(bookId)) {
-            return "结束页超过最大页码";
+            errorMsg = "结束页超过最大页码";
         }
-        //检验目录页码是否存在重叠
         List<BookCatalog> list = bookCatalogDAO.getCatalogListByBookId(bookId);
-        //表示当前电子书尚未有目录
-        if (list == null || list.isEmpty()) {
-            return "";
-        }
-        //先判断当前区间是否在首尾区间
-        if (endIndex < list.get(0).getPageStartIndex() || startIndex > list.get(list.size() - 1).getPageEndIndex()) {
-            return "";
-        }
-        //说明在目录区间内
-        for (int i = 0; i < list.size(); i++) {
-            //判断当前页码是否在当前区间
-            if (startIndex > list.get(i).getPageEndIndex() && endIndex < list.get(i + 1).getPageStartIndex()) {
-                return "";
+        if (list != null && !list.isEmpty()) {
+            //数量大于1
+            boolean flag1 = list.size() > 1;
+            //区间不在首尾
+            boolean flag2 = !(endIndex < list.get(0).getPageStartIndex() || startIndex > list.get(list.size() - 1).getPageEndIndex());
+            if (flag1 && flag2) {
+                //判断当前页码是否在当前区间
+                for (int i = 0; i < list.size(); i++) {
+                    if (!(startIndex > list.get(i).getPageEndIndex() && endIndex < list.get(i + 1).getPageStartIndex())) {
+                        errorMsg = "起始页码和结束页码不能处于当前目录指定页区间";
+                    }
+                }
             }
         }
-        return "起始页码和结束页码不能处于当前目录指定页区间";
+        return errorMsg;
     }
 }
