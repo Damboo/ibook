@@ -46,18 +46,18 @@ public class BookFrontShowService {
      */
     public Map<String, Object> bookCatalogList(Integer bookId) {
         Map<String, Object> bookCatalogMap = new HashMap<>();
-
         List<BookCatalogListVO> bookCatalogList = bookCatalogDAO.getBookCatalogList(bookId);
-
         String pdfUrl = null;
+        String bookName = "";
         BookInfo bookInfo = bookInfoDAO.getBookInfoById(bookId);
         if (null != bookInfo) {
             pdfUrl = bookInfo.getPdfUrl();
+            bookName = bookInfo.getTitleName();
         }
         Integer serialTotal = bookPictureDAO.getPictureCountByBookId(bookId);
-
         bookCatalogMap.put("serialTotal", serialTotal);
         bookCatalogMap.put("pdfUrl", pdfUrl);
+        bookCatalogMap.put("bookName", bookName);
         bookCatalogMap.put("bookCatalogList", bookCatalogList);
         return bookCatalogMap;
     }

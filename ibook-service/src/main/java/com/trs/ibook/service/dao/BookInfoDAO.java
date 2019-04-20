@@ -34,27 +34,29 @@ public class BookInfoDAO extends AbstractDAO<BookInfo> {
      */
     public Page<BookInfoListVO> findByQuery(BookInfoQueryDTO bookInfoQueryDTO) {
         Map<String, Object> params = new HashMap<>();
-        String sql = "select * from " + BookInfo.TABLE_NAME + " t where isDelete = 0 ";
+        String sql = "select * from " + BookInfo.TABLE_NAME + " where isDelete = 0 ";
         if (StrKit.isNotEmpty(bookInfoQueryDTO.getId())) {
-            sql += " and t.id = :id ";
+            sql += " and id = :id ";
             params.put("id", bookInfoQueryDTO.getId());
         }
         if (StrKit.isNotEmpty(bookInfoQueryDTO.getAuthor())) {
-            sql += " and t.author = :author ";
+            sql += " and author = :author ";
             params.put("author", bookInfoQueryDTO.getAuthor());
         }
         if (StrKit.isNotEmpty(bookInfoQueryDTO.getSiteId())) {
-            sql += " and t.siteId = :siteId ";
+            sql += " and siteId = :siteId ";
             params.put("siteId", bookInfoQueryDTO.getSiteId());
         }
         if (StrKit.isNotEmpty(bookInfoQueryDTO.getTitleName())) {
-            sql += " and t.titleName = :titleName ";
+            sql += " and titleName = :titleName ";
             params.put("titleName", bookInfoQueryDTO.getTitleName());
         }
         if (StrKit.isNotEmpty(bookInfoQueryDTO.getStatus())) {
-            sql += " and t.status = :status ";
+            sql += " and status = :status ";
             params.put("status", bookInfoQueryDTO.getStatus());
         }
+        //根据新建的顺序倒序排列
+        sql += " order by id desc ";
         return seasonDao.findPage(BookInfoListVO.class, bookInfoQueryDTO.getPageNo(),
                 bookInfoQueryDTO.getPageSize(), params, sql);
     }
@@ -64,27 +66,29 @@ public class BookInfoDAO extends AbstractDAO<BookInfo> {
      */
     public List<BookInfoListVO> queryList(BookInfoQueryDTO bookInfoQueryDTO) {
         Map<String, Object> params = new HashMap<>();
-        String sql = " select * from " + BookInfo.TABLE_NAME + " t where isDelete = 0 ";
+        String sql = " select * from " + BookInfo.TABLE_NAME + " where isDelete = 0 ";
         if (StrKit.isNotEmpty(bookInfoQueryDTO.getId())) {
-            sql += " and t.id = :id ";
+            sql += " and id = :id ";
             params.put("id", bookInfoQueryDTO.getId());
         }
         if (StrKit.isNotEmpty(bookInfoQueryDTO.getAuthor())) {
-            sql += " and t.author = :author ";
+            sql += " and author = :author ";
             params.put("author", bookInfoQueryDTO.getAuthor());
         }
         if (StrKit.isNotEmpty(bookInfoQueryDTO.getSiteId())) {
-            sql += " and t.siteId = :siteId ";
+            sql += " and siteId = :siteId ";
             params.put("siteId", bookInfoQueryDTO.getSiteId());
         }
         if (StrKit.isNotEmpty(bookInfoQueryDTO.getTitleName())) {
-            sql += " and t.titleName = :titleName ";
+            sql += " and titleName = :titleName ";
             params.put("titleName", bookInfoQueryDTO.getTitleName());
         }
         if (StrKit.isNotEmpty(bookInfoQueryDTO.getStatus())) {
-            sql += " and t.status = :status ";
+            sql += " and status = :status ";
             params.put("status", bookInfoQueryDTO.getStatus());
         }
+        //根据新建的顺序倒序排列
+        sql += " order by id desc ";
         return seasonDao.find(BookInfoListVO.class, params, sql);
     }
 

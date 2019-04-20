@@ -36,7 +36,6 @@ public class BookCatalogUpdateDTO {
     private String titleName;
 
     @ApiModelProperty(notes = N_INTRODUCTION, example = E_INTRODUCTION)
-    @NotBlank(message = "目录简介不能为空")
     @Length(max = 100, message = "introduction最大长度不能超过{max}")
     private String introduction;
 

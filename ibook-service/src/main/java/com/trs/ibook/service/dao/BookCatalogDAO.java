@@ -135,23 +135,12 @@ public class BookCatalogDAO extends AbstractDAO<BookCatalog> {
     }
 
     /**
-     * 检查当前页码保存是否符合规则:
-     * 1:起始页不能小于等于最小结束页
-     * 2:结束页不能大于等于最大起始页
+     * 根据bookId获取到所有目录实体类
+     * @param bookId
+     * @return
      */
-    public String checkCatalogSort(Map<String, Object> map) {
-        //新建的起始页, 是否小于或等于最小结束页,1表示不符合规则,0表示符合
-        String sql1 = " select pageEndIndex>=:pageStartIndex as flag1 from " + BookCatalog.TABLE_NAME + " where bookId=:bookId and isDelete=0 order by pageEndIndex limit 1 ";
-        //新建的结束页, 是否大于或等于最小起始页,1表示不符合规则,0表示符合
-        String sql2 = " select pageStartIndex<=:pageEndIndex as flag2 from " + BookCatalog.TABLE_NAME + " where bookId=:bookId and isDelete=0 order by pageStartIndex desc limit 1 ";
-        Map<String, Object> map1 = seasonDao.queryFirst(map, sql1);
-        if (map1 != null && SafeKit.getInteger(map1.get("flag1")) == 1) {
-            return "起始页不能小于等于最小结束页";
-        }
-        Map<String, Object> map2 = seasonDao.queryFirst(map, sql2);
-        if (map2 != null && SafeKit.getInteger(map2.get("flag2")) == 1) {
-            return "结束页不能大于等于最大起始页";
-        }
-        return "";
+    public List<BookCatalog> getCatalogListByBookId(Integer bookId) {
+        String sql = " select * from " + BookCatalog.TABLE_NAME + " where isDelete=0 and bookId=:bookId order by pageStartIndex ";
+        return seasonDao.find(BookCatalog.class, sql, bookId);
     }
 }

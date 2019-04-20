@@ -69,11 +69,11 @@ public class PDFToOriginService {
             int pageCount = doc.getNumberOfPages();
             //需要校验起始空白页和结束空白页是否正确
             if (startBlankNum >= pageCount * 2) {
-                return "起始空白页不得等于或大于总页码数量";
+                return "起始空白页必须小于总页码数量";
             }
             //去除起始空白页后的
             if (endBlankNum >= pageCount * 2 - startBlankNum) {
-                return "没有足够的结束空白页,请确认起始空白页码是否过多";
+                return "起始空白页码数和结束空白页码数之和必须小于PDF总页码，总页码数为" + pageCount * 2 + "页";
             }
             logger.info("开始对上传的PDF切页,当前PDF有" + pageCount + "页");
             for (int i = 0; i < pageCount; i++) {
