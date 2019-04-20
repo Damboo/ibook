@@ -64,6 +64,7 @@ public class BookCatalogController implements BookCatalogAPI {
         map.put("pageStartIndex", bookCatalogUpdateDTO.getPageStartIndex());
         map.put("pageEndIndex", bookCatalogUpdateDTO.getPageEndIndex());
         map.put("bookId", bookCatalogUpdateDTO.getBookId());
+        map.put("id",bookCatalogUpdateDTO.getId());
         //校验页码格式
         String errorMsg = bookCatalogCRUDService.checkCatalogPage(map, 1);
         if (StrKit.isNotEmpty(errorMsg)) {
