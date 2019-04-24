@@ -172,37 +172,6 @@ public class BookCatalogCRUDService {
         if (endIndex > bookPictureDAO.getMaxEndIndexByBookId(bookId)) {
             errorMsg = "结束页超过最大页码";
         }
-        List<BookCatalog> list = bookCatalogDAO.getCatalogListByBookId(bookId);
-        //不为空,1.修改当前目录;2.新增第二条(以上目录)
-        if (list != null && !list.isEmpty()) {
-            //如果是新增来源
-            if (type == 0) {
-                //区间不在首尾
-                if (!(endIndex < list.get(0).getPageStartIndex() || startIndex > list.get(list.size() - 1).getPageEndIndex())) {
-                    //判断当前页码是否在当前区间
-                    for (int i = 0; i < list.size(); i++) {
-                        if (!(startIndex > list.get(i).getPageEndIndex() && endIndex < list.get(i + 1).getPageStartIndex())) {
-                            errorMsg = "起始页码和结束页码不能处于当前目录指定页区间";
-                        }
-                    }
-                }
-                //修改来源,如果当前只有一个值则返回成功
-            } else if (type == 1 && list.size() > 1) {
-                //有其他多个需要把自己排除掉
-                int id = SafeKit.getInteger(map.get("id"));
-                list.remove(bookCatalogDAO.findById(id));
-                //区间不在首尾
-                if (!(endIndex < list.get(0).getPageStartIndex() || startIndex > list.get(list.size() - 1).getPageEndIndex())) {
-                    //判断当前页码是否在当前区间
-                    for (int i = 0; i < list.size(); i++) {
-                        if (!(startIndex > list.get(i).getPageEndIndex() && endIndex < list.get(i + 1).getPageStartIndex())) {
-                            errorMsg = "起始页码和结束页码不能处于当前目录指定页区间";
-                        }
-                    }
-                }
-            }
-        }
-        //若为空表示为新建目录,直接成功返回
         return errorMsg;
     }
 }
